@@ -28,20 +28,17 @@ int main(int argc, char *argv[]) {
 }
 
 /*
-* List files and directories within a directory.
+* List files within a directory.
 */
 static void
-list_directory(
-	const char *dirname)
-{
+list_directory(const char *dirname) {
 	DIR *dir;
 	struct dirent *ent;
 
 	/* Open directory stream */
 	dir = opendir(dirname);
 	if (dir != NULL) {
-
-		/* Print all files and directories within the directory */
+		/* Print all files within the directory */
 		while ((ent = readdir(dir)) != NULL) {
 			if (ent->d_type == DT_REG)
 			{
@@ -50,7 +47,6 @@ list_directory(
 		}
 
 		closedir(dir);
-
 	}
 	else {
 		/* Could not open directory */
