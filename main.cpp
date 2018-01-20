@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _MSC_VER
 #include "include/dirent.h"
+#else
+#include <dirent.h>
+#endif // _MSC_VER
 
 static void list_directory(const char *dirname);
 
