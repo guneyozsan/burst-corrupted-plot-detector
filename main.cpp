@@ -78,11 +78,15 @@ static std::vector<dirent> get_files_in_directory(const char *dir_name) {
 static void find_corrupted_plots(const char *file_name) {
 	std::string found_deadline;
 	std::string confirmed_deadline;
+	std::string plot_file;
 	const std::string found_deadline_keyword = "found deadline=";
+	const std::string found_deadline_end_keyword = " nonce";
 	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
+	const std::string file_keyword = "file: ";
 	std::size_t position = 0;
 	std::size_t end_position = 0;
 	std::size_t start_position = 0;
+	std::size_t plot_file_position = 0;
 
 	std::ifstream file(file_name);
 	std::string line;
@@ -91,9 +95,12 @@ static void find_corrupted_plots(const char *file_name) {
 		// Extract found deadlines.
 		position = line.find(found_deadline_keyword, position + 1);
 		if (position != std::string::npos) {
-			end_position = line.find(" nonce", position + 1);
+			end_position = line.find(found_deadline_end_keyword, position + 1);
 			start_position = position + found_deadline_keyword.size();
 			found_deadline = line.substr(start_position, end_position - start_position);
+			// Extract file name.
+			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
+			plot_file = line.substr(plot_file_position, line.size());
 		}
 
 		// Extract confirmed deadlines.
@@ -106,10 +113,12 @@ static void find_corrupted_plots(const char *file_name) {
 
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline != confirmed_deadline) {
-				std::cout << "Found" << std::endl;
+				std::cout << "Found deadline     : ";
 				std::cout << found_deadline << std::endl;
-				std::cout << "Confirmed" << std::endl;
+				std::cout << "Confirmed deadline : ";
 				std::cout << confirmed_deadline << std::endl;
+				std::cout << "FILE               : ";
+				std::cout << plot_file << std::endl;
 			}
 			found_deadline = "";
 			confirmed_deadline = "";
