@@ -72,11 +72,21 @@ static std::vector<dirent> get_files_in_directory(const char *dir_name) {
 * Find Burst plots with deadlines different from server's deadline.
 */
 static void find_corrupted_plots(const char *file_name) {
-	std::ifstream file(file_name);
+	const std::string found_deadline = "found deadline=";
+	const std::string confirmed_deadline = "confirmed deadline: ";
+	std::size_t position = 0;
 
+	std::ifstream file(file_name);
 	std::string line;
 	while (std::getline(file, line))
 	{
-		std::cout << line.c_str() << std::endl;
+		position = line.find(found_deadline, position + 1);
+		if (position != std::string::npos) {
+			std::cout << line.c_str() << std::endl;
+		}
+		position = line.find(confirmed_deadline, position + 1);
+		if (position != std::string::npos) {
+			std::cout << line.c_str() << std::endl;
+		}
 	}
 }
