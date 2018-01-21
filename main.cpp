@@ -34,7 +34,11 @@ int main(int argc, char *argv[]) {
 
 	for (int i = 0; i < files_in_dir.size(); i++) {
 		std::cout << files_in_dir[i].d_name << std::endl;
-		find_corrupted_plots(files_in_dir[i].d_name);
+		std::string file_name = files_in_dir[i].d_name;
+		std::string log_name = "2018-1-10_0_27_31.log";
+		if (file_name == log_name) {
+			find_corrupted_plots(files_in_dir[i].d_name);
+		}
 	}
 
 	return EXIT_SUCCESS;
@@ -72,8 +76,10 @@ static std::vector<dirent> get_files_in_directory(const char *dir_name) {
 * Find Burst plots with deadlines different from server's deadline.
 */
 static void find_corrupted_plots(const char *file_name) {
-	const std::string found_deadline = "found deadline=";
-	const std::string confirmed_deadline = "confirmed deadline: ";
+	std::string found_deadline;
+	std::string confirmed_deadline;
+	const std::string found_deadline_keyword = "found deadline=";
+	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
 	std::size_t position = 0;
 	std::size_t end_position = 0;
 	std::size_t start_position = 0;
@@ -82,15 +88,31 @@ static void find_corrupted_plots(const char *file_name) {
 	std::string line;
 	while (std::getline(file, line))
 	{
-		position = line.find(found_deadline, position + 1);
+		// Extract found deadlines.
+		position = line.find(found_deadline_keyword, position + 1);
 		if (position != std::string::npos) {
 			end_position = line.find(" nonce", position + 1);
-			start_position = position + found_deadline.size();
-			std::cout << line.substr(start_position, end_position - start_position).c_str() << std::endl;
+			start_position = position + found_deadline_keyword.size();
+			found_deadline = line.substr(start_position, end_position - start_position);
 		}
-		//position = line.find(confirmed_deadline, position + 1);
-		//if (position != std::string::npos) {
-		//	std::cout << line.c_str() << std::endl;
-		//}
+
+		// Extract confirmed deadlines.
+		position = line.find(confirmed_deadline_keyword, position + 1);
+		if (position != std::string::npos) {
+			end_position = line.size();
+			start_position = position + confirmed_deadline_keyword.size();
+			confirmed_deadline = line.substr(start_position, end_position - start_position);
+		}
+
+		if (found_deadline != "" && confirmed_deadline != "") {
+			if (found_deadline != confirmed_deadline) {
+				std::cout << "Found" << std::endl;
+				std::cout << found_deadline << std::endl;
+				std::cout << "Confirmed" << std::endl;
+				std::cout << confirmed_deadline << std::endl;
+			}
+			found_deadline = "";
+			confirmed_deadline = "";
+		}
 	}
 }
