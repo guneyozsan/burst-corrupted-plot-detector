@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,6 +14,7 @@
 #endif // _MSC_VER
 
 static std::vector<dirent> get_files_in_directory(const char *dirname);
+static void find_corrupted_plots(const char *file_name);
 
 int main(int argc, char *argv[]) {
 	int i;
@@ -31,6 +34,7 @@ int main(int argc, char *argv[]) {
 
 	for (int i = 0; i < files_in_dir.size(); i++) {
 		std::cout << files_in_dir[i].d_name << std::endl;
+		find_corrupted_plots(files_in_dir[i].d_name);
 	}
 
 	return EXIT_SUCCESS;
@@ -61,5 +65,18 @@ static std::vector<dirent> get_files_in_directory(const char *dir_name) {
 		/* Could not open directory */
 		printf("Cannot open directory %s\n", dir_name);
 		exit(EXIT_FAILURE);
+	}
+}
+
+/*
+* Find Burst plots with deadlines different from server's deadline.
+*/
+static void find_corrupted_plots(const char *file_name) {
+	std::ifstream file(file_name);
+
+	std::string line;
+	while (std::getline(file, line))
+	{
+		std::cout << line.c_str() << std::endl;
 	}
 }
