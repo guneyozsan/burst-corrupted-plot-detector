@@ -75,6 +75,8 @@ static void find_corrupted_plots(const char *file_name) {
 	const std::string found_deadline = "found deadline=";
 	const std::string confirmed_deadline = "confirmed deadline: ";
 	std::size_t position = 0;
+	std::size_t end_position = 0;
+	std::size_t start_position = 0;
 
 	std::ifstream file(file_name);
 	std::string line;
@@ -82,11 +84,13 @@ static void find_corrupted_plots(const char *file_name) {
 	{
 		position = line.find(found_deadline, position + 1);
 		if (position != std::string::npos) {
-			std::cout << line.c_str() << std::endl;
+			end_position = line.find(" nonce", position + 1);
+			start_position = position + found_deadline.size();
+			std::cout << line.substr(start_position, end_position - start_position).c_str() << std::endl;
 		}
-		position = line.find(confirmed_deadline, position + 1);
-		if (position != std::string::npos) {
-			std::cout << line.c_str() << std::endl;
-		}
+		//position = line.find(confirmed_deadline, position + 1);
+		//if (position != std::string::npos) {
+		//	std::cout << line.c_str() << std::endl;
+		//}
 	}
 }
