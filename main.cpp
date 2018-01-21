@@ -33,12 +33,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	for (int i = 0; i < files_in_dir.size(); i++) {
-		std::cout << files_in_dir[i].d_name << std::endl;
-		std::string file_name = files_in_dir[i].d_name;
-		std::string log_name = "2018-1-10_0_27_31.log";
-		if (file_name == log_name) {
-			find_corrupted_plots(files_in_dir[i].d_name);
-		}
+		find_corrupted_plots(files_in_dir[i].d_name);
 	}
 
 	return EXIT_SUCCESS;
