@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -73,6 +74,7 @@ static void find_corrupted_plots(const char *file_name) {
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file;
+	std::map<std::string, int> plot_file_corruption;
 	const std::string found_deadline_keyword = "found deadline=";
 	const std::string found_deadline_end_keyword = " nonce";
 	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
@@ -95,6 +97,7 @@ static void find_corrupted_plots(const char *file_name) {
 			// Extract file name.
 			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
 			plot_file = line.substr(plot_file_position, line.size());
+			plot_file_corruption[plot_file] = 0;
 		}
 
 		// Extract confirmed deadlines.
@@ -105,14 +108,16 @@ static void find_corrupted_plots(const char *file_name) {
 			confirmed_deadline = line.substr(start_position, end_position - start_position);
 		}
 
+		// Corrupted plot condition:
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline != confirmed_deadline) {
+				plot_file_corruption[plot_file]++;
 				std::cout << "Found deadline     : ";
 				std::cout << found_deadline << std::endl;
 				std::cout << "Confirmed deadline : ";
 				std::cout << confirmed_deadline << std::endl;
 				std::cout << "FILE               : ";
-				std::cout << plot_file << std::endl;
+				std::cout << plot_file << " - " << plot_file_corruption[plot_file] << std::endl;
 			}
 			found_deadline = "";
 			confirmed_deadline = "";
