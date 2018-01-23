@@ -110,7 +110,7 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 
 	std::cout << "DEADLINES -> ";
 
-	std::string busy_icon[4] = { "-", "\\", "|", "/" };
+	std::string busy_icon[4] = { "'", ":", ".", ":" };
 	size_t busy_icon_animation_length = sizeof(busy_icon) / sizeof(busy_icon[0]);
 	float i = 0;
 	float update_interval = 0.002;
