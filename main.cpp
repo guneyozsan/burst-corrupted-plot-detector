@@ -31,6 +31,8 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 static void print_right_aligned(const std::string& content, const size_t& slot_size);
 static std::string underline(const std::string& content);
 static void print_results(std::map<std::string, Plot_file_result> plot_file_result);
+static std::string backspace(const size_t size);
+static std::string whitespace(const size_t size);
 
 int main(int argc, char *argv[]) {
 	int i;
@@ -110,20 +112,23 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 
 	std::cout << "DEADLINES -> ";
 
-	std::string busy_icon[4] = { "'", ":", ".", ":" };
+	std::string busy_icon[] = { "\'", "\'", ":", ".", ":" };
+
 	size_t busy_icon_animation_length = sizeof(busy_icon) / sizeof(busy_icon[0]);
 	float i = 0;
-	float update_interval = 0.002;
+	float update_speed = 0.002f;
 	int last_update = 0;
-	std::cout << " ";
+	std::string current_frame = busy_icon[0];
+	std::cout << whitespace(current_frame.length());
 	while (std::getline(file, line))
 	{
 		// Print busy icon
 		if (i > last_update) {
-			std::cout << "\b" << busy_icon[(int)i % busy_icon_animation_length];
+			current_frame = busy_icon[(int)i % busy_icon_animation_length];
+			std::cout << backspace(current_frame.length()) << current_frame;
 			last_update++;
 		}
-		i += update_interval;
+		i += update_speed;
 
 		// Extract found deadlines.
 		position = line.find(found_deadline_keyword, position + 1);
@@ -151,17 +156,17 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline == confirmed_deadline) {
 				plot_file_result[plot_file].healthy_count++;
-				std::cout << "\b" << "." << busy_icon[(int)i % busy_icon_animation_length];
+				std::cout << backspace(current_frame.length()) << "." << busy_icon[(int)i % busy_icon_animation_length];
 			}
 			else {
 				plot_file_result[plot_file].corrupted_count++;
-				std::cout << "\b" << "X" << busy_icon[(int)i % busy_icon_animation_length];
+				std::cout << backspace(current_frame.length()) << "X" << busy_icon[(int)i % busy_icon_animation_length];
 			}
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
-	std::cout << "\b" << " ";
+	std::cout << backspace(current_frame.length()) << whitespace(current_frame.length());
 	return plot_file_result;
 }
 
@@ -220,4 +225,20 @@ static std::string underline(const std::string& content) {
 		underliner.append("-");
 	}
 	return underliner;
+}
+
+static std::string backspace(const size_t size) {
+	std::string backspace;
+	for (size_t i = 0; i < size; i++) {
+		backspace.append("\b");
+	}
+	return backspace;
+}
+
+static std::string whitespace(const size_t size) {
+	std::string backspace;
+	for (size_t i = 0; i < size; i++) {
+		backspace.append(" ");
+	}
+	return backspace;
 }
