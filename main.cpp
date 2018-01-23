@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -13,8 +13,26 @@
 #include <dirent.h>
 #endif // _MSC_VER
 
+struct Plot_file_result {
+	int healthy_count;
+	int corrupted_count;
+
+	Plot_file_result() {
+	}
+
+	Plot_file_result(const int& healthy_count, const int& corrupted_count) {
+		this->corrupted_count = corrupted_count;
+		this->healthy_count = healthy_count;
+	}
+};
+
 static std::vector<dirent> get_files_in_directory(const char *dirname);
-static void find_corrupted_plots(const char *file_name);
+static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *file_name);
+static void print_right_aligned(const std::string& content, const size_t& slot_size);
+static std::string underline(const std::string& content);
+static void print_results(std::map<std::string, Plot_file_result> plot_file_result);
+static std::string backspace(const size_t size);
+static std::string whitespace(const size_t size);
 
 int main(int argc, char *argv[]) {
 	int i;
@@ -33,7 +51,12 @@ int main(int argc, char *argv[]) {
 	}
 
 	for (int i = 0; i < files_in_dir.size(); i++) {
-		find_corrupted_plots(files_in_dir[i].d_name);
+		std::cout << std::endl;
+		std::cout << "CHECKING FILE -> " << files_in_dir[i].d_name << std::endl;
+
+		std::map<std::string, Plot_file_result> plot_file_result;
+		plot_file_result = find_corrupted_plots(files_in_dir[i].d_name);
+		print_results(plot_file_result);
 	}
 
 	return EXIT_SUCCESS;
@@ -70,10 +93,11 @@ static std::vector<dirent> get_files_in_directory(const char *dir_name) {
 /*
 * Find Burst plots with deadlines different from server's deadline.
 */
-static void find_corrupted_plots(const char *file_name) {
+static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *file_name) {
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file;
+	std::map<std::string, Plot_file_result> plot_file_result;
 	const std::string found_deadline_keyword = "found deadline=";
 	const std::string found_deadline_end_keyword = " nonce";
 	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
@@ -85,8 +109,27 @@ static void find_corrupted_plots(const char *file_name) {
 
 	std::ifstream file(file_name);
 	std::string line;
+
+	std::cout << "DEADLINES -> ";
+
+	std::string busy_icon[] = { "\'", "\'", ":", ".", ":" };
+
+	size_t busy_icon_animation_length = sizeof(busy_icon) / sizeof(busy_icon[0]);
+	float i = 0;
+	float update_speed = 0.002f;
+	int last_update = 0;
+	std::string current_frame = busy_icon[0];
+	std::cout << whitespace(current_frame.length());
 	while (std::getline(file, line))
 	{
+		// Print busy icon
+		if (i > last_update) {
+			current_frame = busy_icon[(int)i % busy_icon_animation_length];
+			std::cout << backspace(current_frame.length()) << current_frame;
+			last_update++;
+		}
+		i += update_speed;
+
 		// Extract found deadlines.
 		position = line.find(found_deadline_keyword, position + 1);
 		if (position != std::string::npos) {
@@ -96,6 +139,9 @@ static void find_corrupted_plots(const char *file_name) {
 			// Extract file name.
 			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
 			plot_file = line.substr(plot_file_position, line.size());
+			if (plot_file_result.count(plot_file) == 0) {
+				plot_file_result[plot_file] = Plot_file_result(0, 0);
+			}
 		}
 
 		// Extract confirmed deadlines.
@@ -106,17 +152,93 @@ static void find_corrupted_plots(const char *file_name) {
 			confirmed_deadline = line.substr(start_position, end_position - start_position);
 		}
 
+		// Corrupted plot condition:
 		if (found_deadline != "" && confirmed_deadline != "") {
-			if (found_deadline != confirmed_deadline) {
-				std::cout << "Found deadline     : ";
-				std::cout << found_deadline << std::endl;
-				std::cout << "Confirmed deadline : ";
-				std::cout << confirmed_deadline << std::endl;
-				std::cout << "FILE               : ";
-				std::cout << plot_file << std::endl;
+			if (found_deadline == confirmed_deadline) {
+				plot_file_result[plot_file].healthy_count++;
+				std::cout << backspace(current_frame.length()) << "." << busy_icon[(int)i % busy_icon_animation_length];
+			}
+			else {
+				plot_file_result[plot_file].corrupted_count++;
+				std::cout << backspace(current_frame.length()) << "X" << busy_icon[(int)i % busy_icon_animation_length];
 			}
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
+	std::cout << backspace(current_frame.length()) << whitespace(current_frame.length());
+	return plot_file_result;
+}
+
+static void print_results(std::map<std::string, Plot_file_result> plot_file_result) {
+	const std::string corrupted_title = "CONFLICTING";
+	const std::string healthy_title = "HEALTHY";
+	const std::string plot_file_title = "PLOT FILE";
+	const std::string title_gap = "   ";
+
+	if (plot_file_result.size() > 0) {
+		std::cout << std::endl;
+		std::cout << corrupted_title << title_gap << healthy_title << title_gap << plot_file_title << std::endl;
+		std::cout << underline(corrupted_title) << title_gap << underline(healthy_title) << title_gap << underline(plot_file_title) << std::endl;
+		std::string corrupted_count;
+		std::string healthy_count;
+		for (auto const& it : plot_file_result) {
+			if (it.second.corrupted_count == 0) {
+				corrupted_count = "-";
+			}
+			else {
+				corrupted_count = std::to_string(it.second.corrupted_count);
+			}
+
+			print_right_aligned(corrupted_count, corrupted_title.length());
+			std::cout << title_gap;
+
+			if (it.second.healthy_count == 0) {
+				healthy_count = "-";
+			}
+			else {
+				healthy_count = std::to_string(it.second.healthy_count);
+			}
+
+			print_right_aligned(healthy_count, healthy_title.length());
+			std::cout << title_gap;
+			std::cout << it.first;
+			std::cout << std::endl;
+		}
+	}
+	else {
+		std::cout << "No deadlines detected." << std::endl;
+	}
+}
+
+static void print_right_aligned(const std::string& content, const size_t& slot_size) {
+	size_t whitespace_count = slot_size - content.length();
+	for (size_t i = 0; i < whitespace_count; i++) {
+		std::cout << " ";
+	}
+	std::cout << content;
+}
+
+static std::string underline(const std::string& content) {
+	std::string underliner;
+	for (size_t i = 0; i < content.length(); i++) {
+		underliner.append("-");
+	}
+	return underliner;
+}
+
+static std::string backspace(const size_t size) {
+	std::string backspace;
+	for (size_t i = 0; i < size; i++) {
+		backspace.append("\b");
+	}
+	return backspace;
+}
+
+static std::string whitespace(const size_t size) {
+	std::string backspace;
+	for (size_t i = 0; i < size; i++) {
+		backspace.append(" ");
+	}
+	return backspace;
 }
