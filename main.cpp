@@ -28,7 +28,9 @@ struct Plot_file_result {
 
 static std::vector<dirent> get_files_in_directory(const char *dirname);
 static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *file_name);
-
+static void print_right_aligned(const std::string& content, const size_t& slot_size);
+static std::string underline(const std::string& content);
+static void print_results(std::map<std::string, Plot_file_result> plot_file_result);
 
 int main(int argc, char *argv[]) {
 	int i;
@@ -49,18 +51,10 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < files_in_dir.size(); i++) {
 		std::cout << std::endl;
 		std::cout << "CHECKING FILE -> " << files_in_dir[i].d_name << std::endl;
+
 		std::map<std::string, Plot_file_result> plot_file_result;
 		plot_file_result = find_corrupted_plots(files_in_dir[i].d_name);
-		if (plot_file_result.size() > 0) {
-			std::cout << "CONFLICTING  HEALTHY  PLOT FILE" << std::endl;
-			std::cout << "-----------  -------  ---------" << std::endl;
-			for (auto const& it : plot_file_result) {
-				std::cout << it.second.corrupted_count << "            " << it.second.healthy_count << "        " << it.first << std::endl;
-			}
-		}
-		else {
-			std::cout << "No deadlines detected." << std::endl;
-		}
+		print_results(plot_file_result);
 	}
 
 	return EXIT_SUCCESS;
@@ -113,6 +107,9 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 
 	std::ifstream file(file_name);
 	std::string line;
+
+	std::cout << "DEADLINES -> ";
+
 	while (std::getline(file, line))
 	{
 		// Extract found deadlines.
@@ -141,7 +138,7 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline == confirmed_deadline) {
 				plot_file_result[plot_file].healthy_count++;
-				std::cout << "-";
+				std::cout << ".";
 			}
 			else {
 				plot_file_result[plot_file].corrupted_count++;
@@ -151,6 +148,62 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 			confirmed_deadline = "";
 		}
 	}
-	std::cout << std::endl;
 	return plot_file_result;
+}
+
+static void print_results(std::map<std::string, Plot_file_result> plot_file_result) {
+	const std::string corrupted_title = "CONFLICTING";
+	const std::string healthy_title = "HEALTHY";
+	const std::string plot_file_title = "PLOT FILE";
+	const std::string title_gap = "   ";
+
+	if (plot_file_result.size() > 0) {
+		std::cout << std::endl;
+		std::cout << corrupted_title << title_gap << healthy_title << title_gap << plot_file_title << std::endl;
+		std::cout << underline(corrupted_title) << title_gap << underline(healthy_title) << title_gap << underline(plot_file_title) << std::endl;
+		std::string corrupted_count;
+		std::string healthy_count;
+		for (auto const& it : plot_file_result) {
+			if (it.second.corrupted_count == 0) {
+				corrupted_count = "-";
+			}
+			else {
+				corrupted_count = std::to_string(it.second.corrupted_count);
+			}
+
+			print_right_aligned(corrupted_count, corrupted_title.length());
+			std::cout << title_gap;
+
+			if (it.second.healthy_count == 0) {
+				healthy_count = "-";
+			}
+			else {
+				healthy_count = std::to_string(it.second.healthy_count);
+			}
+
+			print_right_aligned(healthy_count, healthy_title.length());
+			std::cout << title_gap;
+			std::cout << it.first;
+			std::cout << std::endl;
+		}
+	}
+	else {
+		std::cout << "No deadlines detected." << std::endl;
+	}
+}
+
+static void print_right_aligned(const std::string& content, const size_t& slot_size) {
+	size_t whitespace_count = slot_size - content.length();
+	for (size_t i = 0; i < whitespace_count; i++) {
+		std::cout << " ";
+	}
+	std::cout << content;
+}
+
+static std::string underline(const std::string& content) {
+	std::string underliner;
+	for (size_t i = 0; i < content.length(); i++) {
+		underliner.append("-");
+	}
+	return underliner;
 }
