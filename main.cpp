@@ -13,8 +13,22 @@
 #include <dirent.h>
 #endif // _MSC_VER
 
+struct Plot_file_result {
+	int healthy_count;
+	int corrupted_count;
+
+	Plot_file_result() {
+	}
+
+	Plot_file_result(const int& healthy_count, const int& corrupted_count) {
+		this->corrupted_count = corrupted_count;
+		this->healthy_count = healthy_count;
+	}
+};
+
 static std::vector<dirent> get_files_in_directory(const char *dirname);
-static std::map<std::string, int> find_corrupted_plots(const char *file_name);
+static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *file_name);
+
 
 int main(int argc, char *argv[]) {
 	int i;
@@ -35,13 +49,13 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < files_in_dir.size(); i++) {
 		std::cout << std::endl;
 		std::cout << "CHECKING FILE -> " << files_in_dir[i].d_name << std::endl;
-		std::map<std::string, int> plot_file_corruption_table;
-		plot_file_corruption_table = find_corrupted_plots(files_in_dir[i].d_name);
-		if (plot_file_corruption_table.size() > 0) {
-			std::cout << "CONFLICTING DEADLINES  PLOT FILE" << std::endl;
-			std::cout << "---------------------  ---------" << std::endl;
-			for (auto const& x : plot_file_corruption_table) {
-				std::cout << x.second << "                      " << x.first<< std::endl;
+		std::map<std::string, Plot_file_result> plot_file_result;
+		plot_file_result = find_corrupted_plots(files_in_dir[i].d_name);
+		if (plot_file_result.size() > 0) {
+			std::cout << "CONFLICTING  HEALTHY  PLOT FILE" << std::endl;
+			std::cout << "-----------  -------  ---------" << std::endl;
+			for (auto const& it : plot_file_result) {
+				std::cout << it.second.corrupted_count << "            " << it.second.healthy_count << "        " << it.first << std::endl;
 			}
 		}
 		else {
@@ -83,11 +97,11 @@ static std::vector<dirent> get_files_in_directory(const char *dir_name) {
 /*
 * Find Burst plots with deadlines different from server's deadline.
 */
-static std::map<std::string, int> find_corrupted_plots(const char *file_name) {
+static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *file_name) {
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file;
-	std::map<std::string, int> plot_file_corruption_table;
+	std::map<std::string, Plot_file_result> plot_file_result;
 	const std::string found_deadline_keyword = "found deadline=";
 	const std::string found_deadline_end_keyword = " nonce";
 	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
@@ -110,8 +124,8 @@ static std::map<std::string, int> find_corrupted_plots(const char *file_name) {
 			// Extract file name.
 			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
 			plot_file = line.substr(plot_file_position, line.size());
-			if (plot_file_corruption_table[plot_file] == 0) {
-				plot_file_corruption_table[plot_file] = 0;
+			if (plot_file_result.count(plot_file) == 0) {
+				plot_file_result[plot_file] = Plot_file_result(0, 0);
 			}
 		}
 
@@ -125,13 +139,18 @@ static std::map<std::string, int> find_corrupted_plots(const char *file_name) {
 
 		// Corrupted plot condition:
 		if (found_deadline != "" && confirmed_deadline != "") {
-			if (found_deadline != confirmed_deadline) {
-				plot_file_corruption_table[plot_file]++;
+			if (found_deadline == confirmed_deadline) {
+				plot_file_result[plot_file].healthy_count++;
+				std::cout << "-";
+			}
+			else {
+				plot_file_result[plot_file].corrupted_count++;
+				std::cout << "X";
 			}
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
-
-	return plot_file_corruption_table;
+	std::cout << std::endl;
+	return plot_file_result;
 }
