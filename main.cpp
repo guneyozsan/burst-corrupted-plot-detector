@@ -110,8 +110,21 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 
 	std::cout << "DEADLINES -> ";
 
+	std::string busy_icon[4] = { "-", "\\", "|", "/" };
+	size_t busy_icon_animation_length = sizeof(busy_icon) / sizeof(busy_icon[0]);
+	float i = 0;
+	float update_interval = 0.002;
+	int last_update = 0;
+	std::cout << " ";
 	while (std::getline(file, line))
 	{
+		// Print busy icon
+		if (i > last_update) {
+			std::cout << "\b" << busy_icon[(int)i % busy_icon_animation_length];
+			last_update++;
+		}
+		i += update_interval;
+
 		// Extract found deadlines.
 		position = line.find(found_deadline_keyword, position + 1);
 		if (position != std::string::npos) {
@@ -138,16 +151,17 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline == confirmed_deadline) {
 				plot_file_result[plot_file].healthy_count++;
-				std::cout << ".";
+				std::cout << "\b" << "." << busy_icon[(int)i % busy_icon_animation_length];
 			}
 			else {
 				plot_file_result[plot_file].corrupted_count++;
-				std::cout << "X";
+				std::cout << "\b" << "X" << busy_icon[(int)i % busy_icon_animation_length];
 			}
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
+	std::cout << "\b" << " ";
 	return plot_file_result;
 }
 
