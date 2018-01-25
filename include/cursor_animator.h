@@ -30,6 +30,8 @@ private:
 	public:
 		animating_cursor();
 		animating_cursor(const std::vector<std::string> &cursor_frames);
+		
+		/* Returns the current frame. */
 		std::string current_frame();
 		
 		/* Advances the cursor animation to the next frame. */
