@@ -55,20 +55,25 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
 
-	cursor_animator busy_cursor_animator({ "\'", "\'", ":", ".", ":" }, 0.004f);
+	cursor_animator busy_cursor_animator(
+		{ "\'", "\'", ":", ".", ":" }, 0.004f);
 
 	// Main loop
 	while (std::getline(file, line)) {
 		busy_cursor_animator.update_animation();
 
 		// Extract found deadline.
-		current_position = line.find(found_deadline_keyword, current_position + 1);
+		current_position = line.find(
+			found_deadline_keyword, current_position + 1);
 		if (current_position != std::string::npos) {
-			end_position = line.find(found_deadline_end_keyword, current_position + 1);
+			end_position = line.find(
+				found_deadline_end_keyword, current_position + 1);
 			start_position = current_position + found_deadline_keyword.size();
-			found_deadline = line.substr(start_position, end_position - start_position);
+			found_deadline = line.substr(
+				start_position, end_position - start_position);
 			// Extract file name.
-			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
+			plot_file_position = line.find(file_keyword, end_position
+				+ found_deadline_end_keyword.size()) + file_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
 			if (plot_files.count(plot_file_name) == 0) {
 				plot_files[plot_file_name] = plot_file(plot_file_name);
@@ -76,11 +81,14 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 		}
 
 		// Extract confirmed deadline.
-		current_position = line.find(confirmed_deadline_keyword, current_position + 1);
+		current_position = line.find(
+			confirmed_deadline_keyword, current_position + 1);
 		if (current_position != std::string::npos) {
 			end_position = line.size();
-			start_position = current_position + confirmed_deadline_keyword.size();
-			confirmed_deadline = line.substr(start_position, end_position - start_position);
+			start_position = current_position
+				+ confirmed_deadline_keyword.size();
+			confirmed_deadline = line.substr(
+				start_position, end_position - start_position);
 		}
 
 		// Check if found deadline and confirmed deadline conflict.
@@ -119,8 +127,12 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 
 	if (plot_files.size() > 0) {
 		std::cout << std::endl;
-		std::cout << corrupted_title << title_gap << healthy_title << title_gap << plot_file_title << std::endl;
-		std::cout << underline(corrupted_title) << title_gap << underline(healthy_title) << title_gap << underline(plot_file_title) << std::endl;
+		std::cout << corrupted_title << title_gap
+			<< healthy_title << title_gap
+			<< plot_file_title << std::endl;
+		std::cout << underline(corrupted_title) << title_gap
+			<< underline(healthy_title) << title_gap
+			<< underline(plot_file_title) << std::endl;
 		std::string corrupted_count;
 		std::string healthy_count;
 		for (size_t i = 0; i < plot_files.size(); i++) {
@@ -128,7 +140,8 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 				corrupted_count = "-";
 			}
 			else {
-				corrupted_count = std::to_string(plot_files[i].mining_stats.corrupted_count);
+				corrupted_count = std::to_string(
+					plot_files[i].mining_stats.corrupted_count);
 			}
 
 			print_right_aligned(corrupted_count, corrupted_title.length());
@@ -138,7 +151,8 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 				healthy_count = "-";
 			}
 			else {
-				healthy_count = std::to_string(plot_files[i].mining_stats.healthy_count);
+				healthy_count = std::to_string(
+					plot_files[i].mining_stats.healthy_count);
 			}
 
 			print_right_aligned(healthy_count, healthy_title.length());
