@@ -36,14 +36,6 @@
 struct Plot_file_result {
 	int healthy_count;
 	int corrupted_count;
-
-	Plot_file_result() {
-	}
-
-	Plot_file_result(const int& healthy_count, const int& corrupted_count) {
-		this->corrupted_count = corrupted_count;
-		this->healthy_count = healthy_count;
-	}
 };
 
 static std::vector<dirent> get_files_in_directory(const char *dirname);
@@ -156,7 +148,7 @@ static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *
 			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
 			plot_file = line.substr(plot_file_position, line.size());
 			if (plot_file_result.count(plot_file) == 0) {
-				plot_file_result[plot_file] = Plot_file_result(0, 0);
+				plot_file_result[plot_file] = Plot_file_result{ 0, 0 };
 			}
 		}
 
