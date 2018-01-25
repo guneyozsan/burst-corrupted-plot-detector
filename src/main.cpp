@@ -34,13 +34,21 @@
 #include "console_gui.h"
 #include "file_utility.h"
 
-struct Plot_file_stats {
-	int healthy_count;
-	int corrupted_count;
+struct Plot_file {
+	std::string name;
+	struct Stats {
+		int healthy_count = 0;
+		int corrupted_count = 0;
+	};
+	Stats stats;
+	Plot_file() {}
+	Plot_file(std::string name){
+		this->name = name;
+	}
 };
 
-static std::map<std::string, Plot_file_stats> find_corrupted_plots(const char *file_name);
-static void print_plot_file_stats(std::map<std::string, Plot_file_stats> plot_file_result);
+static std::vector<Plot_file> find_corrupted_plots(const char *file_name);
+static void print_plot_file_stats(std::vector<Plot_file> plot_file_result);
 
 int main(int argc, char *argv[]) {
 	int i;
@@ -62,9 +70,9 @@ int main(int argc, char *argv[]) {
 		std::cout << std::endl;
 		std::cout << "CHECKING FILE -> " << files_in_dir[i].d_name << std::endl;
 
-		std::map<std::string, Plot_file_stats> plot_file_stats_collection;
-		plot_file_stats_collection = find_corrupted_plots(files_in_dir[i].d_name);
-		print_plot_file_stats(plot_file_stats_collection);
+		std::vector<Plot_file> plot_files;
+		plot_files = find_corrupted_plots(files_in_dir[i].d_name);
+		print_plot_file_stats(plot_files);
 	}
 
 	return EXIT_SUCCESS;
@@ -73,11 +81,11 @@ int main(int argc, char *argv[]) {
 /*
 * Find Burst plots with deadlines different from server's deadline.
 */
-static std::map<std::string, Plot_file_stats> find_corrupted_plots(const char *file_name) {
+static std::vector<Plot_file> find_corrupted_plots(const char *file_name) {
 	std::string found_deadline;
 	std::string confirmed_deadline;
-	std::string plot_file;
-	std::map<std::string, Plot_file_stats> plot_file_stats_collection;
+	std::string plot_file_name;
+	std::map<std::string, Plot_file> plot_files;
 	const std::string found_deadline_keyword = "found deadline=";
 	const std::string found_deadline_end_keyword = " nonce";
 	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
@@ -95,7 +103,7 @@ static std::map<std::string, Plot_file_stats> find_corrupted_plots(const char *f
 	std::string busy_icon[] = { "\'", "\'", ":", ".", ":" };
 
 	size_t busy_icon_animation_length = sizeof(busy_icon) / sizeof(busy_icon[0]);
-	float i = 0;
+	float cursor_time = 0;
 	float update_speed = 0.002f;
 	int last_update = 0;
 	std::string current_frame = busy_icon[0];
@@ -103,12 +111,12 @@ static std::map<std::string, Plot_file_stats> find_corrupted_plots(const char *f
 	while (std::getline(file, line))
 	{
 		// Print busy icon
-		if (i > last_update) {
-			current_frame = busy_icon[(int)i % busy_icon_animation_length];
+		if (cursor_time > last_update) {
+			current_frame = busy_icon[(int)cursor_time % busy_icon_animation_length];
 			std::cout << backspace(current_frame.length()) << current_frame;
 			last_update++;
 		}
-		i += update_speed;
+		cursor_time += update_speed;
 
 		// Extract found deadlines.
 		position = line.find(found_deadline_keyword, position + 1);
@@ -118,9 +126,9 @@ static std::map<std::string, Plot_file_stats> find_corrupted_plots(const char *f
 			found_deadline = line.substr(start_position, end_position - start_position);
 			// Extract file name.
 			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
-			plot_file = line.substr(plot_file_position, line.size());
-			if (plot_file_stats_collection.count(plot_file) == 0) {
-				plot_file_stats_collection[plot_file] = Plot_file_stats { 0, 0 };
+			plot_file_name = line.substr(plot_file_position, line.size());
+			if (plot_files.count(plot_file_name) == 0) {
+				plot_files[plot_file_name] = Plot_file(plot_file_name);
 			}
 		}
 
@@ -135,57 +143,63 @@ static std::map<std::string, Plot_file_stats> find_corrupted_plots(const char *f
 		// Corrupted plot condition:
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline == confirmed_deadline) {
-				plot_file_stats_collection[plot_file].healthy_count++;
-				std::cout << backspace(current_frame.length()) << "." << busy_icon[(int)i % busy_icon_animation_length];
+				plot_files[plot_file_name].stats.healthy_count++;
+				std::cout << backspace(current_frame.length()) << "." << busy_icon[(int)cursor_time % busy_icon_animation_length];
 			}
 			else {
-				plot_file_stats_collection[plot_file].corrupted_count++;
-				std::cout << backspace(current_frame.length()) << "X" << busy_icon[(int)i % busy_icon_animation_length];
+				plot_files[plot_file_name].stats.corrupted_count++;
+				std::cout << backspace(current_frame.length()) << "X" << busy_icon[(int)cursor_time % busy_icon_animation_length];
 			}
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
 	std::cout << backspace(current_frame.length()) << whitespace(current_frame.length());
-	return plot_file_stats_collection;
+	std::vector<Plot_file> plot_files_array(plot_files.size());
+	int i = 0;
+	for (auto const &it : plot_files) {
+		plot_files_array[i] = it.second;
+		i++;
+	}
+	return plot_files_array;
 }
 
 /*
-* Display stats of the given plot file in a nice format.
+* Display the stats of the given plot file in a nice format.
 */
-static void print_plot_file_stats(std::map<std::string, Plot_file_stats> plot_file_result) {
+static void print_plot_file_stats(std::vector<Plot_file> plot_files) {
 	const std::string corrupted_title = "CONFLICTING";
 	const std::string healthy_title = "HEALTHY";
 	const std::string plot_file_title = "PLOT FILE";
 	const std::string title_gap = "   ";
 
-	if (plot_file_result.size() > 0) {
+	if (plot_files.size() > 0) {
 		std::cout << std::endl;
 		std::cout << corrupted_title << title_gap << healthy_title << title_gap << plot_file_title << std::endl;
 		std::cout << underline(corrupted_title) << title_gap << underline(healthy_title) << title_gap << underline(plot_file_title) << std::endl;
 		std::string corrupted_count;
 		std::string healthy_count;
-		for (auto const& it : plot_file_result) {
-			if (it.second.corrupted_count == 0) {
+		for (size_t i = 0; i < plot_files.size(); i++) {
+			if (plot_files[i].stats.corrupted_count == 0) {
 				corrupted_count = "-";
 			}
 			else {
-				corrupted_count = std::to_string(it.second.corrupted_count);
+				corrupted_count = std::to_string(plot_files[i].stats.corrupted_count);
 			}
 
 			print_right_aligned(corrupted_count, corrupted_title.length());
 			std::cout << title_gap;
 
-			if (it.second.healthy_count == 0) {
+			if (plot_files[i].stats.healthy_count == 0) {
 				healthy_count = "-";
 			}
 			else {
-				healthy_count = std::to_string(it.second.healthy_count);
+				healthy_count = std::to_string(plot_files[i].stats.healthy_count);
 			}
 
 			print_right_aligned(healthy_count, healthy_title.length());
 			std::cout << title_gap;
-			std::cout << it.first;
+			std::cout << plot_files[i].name;
 			std::cout << std::endl;
 		}
 	}
