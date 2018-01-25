@@ -29,37 +29,41 @@
 * Find Burst plots with deadlines different from server's deadline.
 */
 std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
+	// Plot information
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file_name;
 	std::map<std::string, Plot_file> plot_files;
+
+	// Crawling utility
 	const std::string found_deadline_keyword = "found deadline=";
 	const std::string found_deadline_end_keyword = " nonce";
 	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
 	const std::string file_keyword = "file: ";
-	std::size_t position = 0;
-	std::size_t end_position = 0;
 	std::size_t start_position = 0;
+	std::size_t end_position = 0;
+	std::size_t current_position = 0;
 	std::size_t plot_file_position = 0;
 
+	// File utility
 	std::ifstream file(file_name);
 	std::string line;
 
+	// User feedback
 	std::cout << std::endl;
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
-
 	std::string busy_icon[] = { "\'", "\'", ":", ".", ":" };
-
 	size_t busy_icon_animation_length = sizeof(busy_icon) / sizeof(busy_icon[0]);
 	float cursor_time = 0;
 	float update_speed = 0.002f;
 	int last_update = 0;
 	std::string current_frame = busy_icon[0];
 	std::cout << whitespace(current_frame.length());
+
 	while (std::getline(file, line))
 	{
-		// Print busy icon
+		// Update cursor busy animation
 		if (cursor_time > last_update) {
 			current_frame = busy_icon[(int)cursor_time % busy_icon_animation_length];
 			std::cout << backspace(current_frame.length()) << current_frame;
@@ -67,11 +71,11 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 		}
 		cursor_time += update_speed;
 
-		// Extract found deadlines.
-		position = line.find(found_deadline_keyword, position + 1);
-		if (position != std::string::npos) {
-			end_position = line.find(found_deadline_end_keyword, position + 1);
-			start_position = position + found_deadline_keyword.size();
+		// Extract found deadline.
+		current_position = line.find(found_deadline_keyword, current_position + 1);
+		if (current_position != std::string::npos) {
+			end_position = line.find(found_deadline_end_keyword, current_position + 1);
+			start_position = current_position + found_deadline_keyword.size();
 			found_deadline = line.substr(start_position, end_position - start_position);
 			// Extract file name.
 			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
@@ -81,15 +85,15 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 			}
 		}
 
-		// Extract confirmed deadlines.
-		position = line.find(confirmed_deadline_keyword, position + 1);
-		if (position != std::string::npos) {
+		// Extract confirmed deadline.
+		current_position = line.find(confirmed_deadline_keyword, current_position + 1);
+		if (current_position != std::string::npos) {
 			end_position = line.size();
-			start_position = position + confirmed_deadline_keyword.size();
+			start_position = current_position + confirmed_deadline_keyword.size();
 			confirmed_deadline = line.substr(start_position, end_position - start_position);
 		}
 
-		// Corrupted plot condition:
+		// Check if found deadline and confirmed deadline conflict.
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline == confirmed_deadline) {
 				plot_files[plot_file_name].stats.healthy_count++;
@@ -99,6 +103,7 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 				plot_files[plot_file_name].stats.corrupted_count++;
 				std::cout << backspace(current_frame.length()) << "X" << busy_icon[(int)cursor_time % busy_icon_animation_length];
 			}
+			// Reset.
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
