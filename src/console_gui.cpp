@@ -18,6 +18,8 @@
 
 #include "console_gui.h"
 
+#include <iostream>
+
 void print_right_aligned(const std::string& content, const size_t& slot_size) {
 	size_t whitespace_count = slot_size - content.length();
 	for (size_t i = 0; i < whitespace_count; i++) {

@@ -16,32 +16,22 @@
 * along with this program.If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "file_utility.h"
+#pragma once
 
-/*
-* List files within a directory.
-*/
-std::vector<dirent> get_files_in_directory(const char *dir_name) {
-	DIR *dir;
-	struct dirent *dir_entry;
-	std::vector<struct dirent> file_entries;
+#include <vector>
 
-	/* Open directory stream */
-	dir = opendir(dir_name);
-	if (dir != NULL) {
-		/* Add all files within the directory */
-		while ((dir_entry = readdir(dir)) != NULL) {
-			if (dir_entry->d_type == DT_REG) {
-				file_entries.push_back(*dir_entry);
-			}
-		}
-
-		closedir(dir);
-		return file_entries;
+struct Plot_file {
+	std::string name;
+	struct Stats {
+		int healthy_count = 0;
+		int corrupted_count = 0;
+	};
+	Stats stats;
+	Plot_file() {}
+	Plot_file(std::string name) {
+		this->name = name;
 	}
-	else {
-		/* Could not open directory */
-		printf("Cannot open directory %s\n", dir_name);
-		exit(EXIT_FAILURE);
-	}
-}
+};
+
+std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name);
+void print_plot_file_stats(std::vector<Plot_file> plot_file_result);

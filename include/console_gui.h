@@ -17,8 +17,7 @@
  */
 
 #pragma once
-#include <stdlib.h>
-#include <iostream>
+
 #include <string>
 
 void print_right_aligned(const std::string& content, const size_t& slot_size);

@@ -119,11 +119,13 @@
   <ItemGroup>
     <ClInclude Include="include\console_gui.h" />
     <ClInclude Include="include\file_utility.h" />
+    <ClInclude Include="include\mining_log_analyzer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\console_gui.cpp" />
     <ClCompile Include="src\file_utility.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\mining_log_analyzer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
