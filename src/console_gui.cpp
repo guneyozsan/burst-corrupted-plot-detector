@@ -23,7 +23,7 @@
  /*
  * Prints the content right aligned in a horizontal slot of given size.
  */
-void print_right_aligned(const std::string& content, const size_t& slot_size) {
+void print_right_aligned(const std::string &content, const size_t &slot_size) {
 	size_t whitespace_count = slot_size - content.length();
 	for (size_t i = 0; i < whitespace_count; i++) {
 		std::cout << " ";
@@ -34,7 +34,7 @@ void print_right_aligned(const std::string& content, const size_t& slot_size) {
 /*
 * Prints "-" the same size with given content to serve as underliner.
 */
-std::string underline(const std::string& content) {
+std::string underline(const std::string &content) {
 	std::string underliner;
 	for (size_t i = 0; i < content.length(); i++) {
 		underliner.append("-");
@@ -45,7 +45,7 @@ std::string underline(const std::string& content) {
 /*
 * Moves cursor back. Doesn't delete printed output.
 */
-std::string move_cursor_back(const size_t size) {
+std::string move_cursor_back(const size_t &size) {
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
 		backspace.append("\b");
@@ -56,7 +56,7 @@ std::string move_cursor_back(const size_t size) {
 /*
 * Prints whitespace of given size.
 */
-std::string whitespace(const size_t size) {
+std::string whitespace(const size_t &size) {
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
 		backspace.append(" ");

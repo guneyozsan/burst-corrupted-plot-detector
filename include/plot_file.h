@@ -10,7 +10,7 @@ struct Plot_file {
 	};
 	Stats stats;
 	Plot_file() {}
-	Plot_file(const std::string &name) {
+	Plot_file(std::string name) {
 		this->name = name;
 	}
 };

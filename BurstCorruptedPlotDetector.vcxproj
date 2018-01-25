@@ -120,6 +120,7 @@
     <ClInclude Include="include\console_gui.h" />
     <ClInclude Include="include\file_utility.h" />
     <ClInclude Include="include\mining_log_analyzer.h" />
+    <ClInclude Include="include\plot_file.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\console_gui.cpp" />

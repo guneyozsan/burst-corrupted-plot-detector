@@ -121,7 +121,7 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 /*
 * Display the stats of the given plot file in a nice format.
 */
-void print_plot_file_stats(std::vector<Plot_file> plot_files) {
+void print_plot_file_stats(const std::vector<Plot_file> &plot_files) {
 	const std::string corrupted_title = "CONFLICTING";
 	const std::string healthy_title = "HEALTHY";
 	const std::string plot_file_title = "PLOT FILE";
