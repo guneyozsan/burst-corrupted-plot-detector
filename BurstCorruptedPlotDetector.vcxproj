@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\console_gui.cpp" />
+    <ClCompile Include="src\cursor_animator.cpp" />
     <ClCompile Include="src\file_utility.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mining_log_analyzer.cpp" />

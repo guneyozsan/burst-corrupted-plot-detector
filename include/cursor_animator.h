@@ -1,76 +1,59 @@
+/* Burst Corrupted Plot Detector - Scans Burst mining logs and reports
+* possible corrupt plot files.
+* Copyright(C) 2018 Guney Ozsan
+*
+* This program is free software : you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.If not, see <https://www.gnu.org/licenses/>.
+*/
+
 #pragma once
 
 #include <string>
 #include <vector>
 
-struct animating_cursor {
-	animating_cursor() {};
-	animating_cursor(const std::vector<std::string> &frames) {
-		for (size_t i = 0; i < frames.size(); i++) {
-			this->frames.push_back(frames[i]);
-		}
-	}
-	std::string current_frame() {
-		return frames[currentFrame];
-	}
-	void progress_to_next_frame() {
-		currentFrame = (currentFrame + 1) % frames.size();
-	}
-private:
-	std::vector<std::string> frames;
-	int currentFrame = 0;
-};
-
 class cursor_animator {
-public:
+private:
+	struct animating_cursor {
+	private:
+		std::vector<std::string> frames;
+		int currentFrame = 0;
+	public:
+		animating_cursor();
+		animating_cursor(const std::vector<std::string> &cursor_frames);
+		std::string current_frame();
+		
+		/* Advances the cursor animation to the next frame. */
+		void progress_to_next_frame();
+	};
+
+	float anim_time = 0;
 	float anim_speed;
+	int total_frame_count = 0;
 	animating_cursor cursor;
 
-	cursor_animator(const animating_cursor &animating_cursor,
-		const float &anim_speed)
-	{
-		this->cursor = animating_cursor;
-		this->anim_speed = anim_speed;
-		std::cout << whitespace(cursor.current_frame().length());
-	}
+	bool is_time_for_next_frame();
+	void update_time();
+public:
+	cursor_animator(
+		const std::vector<std::string> &cursor_frames,
+		const float &anim_speed);
+	
+	/* Animates cursor. */
+	void update_animation();
 
-	void animate() {
-		if (time_for_next_frame()) {
-			cursor.progress_to_next_frame();
-			std::cout << move_cursor_back(cursor.current_frame().length())
-				<< cursor.current_frame();
-		}
-		update_time();
-	}
+	/* Prints content moves animating cursor to the end. */
+	void print(std::string content);
 
-	void print(std::string content) {
-		std::cout << move_cursor_back(cursor.current_frame().length())
-			<< content << cursor.current_frame();
-	}
-
-	/*
-	* Clears last frame. Use this when you are donw with the animation.
-	*/
-	void finalize() {
-		std::cout << move_cursor_back(cursor.current_frame().length())
-			<< whitespace(cursor.current_frame().length());
-	}
-
-private:
-	float anim_time = 0;
-	int total_frame_count = 0;
-
-	bool time_for_next_frame() {
-		if (anim_time > total_frame_count) {
-			total_frame_count++;
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	void update_time() {
-		anim_time += anim_speed;
-	}
+	/* Clears last frame. Use this when you are done with the animation. */
+	void finalize();
 };
