@@ -118,9 +118,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\console_gui.h" />
+    <ClInclude Include="include\file_utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\console_gui.cpp" />
+    <ClCompile Include="src\file_utility.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -32,13 +32,13 @@
 #endif // _MSC_VER
 
 #include "console_gui.h"
+#include "file_utility.h"
 
 struct Plot_file_result {
 	int healthy_count;
 	int corrupted_count;
 };
 
-static std::vector<dirent> get_files_in_directory(const char *dirname);
 static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *file_name);
 static void print_results(std::map<std::string, Plot_file_result> plot_file_result);
 
@@ -68,34 +68,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	return EXIT_SUCCESS;
-}
-
-/*
-* List files within a directory.
-*/
-static std::vector<dirent> get_files_in_directory(const char *dir_name) {
-	DIR *dir;
-	struct dirent *dir_entry;
-	std::vector<struct dirent> file_entries;
-
-	/* Open directory stream */
-	dir = opendir(dir_name);
-	if (dir != NULL) {
-		/* Print all files within the directory */
-		while ((dir_entry = readdir(dir)) != NULL) {
-			if (dir_entry->d_type == DT_REG) {
-				file_entries.push_back(*dir_entry);
-			}
-		}
-
-		closedir(dir);
-		return file_entries;
-	}
-	else {
-		/* Could not open directory */
-		printf("Cannot open directory %s\n", dir_name);
-		exit(EXIT_FAILURE);
-	}
 }
 
 /*
