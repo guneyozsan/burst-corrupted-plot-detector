@@ -20,6 +20,9 @@
 
 #include <iostream>
 
+ /*
+ * Prints the content right aligned in a horizontal slot of given size.
+ */
 void print_right_aligned(const std::string& content, const size_t& slot_size) {
 	size_t whitespace_count = slot_size - content.length();
 	for (size_t i = 0; i < whitespace_count; i++) {
@@ -28,6 +31,9 @@ void print_right_aligned(const std::string& content, const size_t& slot_size) {
 	std::cout << content;
 }
 
+/*
+* Prints "-" the same size with given content to serve as underliner.
+*/
 std::string underline(const std::string& content) {
 	std::string underliner;
 	for (size_t i = 0; i < content.length(); i++) {
@@ -36,6 +42,9 @@ std::string underline(const std::string& content) {
 	return underliner;
 }
 
+/*
+* Moves cursor back.
+*/
 std::string backspace(const size_t size) {
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
@@ -44,6 +53,9 @@ std::string backspace(const size_t size) {
 	return backspace;
 }
 
+/*
+* Prints whitespace of given size.
+*/
 std::string whitespace(const size_t size) {
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
