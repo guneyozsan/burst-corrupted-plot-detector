@@ -66,7 +66,7 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 		// Update cursor busy animation
 		if (cursor_time > last_update) {
 			current_frame = busy_icon[(int)cursor_time % busy_icon_animation_length];
-			std::cout << backspace(current_frame.length()) << current_frame;
+			std::cout << move_cursor_back(current_frame.length()) << current_frame;
 			last_update++;
 		}
 		cursor_time += update_speed;
@@ -97,18 +97,18 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline == confirmed_deadline) {
 				plot_files[plot_file_name].stats.healthy_count++;
-				std::cout << backspace(current_frame.length()) << "." << busy_icon[(int)cursor_time % busy_icon_animation_length];
+				std::cout << move_cursor_back(current_frame.length()) << "." << busy_icon[(int)cursor_time % busy_icon_animation_length];
 			}
 			else {
 				plot_files[plot_file_name].stats.corrupted_count++;
-				std::cout << backspace(current_frame.length()) << "X" << busy_icon[(int)cursor_time % busy_icon_animation_length];
+				std::cout << move_cursor_back(current_frame.length()) << "X" << busy_icon[(int)cursor_time % busy_icon_animation_length];
 			}
 			// Reset.
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
-	std::cout << backspace(current_frame.length()) << whitespace(current_frame.length());
+	std::cout << move_cursor_back(current_frame.length()) << whitespace(current_frame.length());
 	std::vector<Plot_file> plot_files_array(plot_files.size());
 	int i = 0;
 	for (auto const &it : plot_files) {

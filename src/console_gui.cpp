@@ -43,9 +43,9 @@ std::string underline(const std::string& content) {
 }
 
 /*
-* Moves cursor back.
+* Moves cursor back. Doesn't delete printed output.
 */
-std::string backspace(const size_t size) {
+std::string move_cursor_back(const size_t size) {
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
 		backspace.append("\b");
