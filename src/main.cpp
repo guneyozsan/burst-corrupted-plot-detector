@@ -26,10 +26,12 @@
 #include <vector>
 
 #ifdef _MSC_VER
-#include "include/dirent.h"
+#include "dirent.h"
 #else
 #include <dirent.h>
 #endif // _MSC_VER
+
+#include "console_gui.h"
 
 struct Plot_file_result {
 	int healthy_count;
@@ -46,11 +48,7 @@ struct Plot_file_result {
 
 static std::vector<dirent> get_files_in_directory(const char *dirname);
 static std::map<std::string, Plot_file_result> find_corrupted_plots(const char *file_name);
-static void print_right_aligned(const std::string& content, const size_t& slot_size);
-static std::string underline(const std::string& content);
 static void print_results(std::map<std::string, Plot_file_result> plot_file_result);
-static std::string backspace(const size_t size);
-static std::string whitespace(const size_t size);
 
 int main(int argc, char *argv[]) {
 	int i;
@@ -227,36 +225,4 @@ static void print_results(std::map<std::string, Plot_file_result> plot_file_resu
 	else {
 		std::cout << "No deadlines detected." << std::endl;
 	}
-}
-
-static void print_right_aligned(const std::string& content, const size_t& slot_size) {
-	size_t whitespace_count = slot_size - content.length();
-	for (size_t i = 0; i < whitespace_count; i++) {
-		std::cout << " ";
-	}
-	std::cout << content;
-}
-
-static std::string underline(const std::string& content) {
-	std::string underliner;
-	for (size_t i = 0; i < content.length(); i++) {
-		underliner.append("-");
-	}
-	return underliner;
-}
-
-static std::string backspace(const size_t size) {
-	std::string backspace;
-	for (size_t i = 0; i < size; i++) {
-		backspace.append("\b");
-	}
-	return backspace;
-}
-
-static std::string whitespace(const size_t size) {
-	std::string backspace;
-	for (size_t i = 0; i < size; i++) {
-		backspace.append(" ");
-	}
-	return backspace;
 }
