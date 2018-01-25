@@ -64,16 +64,21 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 
 		// Extract found deadline.
 		current_position = line.find(
-			found_deadline_keyword, current_position + 1);
+			found_deadline_keyword, current_position + 1
+		);
 		if (current_position != std::string::npos) {
 			end_position = line.find(
-				found_deadline_end_keyword, current_position + 1);
+				found_deadline_end_keyword, current_position + 1
+			);
 			start_position = current_position + found_deadline_keyword.size();
 			found_deadline = line.substr(
-				start_position, end_position - start_position);
+				start_position, end_position - start_position
+			);
 			// Extract file name.
-			plot_file_position = line.find(file_keyword, end_position
-				+ found_deadline_end_keyword.size()) + file_keyword.size();
+			plot_file_position = line.find(
+				file_keyword, end_position
+				+ found_deadline_end_keyword.size()
+			) + file_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
 			if (plot_files.count(plot_file_name) == 0) {
 				plot_files[plot_file_name] = plot_file(plot_file_name);
@@ -82,13 +87,15 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 
 		// Extract confirmed deadline.
 		current_position = line.find(
-			confirmed_deadline_keyword, current_position + 1);
+			confirmed_deadline_keyword, current_position + 1
+		);
 		if (current_position != std::string::npos) {
 			end_position = line.size();
 			start_position = current_position
 				+ confirmed_deadline_keyword.size();
 			confirmed_deadline = line.substr(
-				start_position, end_position - start_position);
+				start_position, end_position - start_position
+			);
 		}
 
 		// Check if found deadline and confirmed deadline conflict.
