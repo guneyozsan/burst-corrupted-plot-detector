@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	for (int i = 0; i < files_in_dir.size(); i++) {
-		std::vector<Plot_file> plot_files;
+		std::vector<plot_file> plot_files;
 		plot_files = analyze_plot_files_in_log(files_in_dir[i].d_name);
 		print_plot_file_stats(plot_files);
 	}

@@ -24,16 +24,17 @@
 #include <string>
 
 #include "console_gui.h"
+#include "cursor_animator.h"
 
 /*
 * Find Burst plots with deadlines different from server's deadline.
 */
-std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
+std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	// Plot information
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file_name;
-	std::map<std::string, Plot_file> plot_files;
+	std::map<std::string, plot_file> plot_files;
 
 	// Crawling utility
 	const std::string found_deadline_keyword = "found deadline=";
@@ -53,23 +54,13 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::cout << std::endl;
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
-	std::string busy_icon[] = { "\'", "\'", ":", ".", ":" };
-	size_t busy_icon_animation_length = sizeof(busy_icon) / sizeof(busy_icon[0]);
-	float cursor_time = 0;
-	float update_speed = 0.002f;
-	int last_update = 0;
-	std::string current_frame = busy_icon[0];
-	std::cout << whitespace(current_frame.length());
 
-	while (std::getline(file, line))
-	{
-		// Update cursor busy animation
-		if (cursor_time > last_update) {
-			current_frame = busy_icon[(int)cursor_time % busy_icon_animation_length];
-			std::cout << move_cursor_back(current_frame.length()) << current_frame;
-			last_update++;
-		}
-		cursor_time += update_speed;
+	cursor_animator busy_cursor_animator(
+		animating_cursor({ "\'", "\'", ":", ".", ":" }), 0.004f);
+
+	// Main loop
+	while (std::getline(file, line)) {
+		busy_cursor_animator.animate();
 
 		// Extract found deadline.
 		current_position = line.find(found_deadline_keyword, current_position + 1);
@@ -81,7 +72,7 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 			plot_file_position = line.find(file_keyword, end_position + found_deadline_end_keyword.size()) + file_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
 			if (plot_files.count(plot_file_name) == 0) {
-				plot_files[plot_file_name] = Plot_file(plot_file_name);
+				plot_files[plot_file_name] = plot_file(plot_file_name);
 			}
 		}
 
@@ -96,20 +87,20 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 		// Check if found deadline and confirmed deadline conflict.
 		if (found_deadline != "" && confirmed_deadline != "") {
 			if (found_deadline == confirmed_deadline) {
-				plot_files[plot_file_name].stats.healthy_count++;
-				std::cout << move_cursor_back(current_frame.length()) << "." << busy_icon[(int)cursor_time % busy_icon_animation_length];
+				plot_files[plot_file_name].mining_stats.healthy_count++;
+				busy_cursor_animator.print(".");
 			}
 			else {
-				plot_files[plot_file_name].stats.corrupted_count++;
-				std::cout << move_cursor_back(current_frame.length()) << "X" << busy_icon[(int)cursor_time % busy_icon_animation_length];
+				plot_files[plot_file_name].mining_stats.corrupted_count++;
+				busy_cursor_animator.print("X");
 			}
 			// Reset.
 			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
-	std::cout << move_cursor_back(current_frame.length()) << whitespace(current_frame.length());
-	std::vector<Plot_file> plot_files_array(plot_files.size());
+	busy_cursor_animator.finalize();
+	std::vector<plot_file> plot_files_array(plot_files.size());
 	int i = 0;
 	for (auto const &it : plot_files) {
 		plot_files_array[i] = it.second;
@@ -121,7 +112,7 @@ std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name) {
 /*
 * Display the stats of the given plot file in a nice format.
 */
-void print_plot_file_stats(const std::vector<Plot_file> &plot_files) {
+void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 	const std::string corrupted_title = "CONFLICTING";
 	const std::string healthy_title = "HEALTHY";
 	const std::string plot_file_title = "PLOT FILE";
@@ -134,21 +125,21 @@ void print_plot_file_stats(const std::vector<Plot_file> &plot_files) {
 		std::string corrupted_count;
 		std::string healthy_count;
 		for (size_t i = 0; i < plot_files.size(); i++) {
-			if (plot_files[i].stats.corrupted_count == 0) {
+			if (plot_files[i].mining_stats.corrupted_count == 0) {
 				corrupted_count = "-";
 			}
 			else {
-				corrupted_count = std::to_string(plot_files[i].stats.corrupted_count);
+				corrupted_count = std::to_string(plot_files[i].mining_stats.corrupted_count);
 			}
 
 			print_right_aligned(corrupted_count, corrupted_title.length());
 			std::cout << title_gap;
 
-			if (plot_files[i].stats.healthy_count == 0) {
+			if (plot_files[i].mining_stats.healthy_count == 0) {
 				healthy_count = "-";
 			}
 			else {
-				healthy_count = std::to_string(plot_files[i].stats.healthy_count);
+				healthy_count = std::to_string(plot_files[i].mining_stats.healthy_count);
 			}
 
 			print_right_aligned(healthy_count, healthy_title.length());

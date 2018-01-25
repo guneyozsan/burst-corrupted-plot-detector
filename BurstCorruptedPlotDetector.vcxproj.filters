@@ -24,6 +24,9 @@
     <ClInclude Include="include\mining_log_analyzer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\cursor_animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\plot_file.h">
       <Filter>Header Files</Filter>
     </ClInclude>

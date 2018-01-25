@@ -2,15 +2,15 @@
 
 #include <string>
 
-struct Plot_file {
+struct plot_file {
 	std::string name;
-	struct Stats {
+	struct mining_stats {
 		int healthy_count = 0;
 		int corrupted_count = 0;
 	};
-	Stats stats;
-	Plot_file() {}
-	Plot_file(std::string name) {
+	mining_stats mining_stats;
+	plot_file() {}
+	plot_file(std::string name) {
 		this->name = name;
 	}
 };
