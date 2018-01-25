@@ -20,7 +20,6 @@
 #include "mining_log_analyzer.h"
 
 int main(int argc, char *argv[]) {
-	int i;
 	std::vector<dirent> files_in_dir;
 
 	/* List current working directory if no arguments on command line */
@@ -29,7 +28,7 @@ int main(int argc, char *argv[]) {
 	}
 	else {
 		/* For each directory in command line */
-		i = 1;
+		int i = 1;
 		while (i < argc) {
 			files_in_dir = get_files_in_directory(argv[i]);
 			i++;

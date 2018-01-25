@@ -20,18 +20,7 @@
 
 #include <vector>
 
-struct Plot_file {
-	std::string name;
-	struct Stats {
-		int healthy_count = 0;
-		int corrupted_count = 0;
-	};
-	Stats stats;
-	Plot_file() {}
-	Plot_file(std::string name) {
-		this->name = name;
-	}
-};
+#include "plot_file.h"
 
 std::vector<Plot_file> analyze_plot_files_in_log(const char *file_name);
 void print_plot_file_stats(std::vector<Plot_file> plot_file_result);
