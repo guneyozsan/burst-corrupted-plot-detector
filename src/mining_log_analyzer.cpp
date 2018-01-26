@@ -20,6 +20,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <map>
 #include <string>
 
@@ -34,7 +35,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file_name;
-	std::map<std::string, plot_file> plot_files;
+	std::map<std::string, plot_file> plot_files; // <file_name, plot_file>
 
 	// Crawling utility
 	const std::string found_deadline_keyword = "found deadline=";
@@ -83,6 +84,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 			if (plot_files.count(plot_file_name) == 0) {
 				plot_files[plot_file_name] = plot_file(plot_file_name);
 			}
+			plot_files[plot_file_name].found_deadlines.push_back(found_deadline);
 		}
 
 		// Extract confirmed deadline.
@@ -99,25 +101,39 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 		}
 
 		// Check if found deadline and confirmed deadline conflict.
-		if (found_deadline != "" && confirmed_deadline != "") {
-			if (found_deadline == confirmed_deadline) {
-				plot_files[plot_file_name].mining_stats.healthy_count++;
-				busy_cursor_animator.print(".");
+		if (confirmed_deadline != "") {
+			for (auto &it_pf : plot_files) {
+				auto it_fd = it_pf.second.found_deadlines.begin();
+				size_t j = 0;
+				while (j < it_pf.second.found_deadlines.size()) {
+					if (*it_fd == confirmed_deadline) {
+						it_pf.second.found_deadlines.erase(it_fd);
+						it_pf.second.mining_stats.AddHealthy();
+						busy_cursor_animator.print(".");
+						break;
+					}
+					else {
+						it_fd++;
+						j++;
+					}
+				}
 			}
-			else {
-				plot_files[plot_file_name].mining_stats.corrupted_count++;
+
+			/*else {
 				busy_cursor_animator.print("X");
-			}
+			}*/
+
 			// Reset.
-			found_deadline = "";
 			confirmed_deadline = "";
 		}
 	}
 	busy_cursor_animator.finalize();
 	std::vector<plot_file> plot_files_array(plot_files.size());
+	// Convert to array
 	int i = 0;
-	for (auto const &it : plot_files) {
-		plot_files_array[i] = it.second;
+	for (auto &it_pf : plot_files) {
+		it_pf.second.mining_stats.AddCorruptedCount(it_pf.second.found_deadlines.size());
+		plot_files_array[i] = it_pf.second;
 		i++;
 	}
 	return plot_files_array;
@@ -127,12 +143,14 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 * Display the stats of the given plot file in a nice format.
 */
 void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
+	std::vector<plot_file> m_plot_files = plot_files;
+
 	const std::string corrupted_title = "CONFLICTING";
 	const std::string healthy_title = "HEALTHY";
 	const std::string plot_file_title = "PLOT FILE";
 	const std::string title_gap = "   ";
 
-	if (plot_files.size() > 0) {
+	if (m_plot_files.size() > 0) {
 		std::cout << std::endl;
 		std::cout << corrupted_title << title_gap
 			<< healthy_title << title_gap
@@ -142,29 +160,29 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 			<< underline(plot_file_title) << std::endl;
 		std::string corrupted_count;
 		std::string healthy_count;
-		for (size_t i = 0; i < plot_files.size(); i++) {
-			if (plot_files[i].mining_stats.corrupted_count == 0) {
+		for (size_t i = 0; i < m_plot_files.size(); i++) {
+			if (m_plot_files[i].mining_stats.GetCorruptedCount() == 0) {
 				corrupted_count = "-";
 			}
 			else {
 				corrupted_count = std::to_string(
-					plot_files[i].mining_stats.corrupted_count);
+					m_plot_files[i].mining_stats.GetCorruptedCount());
 			}
 
 			print_right_aligned(corrupted_count, corrupted_title.length());
 			std::cout << title_gap;
 
-			if (plot_files[i].mining_stats.healthy_count == 0) {
+			if (m_plot_files[i].mining_stats.GetHealthyCount() == 0) {
 				healthy_count = "-";
 			}
 			else {
 				healthy_count = std::to_string(
-					plot_files[i].mining_stats.healthy_count);
+					m_plot_files[i].mining_stats.GetHealthyCount());
 			}
 
 			print_right_aligned(healthy_count, healthy_title.length());
 			std::cout << title_gap;
-			std::cout << plot_files[i].name;
+			std::cout << m_plot_files[i].name;
 			std::cout << std::endl;
 		}
 	}

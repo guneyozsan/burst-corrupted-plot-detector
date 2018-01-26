@@ -18,14 +18,38 @@
 
 #pragma once
 
+#include <list>
 #include <string>
+#include <iostream>
 
 struct plot_file {
 	std::string name;
+	std::list<std::string> found_deadlines;
 
 	struct mining_stats {
+	private:
 		int healthy_count = 0;
 		int corrupted_count = 0;
+	public:
+		void AddHealthy() {
+			healthy_count++;
+		}
+
+		void AddCorrupted() {
+			corrupted_count++;
+		}
+
+		void AddCorruptedCount(const size_t& corrupted_count) {
+			this->corrupted_count += (int)corrupted_count;
+		}
+
+		int GetHealthyCount() {
+			return healthy_count;
+		}
+
+		int GetCorruptedCount() {
+			return corrupted_count;
+		}
 	};
 
 	mining_stats mining_stats;
