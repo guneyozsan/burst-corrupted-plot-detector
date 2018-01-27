@@ -141,23 +141,23 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 		std::string corrupted_count;
 		std::string healthy_count;
 		for (size_t i = 0; i < m_plot_files.size(); i++) {
-			if (m_plot_files[i].mining_stats.GetCorruptedCount() == 0) {
+			if (m_plot_files[i].mining_stats.get_corrupted_count() == 0) {
 				corrupted_count = "-";
 			}
 			else {
 				corrupted_count = std::to_string(
-					m_plot_files[i].mining_stats.GetCorruptedCount());
+					m_plot_files[i].mining_stats.get_corrupted_count());
 			}
 
 			print_right_aligned(corrupted_count, corrupted_title.length());
 			std::cout << title_gap;
 
-			if (m_plot_files[i].mining_stats.GetHealthyCount() == 0) {
+			if (m_plot_files[i].mining_stats.get_healthy_count() == 0) {
 				healthy_count = "-";
 			}
 			else {
 				healthy_count = std::to_string(
-					m_plot_files[i].mining_stats.GetHealthyCount());
+					m_plot_files[i].mining_stats.get_healthy_count());
 			}
 
 			print_right_aligned(healthy_count, healthy_title.length());

@@ -31,23 +31,23 @@ struct plot_file {
 		int healthy_count = 0;
 		int corrupted_count = 0;
 	public:
-		void AddHealthy() {
+		void increment_healthy_count() {
 			healthy_count++;
 		}
 
-		void AddCorrupted() {
+		void increment_corrupted_count() {
 			corrupted_count++;
 		}
 
-		void AddCorruptedCount(const size_t& corrupted_count) {
+		void add_to_corrupted_count(const size_t& corrupted_count) {
 			this->corrupted_count += (int)corrupted_count;
 		}
 
-		int GetHealthyCount() {
+		int get_healthy_count() {
 			return healthy_count;
 		}
 
-		int GetCorruptedCount() {
+		int get_corrupted_count() {
 			return corrupted_count;
 		}
 	};

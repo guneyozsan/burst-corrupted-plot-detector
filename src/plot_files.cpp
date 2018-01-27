@@ -46,7 +46,7 @@ plot_files::get_vector() {
 	std::vector<plot_file> plot_files_vector(plot_file_collection.size());
 	int i = 0;
 	for (auto &it_pf : plot_file_collection) {
-		it_pf.second.mining_stats.AddCorruptedCount(it_pf.second.found_deadlines.size());
+		it_pf.second.mining_stats.add_to_corrupted_count(it_pf.second.found_deadlines.size());
 		plot_files_vector[i] = it_pf.second;
 		i++;
 	}
@@ -83,7 +83,7 @@ plot_files::remove_deadline(const std::string &plot_file_name, const std::string
 	while (j < plot_file_collection[plot_file_name].found_deadlines.size()) {
 		if (*it_fd == deadline) {
 			plot_file_collection[plot_file_name].found_deadlines.erase(it_fd);
-			plot_file_collection[plot_file_name].mining_stats.AddHealthy();
+			plot_file_collection[plot_file_name].mining_stats.increment_healthy_count();
 			break;
 		}
 		else {
