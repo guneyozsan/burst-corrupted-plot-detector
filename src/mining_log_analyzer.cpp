@@ -58,12 +58,11 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
 
-	cursor_animator busy_cursor_animator(
-		{ "\'", "\'", ":", ".", ":" }, 0.004f);
+	cursor_animator cursor_animator({ "-", "\\", "|", "/" }, 0.006f);
 
 	// Main loop
 	while (std::getline(file, line)) {
-		busy_cursor_animator.update_animation();
+		cursor_animator.update_animation();
 
 		// Extract found deadline.
 		current_position = line.find(
@@ -107,16 +106,17 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 			std::string confirmed_plot_file_name = plot_files.find_plot_file_with_deadline(confirmed_deadline);
 			if (confirmed_plot_file_name != "") {
 				plot_files.remove_deadline(confirmed_plot_file_name, confirmed_deadline);
-				busy_cursor_animator.print(".");
+				unsigned char ok = 219;
+				cursor_animator.print(ok);
 			}
 			else {
-				busy_cursor_animator.print("X");
+				cursor_animator.print("X");
 			}
 			// Reset.
 			confirmed_deadline = "";
 		}
 	}
-	busy_cursor_animator.finalize();
+	cursor_animator.finalize();
 	return plot_files.get_vector();
 }
 
