@@ -57,8 +57,8 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::cout << std::endl;
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
-
 	cursor_animator cursor_animator({ "-", "\\", "|", "/" }, 0.006f);
+	unsigned char confirmed_deadline_cursor = 219;
 
 	// Main loop
 	while (std::getline(file, line)) {
@@ -106,8 +106,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 			std::string confirmed_plot_file_name = plot_files.find_plot_file_with_deadline(confirmed_deadline);
 			if (confirmed_plot_file_name != "") {
 				plot_files.remove_deadline(confirmed_plot_file_name, confirmed_deadline);
-				unsigned char ok = 219;
-				cursor_animator.print(ok);
+				cursor_animator.print(confirmed_deadline_cursor);
 			}
 			else {
 				cursor_animator.print("X");
