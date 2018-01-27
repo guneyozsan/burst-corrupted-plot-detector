@@ -119,10 +119,6 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 				}
 			}
 
-			/*else {
-				busy_cursor_animator.print("X");
-			}*/
-
 			// Reset.
 			confirmed_deadline = "";
 		}
