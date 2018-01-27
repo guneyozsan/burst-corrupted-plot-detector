@@ -31,6 +31,9 @@ private:
 		animating_cursor();
 		animating_cursor(const std::vector<std::string> &cursor_frames);
 		
+		/* Sets cursor animation to given frame sequence. */
+		void set_animation(const std::vector<std::string> &frame_sequence);
+		
 		/* Returns the current frame. */
 		std::string current_frame();
 		
@@ -47,15 +50,25 @@ private:
 	void update_time();
 public:
 	cursor_animator(
-		const std::vector<std::string> &cursor_frames,
-		const float &anim_speed);
-	
+		const std::vector<std::string> &cursor_frames, const float &anim_speed
+	);
+
+	/* Sets cursor animation to given frame sequence. */
+	void set_animation(const std::vector<std::string> &frame_sequence);
+
 	/* Animates cursor. */
 	void update_animation();
 
 	/* Prints content moves animating cursor to the end. */
-	void print(std::string content);
+	template<typename T> void print(T const &content);
 
 	/* Clears last frame. Use this when you are done with the animation. */
 	void finalize();
 };
+
+template<typename T> void
+cursor_animator::print(T const &content) {
+	std::cout << move_cursor_back(cursor.current_frame().length())
+		<< content << cursor.current_frame();
+}
+

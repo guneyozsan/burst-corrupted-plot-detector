@@ -23,28 +23,9 @@
 #include <string>
 #include <vector>
 
-cursor_animator::animating_cursor::animating_cursor() {}
-
-cursor_animator::animating_cursor::animating_cursor(
-	const std::vector<std::string> &cursor_frames)
-{
-	for (size_t i = 0; i < cursor_frames.size(); i++) {
-		this->frames.push_back(cursor_frames[i]);
-	}
-}
-
-std::string 
-cursor_animator::animating_cursor::current_frame() {
-	return frames[currentFrame];
-}
-
-void 
-cursor_animator::animating_cursor::progress_to_next_frame() {
-	currentFrame = (currentFrame + 1) % frames.size();
-}
-
 cursor_animator::cursor_animator(
-	const std::vector<std::string> &cursor_frames, const float &anim_speed)
+	const std::vector<std::string> &cursor_frames, const float &anim_speed
+)
 {
 	this->cursor = animating_cursor(cursor_frames);
 	this->anim_speed = anim_speed;
@@ -59,12 +40,6 @@ cursor_animator::update_animation() {
 			<< cursor.current_frame();
 	}
 	update_time();
-}
-
-void
-cursor_animator::print(std::string content) {
-	std::cout << move_cursor_back(cursor.current_frame().length())
-		<< content << cursor.current_frame();
 }
 
 void
@@ -87,4 +62,42 @@ cursor_animator::is_time_for_next_frame() {
 void
 cursor_animator::update_time() {
 	anim_time += anim_speed;
+}
+
+void
+cursor_animator::set_animation(
+	const std::vector<std::string> &frame_sequence)
+{
+	cursor.set_animation(frame_sequence);
+}
+
+cursor_animator::animating_cursor::animating_cursor() {}
+
+cursor_animator::animating_cursor::animating_cursor(
+	const std::vector<std::string> &cursor_frames)
+{
+	for (size_t i = 0; i < cursor_frames.size(); i++) {
+		this->frames.push_back(cursor_frames[i]);
+	}
+}
+
+std::string 
+cursor_animator::animating_cursor::current_frame() {
+	return frames[currentFrame];
+}
+
+void 
+cursor_animator::animating_cursor::progress_to_next_frame() {
+	currentFrame = (currentFrame + 1) % frames.size();
+}
+
+void
+cursor_animator::animating_cursor::set_animation(
+	const std::vector<std::string> &frame_sequence
+)
+{
+	for (size_t i = 0; i < frame_sequence.size(); i++) {
+		this->frames.clear();
+		this->frames.push_back(frame_sequence[i]);
+	}
 }
