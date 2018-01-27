@@ -30,6 +30,9 @@
     <ClInclude Include="include\plot_file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\plot_files.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\console_gui.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\cursor_animator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\plot_files.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

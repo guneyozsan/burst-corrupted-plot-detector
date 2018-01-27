@@ -26,62 +26,13 @@
 
 #include "console_gui.h"
 #include "cursor_animator.h"
+#include "plot_files.h"
 
 /*
 * Find Burst plots with deadlines different from server's deadline.
 */
 std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	// Plot information
-	struct plot_files {
-		std::map<std::string, plot_file> plot_file_collection;
-		bool contains(const std::string &plot_file_name) {
-			if (plot_file_collection.count(plot_file_name) == 0)
-				return false;
-			else
-				return true;
-		}
-		void add(const std::string &plot_file_name) {
-			plot_file_collection[plot_file_name] = plot_file(plot_file_name);
-		}
-		plot_file get(const std::string &plot_file_name) {
-			return plot_file_collection[plot_file_name];
-		}
-		std::map<std::string, plot_file> get_collection() {
-			return plot_file_collection;
-		}
-		std::vector<plot_file> get_vector() {
-			std::vector<plot_file> plot_files_vector(plot_file_collection.size());
-			int i = 0;
-			for (auto &it_pf : plot_file_collection) {
-				it_pf.second.mining_stats.AddCorruptedCount(it_pf.second.found_deadlines.size());
-				plot_files_vector[i] = it_pf.second;
-				i++;
-			}
-			return plot_files_vector;
-		}
-		void find_deadline(const std::string &plot_file_name, const std::string &found_deadline) {
-			plot_file_collection[plot_file_name].found_deadlines.push_back(found_deadline);
-		}
-		void process_deadline(std::string confirmed_deadline) {
-			for (auto &it_pf : plot_file_collection) {
-				auto it_fd = it_pf.second.found_deadlines.begin();
-				size_t j = 0;
-				while (j < it_pf.second.found_deadlines.size()) {
-					if (*it_fd == confirmed_deadline) {
-						it_pf.second.found_deadlines.erase(it_fd);
-						it_pf.second.mining_stats.AddHealthy();
-						std::cout << ".";
-						//busy_cursor_animator.print(".");
-						break;
-					}
-					else {
-						it_fd++;
-						j++;
-					}
-				}
-			}
-		}
-	};
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file_name;
@@ -135,7 +86,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 			if (!plot_files.contains(plot_file_name)) {
 				plot_files.add(plot_file_name);
 			}
-			plot_files.find_deadline(plot_file_name, found_deadline);
+			plot_files.add_found_deadline(plot_file_name, found_deadline);
 		}
 
 		// Extract confirmed deadline.
@@ -153,8 +104,14 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 
 		// Check if found deadline and confirmed deadline conflict.
 		if (confirmed_deadline != "") {
-			plot_files.process_deadline(confirmed_deadline);
-
+			std::string confirmed_plot_file_name = plot_files.find_plot_file_with_deadline(confirmed_deadline);
+			if (confirmed_plot_file_name != "") {
+				plot_files.remove_deadline(confirmed_plot_file_name, confirmed_deadline);
+				busy_cursor_animator.print(".");
+			}
+			else {
+				busy_cursor_animator.print("X");
+			}
 			// Reset.
 			confirmed_deadline = "";
 		}
