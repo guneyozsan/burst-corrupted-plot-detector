@@ -23,16 +23,6 @@
 #include <string>
 #include <vector>
 
-cursor_animator::animating_cursor::animating_cursor() {}
-
-cursor_animator::animating_cursor::animating_cursor(
-	const std::vector<std::string> &cursor_frames)
-{
-	for (size_t i = 0; i < cursor_frames.size(); i++) {
-		this->frames.push_back(cursor_frames[i]);
-	}
-}
-
 cursor_animator::cursor_animator(
 	const std::vector<std::string> &cursor_frames, const float &anim_speed
 )
@@ -75,8 +65,20 @@ cursor_animator::update_time() {
 }
 
 void
-cursor_animator::set_animation(const std::vector<std::string> &frame_sequence) {
+cursor_animator::set_animation(
+	const std::vector<std::string> &frame_sequence)
+{
 	cursor.set_animation(frame_sequence);
+}
+
+cursor_animator::animating_cursor::animating_cursor() {}
+
+cursor_animator::animating_cursor::animating_cursor(
+	const std::vector<std::string> &cursor_frames)
+{
+	for (size_t i = 0; i < cursor_frames.size(); i++) {
+		this->frames.push_back(cursor_frames[i]);
+	}
 }
 
 std::string 
