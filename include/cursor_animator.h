@@ -47,9 +47,9 @@ private:
 	void update_time();
 public:
 	cursor_animator(
-		const std::vector<std::string> &cursor_frames,
-		const float &anim_speed);
-	
+		const std::vector<std::string> &cursor_frames, const float &anim_speed
+	);
+
 	/* Animates cursor. */
 	void update_animation();
 

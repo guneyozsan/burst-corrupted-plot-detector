@@ -33,18 +33,9 @@ cursor_animator::animating_cursor::animating_cursor(
 	}
 }
 
-std::string 
-cursor_animator::animating_cursor::current_frame() {
-	return frames[currentFrame];
-}
-
-void 
-cursor_animator::animating_cursor::progress_to_next_frame() {
-	currentFrame = (currentFrame + 1) % frames.size();
-}
-
 cursor_animator::cursor_animator(
-	const std::vector<std::string> &cursor_frames, const float &anim_speed)
+	const std::vector<std::string> &cursor_frames, const float &anim_speed
+)
 {
 	this->cursor = animating_cursor(cursor_frames);
 	this->anim_speed = anim_speed;
@@ -82,3 +73,13 @@ void
 cursor_animator::update_time() {
 	anim_time += anim_speed;
 }
+std::string 
+cursor_animator::animating_cursor::current_frame() {
+	return frames[currentFrame];
+}
+
+void 
+cursor_animator::animating_cursor::progress_to_next_frame() {
+	currentFrame = (currentFrame + 1) % frames.size();
+}
+
