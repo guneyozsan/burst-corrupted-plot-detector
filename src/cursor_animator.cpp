@@ -19,33 +19,29 @@
 #include "cursor_animator.h"
 
 #include "console_gui.h"
+#include "console_gui.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
-cursor_animator::cursor_animator(
-	const std::vector<std::string> &cursor_frames, const float &anim_speed
-)
-{
-	this->cursor = animating_cursor(cursor_frames);
-	this->anim_speed = anim_speed;
-	std::cout << whitespace(cursor.current_frame().length());
-}
+float cursor_animator::anim_time;
+float cursor_animator::anim_speed;
+int cursor_animator::total_frame_count;
 
 void
 cursor_animator::update_animation() {
 	if (is_time_for_next_frame()) {
-		cursor.progress_to_next_frame();
-		std::cout << move_cursor_back(cursor.current_frame().length())
-			<< cursor.current_frame();
+		animating_cursor::progress_to_next_frame();
+		std::cout << move_cursor_back(animating_cursor::current_frame().length())
+			<< animating_cursor::current_frame();
 	}
 	update_time();
 }
 
 void
 cursor_animator::finalize() {
-	std::cout << move_cursor_back(cursor.current_frame().length())
-		<< whitespace(cursor.current_frame().length());
+	std::cout << move_cursor_back(animating_cursor::current_frame().length())
+		<< whitespace(animating_cursor::current_frame().length());
 }
 
 bool
@@ -66,38 +62,23 @@ cursor_animator::update_time() {
 
 void
 cursor_animator::set_animation(
-	const std::vector<std::string> &frame_sequence)
+	const std::vector<std::string> &frame_sequence,
+	const float &anim_speed)
 {
-	cursor.set_animation(frame_sequence);
-}
-
-cursor_animator::animating_cursor::animating_cursor() {}
-
-cursor_animator::animating_cursor::animating_cursor(
-	const std::vector<std::string> &cursor_frames)
-{
-	for (size_t i = 0; i < cursor_frames.size(); i++) {
-		this->frames.push_back(cursor_frames[i]);
-	}
-}
-
-std::string 
-cursor_animator::animating_cursor::current_frame() {
-	return frames[currentFrame];
-}
-
-void 
-cursor_animator::animating_cursor::progress_to_next_frame() {
-	currentFrame = (currentFrame + 1) % frames.size();
+	set_animation_sequence(frame_sequence);
+	set_speed(anim_speed);
 }
 
 void
-cursor_animator::animating_cursor::set_animation(
-	const std::vector<std::string> &frame_sequence
-)
+cursor_animator::set_animation_sequence(
+	const std::vector<std::string> &frame_sequence)
 {
-	for (size_t i = 0; i < frame_sequence.size(); i++) {
-		this->frames.clear();
-		this->frames.push_back(frame_sequence[i]);
-	}
+	animating_cursor::set_animation(frame_sequence);
+}
+
+void
+cursor_animator::set_speed(
+	const float &anim_speed)
+{
+	cursor_animator::anim_speed = anim_speed;
 }

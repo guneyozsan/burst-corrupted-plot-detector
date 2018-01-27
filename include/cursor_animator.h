@@ -18,57 +18,43 @@
 
 #pragma once
 
+#include "animating_cursor.h"
 #include <string>
 #include <vector>
 
 class cursor_animator {
 private:
-	struct animating_cursor {
-	private:
-		std::vector<std::string> frames;
-		int currentFrame = 0;
-	public:
-		animating_cursor();
-		animating_cursor(const std::vector<std::string> &cursor_frames);
-		
-		/* Sets cursor animation to given frame sequence. */
-		void set_animation(const std::vector<std::string> &frame_sequence);
-		
-		/* Returns the current frame. */
-		std::string current_frame();
-		
-		/* Advances the cursor animation to the next frame. */
-		void progress_to_next_frame();
-	};
+	static float anim_time;
+	static float anim_speed;
+	static int total_frame_count;
 
-	float anim_time = 0;
-	float anim_speed;
-	int total_frame_count = 0;
-	animating_cursor cursor;
-
-	bool is_time_for_next_frame();
-	void update_time();
+	static bool is_time_for_next_frame();
+	static void update_time();
 public:
-	cursor_animator(
-		const std::vector<std::string> &cursor_frames, const float &anim_speed
+	/* Sets cursor animation and speed. */
+	static void set_animation(
+		const std::vector<std::string> &frame_sequence,
+		const float &anim_speed
 	);
-
+	
 	/* Sets cursor animation to given frame sequence. */
-	void set_animation(const std::vector<std::string> &frame_sequence);
+	static void set_animation_sequence(const std::vector<std::string> &frame_sequence);
+	
+	/* Sets animation speed. */
+	static void set_speed(const float &anim_speed);
 
 	/* Animates cursor. */
-	void update_animation();
+	static void update_animation();
 
 	/* Prints content moves animating cursor to the end. */
-	template<typename T> void print(T const &content);
+	template<typename T> static void print(T const &content);
 
 	/* Clears last frame. Use this when you are done with the animation. */
-	void finalize();
+	static void finalize();
 };
 
-template<typename T> void
+template<typename T> static void
 cursor_animator::print(T const &content) {
-	std::cout << move_cursor_back(cursor.current_frame().length())
-		<< content << cursor.current_frame();
+	std::cout << move_cursor_back(animating_cursor::current_frame().length())
+		<< content << animating_cursor::current_frame();
 }
-
