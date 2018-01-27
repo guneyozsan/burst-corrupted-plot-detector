@@ -31,6 +31,8 @@ private:
 		animating_cursor();
 		animating_cursor(const std::vector<std::string> &cursor_frames);
 		
+		void set_animation(const std::vector<std::string> &frame_sequence);
+		
 		/* Returns the current frame. */
 		std::string current_frame();
 		
@@ -49,6 +51,8 @@ public:
 	cursor_animator(
 		const std::vector<std::string> &cursor_frames, const float &anim_speed
 	);
+
+	void set_animation(const std::vector<std::string> &frame_sequence);
 
 	/* Animates cursor. */
 	void update_animation();
