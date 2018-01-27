@@ -32,10 +32,61 @@
 */
 std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	// Plot information
+	struct plot_files {
+		std::map<std::string, plot_file> plot_file_collection;
+		bool contains(const std::string &plot_file_name) {
+			if (plot_file_collection.count(plot_file_name) == 0)
+				return false;
+			else
+				return true;
+		}
+		void add(const std::string &plot_file_name) {
+			plot_file_collection[plot_file_name] = plot_file(plot_file_name);
+		}
+		plot_file get(const std::string &plot_file_name) {
+			return plot_file_collection[plot_file_name];
+		}
+		std::map<std::string, plot_file> get_collection() {
+			return plot_file_collection;
+		}
+		std::vector<plot_file> get_vector() {
+			std::vector<plot_file> plot_files_vector(plot_file_collection.size());
+			int i = 0;
+			for (auto &it_pf : plot_file_collection) {
+				it_pf.second.mining_stats.AddCorruptedCount(it_pf.second.found_deadlines.size());
+				plot_files_vector[i] = it_pf.second;
+				i++;
+			}
+			return plot_files_vector;
+		}
+		void find_deadline(const std::string &plot_file_name, const std::string &found_deadline) {
+			plot_file_collection[plot_file_name].found_deadlines.push_back(found_deadline);
+		}
+		void process_deadline(std::string confirmed_deadline) {
+			for (auto &it_pf : plot_file_collection) {
+				auto it_fd = it_pf.second.found_deadlines.begin();
+				size_t j = 0;
+				while (j < it_pf.second.found_deadlines.size()) {
+					if (*it_fd == confirmed_deadline) {
+						it_pf.second.found_deadlines.erase(it_fd);
+						it_pf.second.mining_stats.AddHealthy();
+						std::cout << ".";
+						//busy_cursor_animator.print(".");
+						break;
+					}
+					else {
+						it_fd++;
+						j++;
+					}
+				}
+			}
+		}
+	};
 	std::string found_deadline;
 	std::string confirmed_deadline;
 	std::string plot_file_name;
-	std::map<std::string, plot_file> plot_files; // <file_name, plot_file>
+	plot_files plot_files;
+
 
 	// Crawling utility
 	const std::string found_deadline_keyword = "found deadline=";
@@ -81,10 +132,10 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 				+ found_deadline_end_keyword.size()
 			) + file_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
-			if (plot_files.count(plot_file_name) == 0) {
-				plot_files[plot_file_name] = plot_file(plot_file_name);
+			if (!plot_files.contains(plot_file_name)) {
+				plot_files.add(plot_file_name);
 			}
-			plot_files[plot_file_name].found_deadlines.push_back(found_deadline);
+			plot_files.find_deadline(plot_file_name, found_deadline);
 		}
 
 		// Extract confirmed deadline.
@@ -102,37 +153,14 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 
 		// Check if found deadline and confirmed deadline conflict.
 		if (confirmed_deadline != "") {
-			for (auto &it_pf : plot_files) {
-				auto it_fd = it_pf.second.found_deadlines.begin();
-				size_t j = 0;
-				while (j < it_pf.second.found_deadlines.size()) {
-					if (*it_fd == confirmed_deadline) {
-						it_pf.second.found_deadlines.erase(it_fd);
-						it_pf.second.mining_stats.AddHealthy();
-						busy_cursor_animator.print(".");
-						break;
-					}
-					else {
-						it_fd++;
-						j++;
-					}
-				}
-			}
+			plot_files.process_deadline(confirmed_deadline);
 
 			// Reset.
 			confirmed_deadline = "";
 		}
 	}
 	busy_cursor_animator.finalize();
-	std::vector<plot_file> plot_files_array(plot_files.size());
-	// Convert to array
-	int i = 0;
-	for (auto &it_pf : plot_files) {
-		it_pf.second.mining_stats.AddCorruptedCount(it_pf.second.found_deadlines.size());
-		plot_files_array[i] = it_pf.second;
-		i++;
-	}
-	return plot_files_array;
+	return plot_files.get_vector();
 }
 
 /*
