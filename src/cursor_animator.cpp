@@ -62,12 +62,6 @@ cursor_animator::update_animation() {
 }
 
 void
-cursor_animator::print(std::string content) {
-	std::cout << move_cursor_back(cursor.current_frame().length())
-		<< content << cursor.current_frame();
-}
-
-void
 cursor_animator::finalize() {
 	std::cout << move_cursor_back(cursor.current_frame().length())
 		<< whitespace(cursor.current_frame().length());

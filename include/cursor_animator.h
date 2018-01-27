@@ -54,8 +54,15 @@ public:
 	void update_animation();
 
 	/* Prints content moves animating cursor to the end. */
-	void print(std::string content);
+	template<typename T> inline void print(T const &content);
 
 	/* Clears last frame. Use this when you are done with the animation. */
 	void finalize();
 };
+
+template<typename T> inline void
+cursor_animator::print(T const &content) {
+	std::cout << move_cursor_back(cursor.current_frame().length())
+		<< content << cursor.current_frame();
+}
+
