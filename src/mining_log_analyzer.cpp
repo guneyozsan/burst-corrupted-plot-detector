@@ -58,7 +58,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
 	unsigned char confirmed_deadline_cursor = 219;
-	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 0.006f);
+	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
 
 	// Main loop
 	while (std::getline(file, line)) {

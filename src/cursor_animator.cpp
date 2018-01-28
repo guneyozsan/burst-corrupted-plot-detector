@@ -19,45 +19,29 @@
 #include "cursor_animator.h"
 
 #include "console_gui.h"
-#include "console_gui.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
-float cursor_animator::anim_time;
-float cursor_animator::anim_speed;
-int cursor_animator::total_frame_count;
+float cursor_animator::animation_period;
+clock_t cursor_animator::last_update_time;
 
 void
 cursor_animator::update_animation() {
-	if (is_time_for_next_frame()) {
+	if ((clock() - last_update_time) > animation_period) {
 		animating_cursor::progress_to_next_frame();
-		std::cout << move_cursor_back(animating_cursor::current_frame().length())
+		std::cout 
+			<< move_cursor_back(animating_cursor::current_frame().length())
 			<< animating_cursor::current_frame();
+		last_update_time = clock();
 	}
-	update_time();
 }
 
 void
 cursor_animator::finalize() {
-	std::cout << move_cursor_back(animating_cursor::current_frame().length())
+	std::cout 
+		<< move_cursor_back(animating_cursor::current_frame().length())
 		<< whitespace(animating_cursor::current_frame().length());
-}
-
-bool
-cursor_animator::is_time_for_next_frame() {
-	if (anim_time > total_frame_count) {
-		total_frame_count++;
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-void
-cursor_animator::update_time() {
-	anim_time += anim_speed;
 }
 
 void
@@ -67,6 +51,7 @@ cursor_animator::set_animation(
 {
 	set_animation_sequence(frame_sequence);
 	set_speed(anim_speed);
+	last_update_time = clock();
 }
 
 void
@@ -78,7 +63,7 @@ cursor_animator::set_animation_sequence(
 
 void
 cursor_animator::set_speed(
-	const float &anim_speed)
+	const float &frames_per_second)
 {
-	cursor_animator::anim_speed = anim_speed;
+	cursor_animator::animation_period = 1000 / frames_per_second;
 }

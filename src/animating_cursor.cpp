@@ -18,6 +18,9 @@
 
 #include "animating_cursor.h"
 
+#include "console_gui.h"
+#include <iostream>
+
 std::vector<std::string> animating_cursor::frames;
 int animating_cursor::currentFrame;
 
