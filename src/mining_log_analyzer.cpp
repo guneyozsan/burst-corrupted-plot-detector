@@ -43,7 +43,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	const std::string found_deadline_keyword = "found deadline=";
 	const std::string found_deadline_end_keyword = " nonce";
 	const std::string confirmed_deadline_keyword = "confirmed deadline: ";
-	const std::string file_keyword = "file: ";
+	const std::string file_name_keyword = "file: ";
 	std::size_t start_position = 0;
 	std::size_t end_position = 0;
 	std::size_t current_position = 0;
@@ -78,9 +78,9 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 			);
 			// Extract file name.
 			plot_file_position = line.find(
-				file_keyword, end_position
+				file_name_keyword, end_position
 				+ found_deadline_end_keyword.size()
-			) + file_keyword.size();
+			) + file_name_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
 			if (!plot_files.contains(plot_file_name)) {
 				plot_files.add(plot_file_name);
