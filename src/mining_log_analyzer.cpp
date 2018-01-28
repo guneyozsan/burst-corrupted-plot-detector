@@ -105,20 +105,20 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 		if (confirmed_deadline != "") {
 			std::string confirmed_plot_file_name =
 				plot_files.find_plot_file_with_deadline(confirmed_deadline);
-			if (confirmed_plot_file_name != "") {
+			if (confirmed_plot_file_name == "") {
+				cursor_animator::print("X");
+			}
+			else {
 				plot_files.remove_deadline(
 					confirmed_plot_file_name, confirmed_deadline
 				);
 				cursor_animator::print(confirmed_deadline_cursor);
 			}
-			else {
-				cursor_animator::print("X");
-			}
-			// Reset.
 			confirmed_deadline = "";
 		}
 	}
 	cursor_animator::finalize();
+	plot_files.calculate_corrupted_count();
 	return plot_files.get_vector();
 }
 

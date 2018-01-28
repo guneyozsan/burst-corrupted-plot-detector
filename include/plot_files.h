@@ -50,4 +50,6 @@ public:
 	std::string find_plot_file_with_deadline(const std::string &confirmed_deadline);
 
 	void remove_deadline(const std::string &plot_file_name, const std::string &deadline);
+
+	void calculate_corrupted_count();
 };
