@@ -17,7 +17,10 @@ plot_file::mining_stats::increment_corrupted_count() {
 }
 
 void
-plot_file::mining_stats::add_to_corrupted_count(const size_t& corrupted_count) {
+plot_file::mining_stats::add_to_corrupted_count(
+	const size_t& corrupted_count
+)
+{
 	this->corrupted_count += (int)corrupted_count;
 }
 

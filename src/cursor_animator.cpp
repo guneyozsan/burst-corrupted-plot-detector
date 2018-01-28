@@ -26,6 +26,7 @@
 float cursor_animator::animation_period;
 clock_t cursor_animator::last_update_time;
 
+/* Updates cursor frame according to the frames per second set. */
 void
 cursor_animator::update_animation() {
 	if ((clock() - last_update_time) > animation_period) {
@@ -37,6 +38,7 @@ cursor_animator::update_animation() {
 	}
 }
 
+/* Clears last frame. Use this when you are done with the animation. */
 void
 cursor_animator::finalize() {
 	std::cout 
@@ -44,6 +46,7 @@ cursor_animator::finalize() {
 		<< whitespace(animating_cursor::current_frame().length());
 }
 
+/* Sets cursor animation and speed. */
 void
 cursor_animator::set_animation(
 	const std::vector<std::string> &frame_sequence,
@@ -54,6 +57,7 @@ cursor_animator::set_animation(
 	last_update_time = clock();
 }
 
+/* Sets cursor animation to given frame sequence. */
 void
 cursor_animator::set_animation_sequence(
 	const std::vector<std::string> &frame_sequence)
@@ -61,6 +65,7 @@ cursor_animator::set_animation_sequence(
 	animating_cursor::set_animation(frame_sequence);
 }
 
+/* Sets animation speed. */
 void
 cursor_animator::set_speed(
 	const float &frames_per_second)

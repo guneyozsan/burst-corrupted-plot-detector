@@ -28,28 +28,19 @@ struct plot_files {
 private:
 	std::map<std::string, plot_file> plot_file_collection;
 public:
-	/* Checks if the plot file is already in collection. */
 	bool contains(const std::string &plot_file_name);
-
-	/* Adds a plot file to collection. Allows duplicates. */
 	void add(const std::string &plot_file_name);
-
-	/* Returns the plot file object with given file name. */
 	plot_file get(const std::string &plot_file_name);
-
-	/* Returns the complete plot file collection as map. */
 	std::map<std::string, plot_file> get_collection();
-
-	/* Returns the complete plot file collection as vector. */
 	std::vector<plot_file> get_vector();
-
-	/* Adds found deadline to the confirmation queue. */
-	void add_found_deadline(const std::string &plot_file_name, const std::string &found_deadline);
-	
-	/* Checks if the confirmed deadline corresponds to a found deadline, removes the match from confirmation queue, and return the result. */
-	std::string find_plot_file_with_deadline(const std::string &confirmed_deadline);
-
-	void remove_deadline(const std::string &plot_file_name, const std::string &deadline);
-
+	void add_found_deadline(
+		const std::string &plot_file_name, const std::string &found_deadline
+	);
+	std::string find_plot_file_with_deadline(
+		const std::string &confirmed_deadline
+	);
+	void remove_deadline(
+		const std::string &plot_file_name, const std::string &deadline
+	);
 	void calculate_corrupted_count();
 };

@@ -29,7 +29,8 @@
 #include "plot_files.h"
 
 /*
-* Find Burst plots with deadlines different from server's deadline.
+Analyzes the Burst log file and returns a plot_file object with analysis results.
+Looks for deadlines conflicting with server.
 */
 std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	// Plot information
@@ -123,7 +124,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 }
 
 /*
-* Display the stats of the given plot file in a nice format.
+Displays the stats available in a plot_file object in a nicely formatted way.
 */
 void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 	std::vector<plot_file> m_plot_files = plot_files;

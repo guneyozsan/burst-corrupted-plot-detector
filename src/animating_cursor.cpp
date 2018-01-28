@@ -24,16 +24,19 @@
 std::vector<std::string> animating_cursor::frames;
 int animating_cursor::currentFrame;
 
+/* Returns the current frame. */
 std::string
 animating_cursor::current_frame() {
 	return frames[currentFrame];
 }
 
+/* Advances the cursor animation to the next frame. */
 void
 animating_cursor::progress_to_next_frame() {
 	currentFrame = (currentFrame + 1) % frames.size();
 }
 
+/* Sets cursor animation to given frame sequence. */
 void
 animating_cursor::set_animation(
 	const std::vector<std::string> &frame_sequence

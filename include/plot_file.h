@@ -22,28 +22,22 @@
 #include <string>
 
 struct plot_file {
-	std::string name;
-	std::list<std::string> found_deadlines;
-
 	struct mining_stats {
 	private:
 		int healthy_count = 0;
 		int corrupted_count = 0;
 	public:
 		void increment_healthy_count();
-
 		void increment_corrupted_count();
-
 		void add_to_corrupted_count(const size_t& corrupted_count);
-
 		int get_healthy_count();
-
 		int get_corrupted_count();
 	};
-
+	
+	std::string name;
+	std::list<std::string> found_deadlines;
 	mining_stats mining_stats;
 
 	plot_file();
-
 	plot_file(const std::string &name);
 };

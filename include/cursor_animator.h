@@ -28,30 +28,20 @@ private:
 	static float animation_period;
 	static clock_t last_update_time;
 public:
-	/* Sets cursor animation and speed. */
 	static void set_animation(
 		const std::vector<std::string> &frame_sequence,
 		const float &anim_speed
 	);
-	
-	/* Sets cursor animation to given frame sequence. */
 	static void set_animation_sequence(
 		const std::vector<std::string> &frame_sequence
 	);
-	
-	/* Sets animation speed. */
 	static void set_speed(const float &anim_speed);
-
-	/* Animates cursor. */
 	static void update_animation();
-
-	/* Prints content moves animating cursor to the end. */
 	template<typename T> static void print(T const &content);
-
-	/* Clears last frame. Use this when you are done with the animation. */
 	static void finalize();
 };
 
+/* Prints content moves animating cursor to the end. */
 template<typename T> static void
 cursor_animator::print(T const &content) {
 	std::cout 

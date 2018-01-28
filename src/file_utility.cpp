@@ -18,10 +18,9 @@
 
 #include "file_utility.h"
 
-/*
-* List files within a directory.
-*/
-std::vector<dirent> get_files_in_directory(const char *dir_name) {
+/* Returns the list of files in a directory. */
+std::vector<dirent>
+get_files_in_directory(const char *dir_name) {
 	DIR *dir;
 	struct dirent *dir_entry;
 	std::vector<struct dirent> file_entries;
