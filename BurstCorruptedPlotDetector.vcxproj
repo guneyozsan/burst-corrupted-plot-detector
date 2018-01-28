@@ -132,6 +132,7 @@
     <ClCompile Include="src\file_utility.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mining_log_analyzer.cpp" />
+    <ClCompile Include="src\plot_file.cpp" />
     <ClCompile Include="src\plot_files.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
