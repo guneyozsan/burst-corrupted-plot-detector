@@ -26,6 +26,7 @@
 
 #include "console_gui.h"
 #include "cursor_animator.h"
+#include "logger.h"
 #include "plot_files.h"
 
 /*
@@ -55,6 +56,8 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::string line;
 
 	// User feedback
+	logger::log(file_name);
+	logger::endl();
 	std::cout << std::endl;
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
