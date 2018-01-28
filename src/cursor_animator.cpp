@@ -23,81 +23,47 @@
 #include <string>
 #include <vector>
 
-cursor_animator::cursor_animator(
-	const std::vector<std::string> &cursor_frames, const float &anim_speed
-)
-{
-	this->cursor = animating_cursor(cursor_frames);
-	this->anim_speed = anim_speed;
-	std::cout << whitespace(cursor.current_frame().length());
-}
+float cursor_animator::animation_period;
+clock_t cursor_animator::last_update_time;
 
 void
 cursor_animator::update_animation() {
-	if (is_time_for_next_frame()) {
-		cursor.progress_to_next_frame();
-		std::cout << move_cursor_back(cursor.current_frame().length())
-			<< cursor.current_frame();
+	if ((clock() - last_update_time) > animation_period) {
+		animating_cursor::progress_to_next_frame();
+		std::cout 
+			<< move_cursor_back(animating_cursor::current_frame().length())
+			<< animating_cursor::current_frame();
+		last_update_time = clock();
 	}
-	update_time();
 }
 
 void
 cursor_animator::finalize() {
-	std::cout << move_cursor_back(cursor.current_frame().length())
-		<< whitespace(cursor.current_frame().length());
-}
-
-bool
-cursor_animator::is_time_for_next_frame() {
-	if (anim_time > total_frame_count) {
-		total_frame_count++;
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-void
-cursor_animator::update_time() {
-	anim_time += anim_speed;
+	std::cout 
+		<< move_cursor_back(animating_cursor::current_frame().length())
+		<< whitespace(animating_cursor::current_frame().length());
 }
 
 void
 cursor_animator::set_animation(
-	const std::vector<std::string> &frame_sequence)
+	const std::vector<std::string> &frame_sequence,
+	const float &anim_speed)
 {
-	cursor.set_animation(frame_sequence);
-}
-
-cursor_animator::animating_cursor::animating_cursor() {}
-
-cursor_animator::animating_cursor::animating_cursor(
-	const std::vector<std::string> &cursor_frames)
-{
-	for (size_t i = 0; i < cursor_frames.size(); i++) {
-		this->frames.push_back(cursor_frames[i]);
-	}
-}
-
-std::string 
-cursor_animator::animating_cursor::current_frame() {
-	return frames[currentFrame];
-}
-
-void 
-cursor_animator::animating_cursor::progress_to_next_frame() {
-	currentFrame = (currentFrame + 1) % frames.size();
+	set_animation_sequence(frame_sequence);
+	set_speed(anim_speed);
+	last_update_time = clock();
 }
 
 void
-cursor_animator::animating_cursor::set_animation(
-	const std::vector<std::string> &frame_sequence
-)
+cursor_animator::set_animation_sequence(
+	const std::vector<std::string> &frame_sequence)
 {
-	for (size_t i = 0; i < frame_sequence.size(); i++) {
-		this->frames.clear();
-		this->frames.push_back(frame_sequence[i]);
-	}
+	animating_cursor::set_animation(frame_sequence);
+}
+
+void
+cursor_animator::set_speed(
+	const float &frames_per_second)
+{
+	cursor_animator::animation_period = 1000 / frames_per_second;
 }

@@ -117,6 +117,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\animating_cursor.h" />
     <ClInclude Include="include\console_gui.h" />
     <ClInclude Include="include\cursor_animator.h" />
     <ClInclude Include="include\file_utility.h" />
@@ -125,6 +126,7 @@
     <ClInclude Include="include\plot_files.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\animating_cursor.cpp" />
     <ClCompile Include="src\console_gui.cpp" />
     <ClCompile Include="src\cursor_animator.cpp" />
     <ClCompile Include="src\file_utility.cpp" />

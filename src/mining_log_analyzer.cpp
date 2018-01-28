@@ -57,12 +57,12 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::cout << std::endl;
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
-	cursor_animator cursor_animator({ "-", "\\", "|", "/" }, 0.006f);
 	unsigned char confirmed_deadline_cursor = 219;
+	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
 
 	// Main loop
 	while (std::getline(file, line)) {
-		cursor_animator.update_animation();
+		cursor_animator::update_animation();
 
 		// Extract found deadline.
 		current_position = line.find(
@@ -103,19 +103,22 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 
 		// Check if found deadline and confirmed deadline conflict.
 		if (confirmed_deadline != "") {
-			std::string confirmed_plot_file_name = plot_files.find_plot_file_with_deadline(confirmed_deadline);
+			std::string confirmed_plot_file_name =
+				plot_files.find_plot_file_with_deadline(confirmed_deadline);
 			if (confirmed_plot_file_name != "") {
-				plot_files.remove_deadline(confirmed_plot_file_name, confirmed_deadline);
-				cursor_animator.print(confirmed_deadline_cursor);
+				plot_files.remove_deadline(
+					confirmed_plot_file_name, confirmed_deadline
+				);
+				cursor_animator::print(confirmed_deadline_cursor);
 			}
 			else {
-				cursor_animator.print("X");
+				cursor_animator::print("X");
 			}
 			// Reset.
 			confirmed_deadline = "";
 		}
 	}
-	cursor_animator.finalize();
+	cursor_animator::finalize();
 	return plot_files.get_vector();
 }
 
