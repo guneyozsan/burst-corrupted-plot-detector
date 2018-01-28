@@ -45,7 +45,9 @@ public:
 template<typename T> static void
 cursor_animator::print(T const &content) {
 	std::cout 
-		<< move_cursor_back(animating_cursor::current_frame().length())
+		<< console_gui::move_cursor_back(
+			animating_cursor::current_frame().length()
+		)
 		<< content 
 		<< animating_cursor::current_frame();
 }

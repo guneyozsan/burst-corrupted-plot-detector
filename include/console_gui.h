@@ -20,7 +20,9 @@
 
 #include <string>
 
-void print_right_aligned(const std::string &content, const size_t &slot_size);
-std::string underline(const std::string &content);
-std::string move_cursor_back(const size_t &size);
-std::string whitespace(const size_t &size);
+struct console_gui {
+	static void print_right_aligned(const std::string &content, const size_t &slot_size);
+	static std::string underline(const std::string &content);
+	static std::string move_cursor_back(const size_t &size);
+	static std::string whitespace(const size_t &size);
+};
