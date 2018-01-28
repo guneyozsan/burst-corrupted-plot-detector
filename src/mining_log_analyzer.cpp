@@ -103,9 +103,12 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 
 		// Check if found deadline and confirmed deadline conflict.
 		if (confirmed_deadline != "") {
-			std::string confirmed_plot_file_name = plot_files.find_plot_file_with_deadline(confirmed_deadline);
+			std::string confirmed_plot_file_name =
+				plot_files.find_plot_file_with_deadline(confirmed_deadline);
 			if (confirmed_plot_file_name != "") {
-				plot_files.remove_deadline(confirmed_plot_file_name, confirmed_deadline);
+				plot_files.remove_deadline(
+					confirmed_plot_file_name, confirmed_deadline
+				);
 				cursor_animator::print(confirmed_deadline_cursor);
 			}
 			else {
