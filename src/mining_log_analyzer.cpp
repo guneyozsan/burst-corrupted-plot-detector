@@ -26,6 +26,7 @@
 
 #include "console_gui.h"
 #include "cursor_animator.h"
+#include "logger.h"
 #include "plot_files.h"
 
 /*
@@ -38,7 +39,6 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::string confirmed_deadline;
 	std::string plot_file_name;
 	plot_files plot_files;
-
 
 	// Crawling utility
 	const std::string found_deadline_keyword = "found deadline=";
@@ -55,6 +55,9 @@ std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
 	std::string line;
 
 	// User feedback
+	logger::log("ANALYSIS OF THE LOG FILE: ");
+	logger::log(file_name);
+	logger::log("\n");
 	std::cout << std::endl;
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
@@ -135,15 +138,24 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 	const std::string title_gap = "   ";
 
 	if (m_plot_files.size() > 0) {
-		std::cout << std::endl;
-		std::cout << corrupted_title << title_gap
-			<< healthy_title << title_gap
-			<< plot_file_title << std::endl;
-		std::cout << console_gui::underline(corrupted_title) << title_gap
-			<< console_gui::underline(healthy_title) << title_gap
-			<< console_gui::underline(plot_file_title) << std::endl;
 		std::string corrupted_count;
 		std::string healthy_count;
+
+		std::cout << std::endl;
+		logger::print_and_log("\n");
+		logger::print_and_log(
+			title_gap + corrupted_title
+			+ title_gap + healthy_title
+			+ title_gap + plot_file_title
+		);
+		logger::print_and_log("\n");
+		logger::print_and_log(
+			title_gap + console_gui::underline(corrupted_title)
+			+ title_gap + console_gui::underline(healthy_title)
+			+ title_gap + console_gui::underline(plot_file_title)
+		);
+		logger::print_and_log("\n");
+
 		for (size_t i = 0; i < m_plot_files.size(); i++) {
 			if (m_plot_files[i].mining_stats.get_corrupted_count() == 0) {
 				corrupted_count = "-";
@@ -153,10 +165,12 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 					m_plot_files[i].mining_stats.get_corrupted_count());
 			}
 
-			console_gui::print_right_aligned(
-				corrupted_count, corrupted_title.length()
+			logger::print_and_log(
+				console_gui::print_right_aligned(
+					corrupted_count, corrupted_title.length()
+				)
+				+ title_gap
 			);
-			std::cout << title_gap;
 
 			if (m_plot_files[i].mining_stats.get_healthy_count() == 0) {
 				healthy_count = "-";
@@ -166,15 +180,18 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 					m_plot_files[i].mining_stats.get_healthy_count());
 			}
 
-			console_gui::print_right_aligned(
-				healthy_count, healthy_title.length()
+			logger::print_and_log(title_gap
+				+ console_gui::print_right_aligned(
+					healthy_count, healthy_title.length()
+				)
+				+ title_gap + m_plot_files[i].name
 			);
-			std::cout << title_gap;
-			std::cout << m_plot_files[i].name;
-			std::cout << std::endl;
+			logger::print_and_log("\n");
 		}
 	}
 	else {
-		std::cout << "No deadlines detected." << std::endl;
+		logger::print_and_log("No deadlines detected.");
+		logger::print_and_log("\n");
 	}
+	logger::log("\n");
 }

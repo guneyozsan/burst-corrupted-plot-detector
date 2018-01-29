@@ -21,15 +21,17 @@
 #include <iostream>
 
  /* Prints the content right aligned in a horizontal slot with given size. */
-void
+std::string
 console_gui::print_right_aligned(
 	const std::string &content, const size_t &slot_size)
 {
+	std::string slot = "";
 	size_t whitespace_count = slot_size - content.length();
 	for (size_t i = 0; i < whitespace_count; i++) {
-		std::cout << " ";
+		slot += " ";
 	}
-	std::cout << content;
+	slot += content;
+	return slot;
 }
 
 /* Prints "-" the same size with given content to serve as underliner. */
