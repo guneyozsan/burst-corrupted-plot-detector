@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
 	std::string formatted_time = time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.
 	string_utility::replace_all(':', '_', formatted_time);
-	logger::set_log_file_name("Burst-mining-log-analysis-" + formatted_time + ".log");
+	std::string log_file_prefix = "Burst-mining-log-analysis-";
+	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 
 	std::vector<dirent> files_in_dir;
 
@@ -46,9 +47,8 @@ int main(int argc, char *argv[]) {
 
 	for (int i = 0; i < files_in_dir.size(); i++) {
 		std::vector<plot_file> plot_files;
-		if (strstr(files_in_dir[i].d_name, ".log")
-			&& files_in_dir[i].d_name != logger::get_log_file_name()
-			) 
+		if (strstr(files_in_dir[i].d_name, ".log") 
+			&& !strstr(files_in_dir[i].d_name, log_file_prefix.c_str()))
 		{
 			plot_files = analyze_plot_files_in_log(files_in_dir[i].d_name);
 			print_plot_file_stats(plot_files);
