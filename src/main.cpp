@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
 	std::string log_file_prefix = "Burst-mining-log-analysis-";
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 
+	// Get the list of files in directory or arguments.
 	std::vector<dirent> files_in_dir;
-
 	/* List current working directory if no arguments on command line */
 	if (argc == 1) {
 		files_in_dir = get_files_in_directory(".");
@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	// Main loop
 	for (int i = 0; i < files_in_dir.size(); i++) {
 		std::vector<plot_file> plot_files;
 		if (strstr(files_in_dir[i].d_name, ".log") 
@@ -56,9 +57,11 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	// Finalize logger
 	logger::log("\n");
 	logger::log("\n");
 	logger::log("-- END OF LOG --");
 	logger::log("\n");
+
 	return EXIT_SUCCESS;
 }
