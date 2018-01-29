@@ -19,9 +19,15 @@
 #include "file_utility.h"
 #include "logger.h"
 #include "mining_log_analyzer.h"
+#include "string_utility.h"
+#include "time_utility.h"
 
 int main(int argc, char *argv[]) {
-	logger::set_log_file_name("Burst-mining-log-analysis.log");
+	// Initialize logging to file.
+	std::string formatted_time = time_utility::format_time(time_utility::now(), "%F-%T");
+	// Replace characters not suitable for a file name.
+	string_utility::replace_all(':', '_', formatted_time);
+	logger::set_log_file_name("Burst-mining-log-analysis-" + formatted_time + ".log");
 
 	std::vector<dirent> files_in_dir;
 
