@@ -24,7 +24,8 @@
 
 int main(int argc, char *argv[]) {
 	// Initialize logging to file.
-	std::string formatted_time = time_utility::format_time(time_utility::now(), "%F-%T");
+	std::string formatted_time =
+		time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.
 	string_utility::replace_all(':', '_', formatted_time);
 	std::string log_file_prefix = "Burst-mining-log-analysis-";

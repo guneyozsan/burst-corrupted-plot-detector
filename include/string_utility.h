@@ -21,5 +21,8 @@
 #include <string>
 
 namespace string_utility {
-	void replace_all(const char &original_char, const char &replacement, std::string &string_body);
+	void replace_all(
+		const char &original_char, const char &replacement,
+		std::string &string_body
+	);
 }

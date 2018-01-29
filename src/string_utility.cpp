@@ -22,7 +22,11 @@
 
 // Replaces all occurences of a character with the given character.
 void
-string_utility::replace_all(const char &original_char, const char &replacement, std::string &string_body) {
+string_utility::replace_all(
+	const char &original_char, const char &replacement,
+	std::string &string_body
+)
+{
 	std::string replacement_str;
 	replacement_str = replacement;
 	for (size_t i = 0; i < string_body.size(); ++i) {
