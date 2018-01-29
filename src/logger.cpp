@@ -34,12 +34,6 @@ logger::log(const std::string &content) {
 
 void
 logger::print_and_log(const std::string &content) {
-	log(content);
 	std::cout << content;
-}
-
-void
-logger::endl() {
-	std::cout << std::endl;
-	log("\n");
+	log(content);
 }

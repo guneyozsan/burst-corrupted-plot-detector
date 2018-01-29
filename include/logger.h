@@ -11,5 +11,4 @@ public:
 	static std::string get_log_file_name();
 	static void log(const std::string &content);
 	static void print_and_log(const std::string &content);
-	static void endl();
 };
