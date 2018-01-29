@@ -10,14 +10,12 @@ Currently only Blago Miner logs are supported.
 Written in C++ to support PC, Mac and Linux. Tested only on Windows. Any testers are appreciated.
 
 ## Release
-This is a pre-release version and only tested using a limited pool of logs. Latest version can be downloaded from the [releases section](https://github.com/guneyozsan/burst-corrupted-plot-detector/releases).
+This is a pre-release version and only tested using a limited number of mining logs. Latest version can be downloaded from the [releases section](https://github.com/guneyozsan/burst-corrupted-plot-detector/releases).
 
 ## Usage
-Copy the executable into the same directory with logs. Navigate to the folder from console and run the executable.
+Copy the executable into the directory that contain your mining logs (probably "Qbundle_1.6\BlagoMiner\Logs"). Results will be saved to a file in the same directory with the executable.
 
-Logging to file is not implemented yet. If you run the exe directly by double clicking results will be displayed as the analysis goes on, but the console will be closed at the end of the process and the results will be lost.)
-
-Please use without arguments. Giving path as argument is supported but it works buggy. This will be fixed soon.
+Please run the executable without any arguments. Giving path as argument is supported but it doesn't work as intended. This will be fixed soon.
 
 ## License
 The project is open source and published under GNU General Public License. More details can be found in the LICENSE.md file, in the source files or at <http://www.gnu.org/licenses>.
