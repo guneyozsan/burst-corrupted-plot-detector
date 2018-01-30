@@ -12,9 +12,12 @@ Written in C++ to support PC, Mac and Linux. Tested only on Windows. Any testers
 ## Usage
 Either pass the path of the directory of your mining log files as arguments or copy the executable into the directory that contain your mining logs and run it there (probably "Qbundle_1.6\BlagoMiner\Logs").
 
-Example:
+**Example:**
+
 D:\Qbundle_1.6\BlagoMiner\Logs>BurstCorruptedPlotDetector.exe
+
 or
+
 AnyPath>BurstCorruptedPlotDetector.exe D:\Qbundle_1.6\BlagoMiner\Logs E:\Qbundle_1.5\BlagoMiner\Logs
 
 Results are also saved to a file in the same directory with the executable.
