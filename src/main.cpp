@@ -17,6 +17,7 @@
  */
 
 #include <string>
+#include <vector>
 
 #include "file_utility.h"
 #include "logger.h"
@@ -34,26 +35,28 @@ int main(int argc, char *argv[]) {
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 
 	// Get the list of files in directory or arguments.
-	std::vector<std::string> files_in_dir;
+	std::vector<std::vector<std::string>> files_in_dir;
 	/* List current working directory if no arguments on command line */
 	if (argc == 1) {
-		files_in_dir = get_file_names_in_directory(".");
+		files_in_dir.push_back(get_file_names_in_directory("."));
 	}
 	else {
 		/* For each directory in command line */
 		for (int i = 1; i < argc; i++) {
-			files_in_dir = get_file_names_in_directory(argv[i]);
+			files_in_dir.push_back(get_file_names_in_directory(argv[i]));
 		}
 	}
 
 	// Main loop
-	for (int i = 0; i < files_in_dir.size(); i++) {
-		std::vector<plot_file> plot_files;
-		if (files_in_dir[i].find(".log") != std::string::npos 
-			&& files_in_dir[i].find(log_file_prefix.c_str()) == std::string::npos)
-		{
-			plot_files = analyze_plot_files_in_log(files_in_dir[i]);
-			print_plot_file_stats(plot_files);
+	for (size_t i = 0; i < files_in_dir.size(); i++) {
+		for (size_t j = 0; j < files_in_dir[i].size(); j++) {
+			std::vector<plot_file> plot_files;
+			if (files_in_dir[i][j].find(".log") != std::string::npos
+				&& files_in_dir[i][j].find(log_file_prefix.c_str()) == std::string::npos)
+			{
+				plot_files = analyze_plot_files_in_log(files_in_dir[i][j]);
+				print_plot_file_stats(plot_files);
+			}
 		}
 	}
 
