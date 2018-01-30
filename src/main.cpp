@@ -16,6 +16,7 @@
  * along with this program.If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -35,26 +36,35 @@ int main(int argc, char *argv[]) {
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 
 	// Get the list of files in directory or arguments.
-	std::vector<std::vector<std::string>> files_in_dir;
+	std::map<std::string, std::vector<std::string>> files_in_dirs;
+	std::string dir_path;
+
 	/* List current working directory if no arguments on command line */
 	if (argc == 1) {
-		files_in_dir.push_back(get_file_names_in_directory("."));
+		dir_path = ".\\";
+		files_in_dirs[dir_path] = file_utility::get_file_names_in_directory(".\\");
 	}
 	else {
 		/* For each directory in command line */
 		for (int i = 1; i < argc; i++) {
-			files_in_dir.push_back(get_file_names_in_directory(argv[i]));
+			dir_path = argv[i];
+			file_utility::fix_path(dir_path);
+			files_in_dirs[dir_path] = file_utility::get_file_names_in_directory(argv[i]);
 		}
 	}
 
 	// Main loop
-	for (size_t i = 0; i < files_in_dir.size(); i++) {
-		for (size_t j = 0; j < files_in_dir[i].size(); j++) {
-			std::vector<plot_file> plot_files;
-			if (files_in_dir[i][j].find(".log") != std::string::npos
-				&& files_in_dir[i][j].find(log_file_prefix.c_str()) == std::string::npos)
+	std::vector<plot_file> plot_files;
+	for (auto &it_path : files_in_dirs) {
+		if (it_path.second.size() == 0) {
+			logger::print_and_log("\n");
+			logger::print_and_log("No mining logs found at " + it_path.first + "\n");
+		}
+		for (size_t i = 0; i < it_path.second.size(); i++) {
+			if (it_path.second[i].find(".log") != std::string::npos
+				&& it_path.second[i].find(log_file_prefix.c_str()) == std::string::npos)
 			{
-				plot_files = analyze_plot_files_in_log(files_in_dir[i][j]);
+				plot_files = analyze_plot_files_in_log(it_path.first + it_path.second[i]);
 				print_plot_file_stats(plot_files);
 			}
 		}

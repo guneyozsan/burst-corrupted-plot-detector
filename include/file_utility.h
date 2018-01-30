@@ -21,4 +21,7 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> get_file_names_in_directory(const char *dirname);
+namespace file_utility {
+	std::vector<std::string> get_file_names_in_directory(const char *dirname);
+	void fix_path(std::string &path);
+}
