@@ -26,12 +26,7 @@ private:
 	static std::vector<std::string> frames;
 	static int currentFrame;
 public:
-	/* Sets cursor animation to given frame sequence. */
 	static void set_animation(const std::vector<std::string> &frame_sequence);
-
-	/* Returns the current frame. */
 	static std::string current_frame();
-
-	/* Advances the cursor animation to the next frame. */
 	static void progress_to_next_frame();
 };

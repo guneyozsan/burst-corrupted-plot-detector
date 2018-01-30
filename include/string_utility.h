@@ -18,9 +18,11 @@
 
 #pragma once
 
-#include <vector>
+#include <string>
 
-#include "plot_file.h"
-
-std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name);
-void print_plot_file_stats(const std::vector<plot_file> &plot_file_result);
+namespace string_utility {
+	void replace_all(
+		const char &original_char, const char &replacement,
+		std::string &string_body
+	);
+}

@@ -20,43 +20,24 @@
 
 #include <list>
 #include <string>
-#include <iostream>
 
 struct plot_file {
-	std::string name;
-	std::list<std::string> found_deadlines;
-
 	struct mining_stats {
 	private:
 		int healthy_count = 0;
 		int corrupted_count = 0;
 	public:
-		void increment_healthy_count() {
-			healthy_count++;
-		}
-
-		void increment_corrupted_count() {
-			corrupted_count++;
-		}
-
-		void add_to_corrupted_count(const size_t& corrupted_count) {
-			this->corrupted_count += (int)corrupted_count;
-		}
-
-		int get_healthy_count() {
-			return healthy_count;
-		}
-
-		int get_corrupted_count() {
-			return corrupted_count;
-		}
+		void increment_healthy_count();
+		void increment_corrupted_count();
+		void add_to_corrupted_count(const size_t& corrupted_count);
+		int get_healthy_count();
+		int get_corrupted_count();
 	};
-
+	
+	std::string name;
+	std::list<std::string> found_deadlines;
 	mining_stats mining_stats;
 
-	plot_file() {}
-
-	plot_file(const std::string &name) {
-		this->name = name;
-	}
+	plot_file();
+	plot_file(const std::string &name);
 };

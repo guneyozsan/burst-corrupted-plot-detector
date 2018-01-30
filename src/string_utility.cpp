@@ -16,11 +16,22 @@
 * along with this program.If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "string_utility.h"
 
-#include <vector>
+#include <string>
 
-#include "plot_file.h"
-
-std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name);
-void print_plot_file_stats(const std::vector<plot_file> &plot_file_result);
+// Replaces all occurences of a character with the given character.
+void
+string_utility::replace_all(
+	const char &original_char, const char &replacement,
+	std::string &string_body
+)
+{
+	std::string replacement_str;
+	replacement_str = replacement;
+	for (size_t i = 0; i < string_body.size(); ++i) {
+		if (string_body[i] == original_char) {
+			string_body.replace(i, 1, replacement_str);
+		}
+	}
+}

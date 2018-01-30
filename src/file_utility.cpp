@@ -18,13 +18,21 @@
 
 #include "file_utility.h"
 
-/*
-* List files within a directory.
-*/
-std::vector<dirent> get_files_in_directory(const char *dir_name) {
+#ifdef _MSC_VER
+#include "dirent.h"
+#else
+#include <dirent.h>
+#endif // _MSC_VER
+
+#include "logger.h"
+#include "string_utility.h"
+
+/* Returns the list of files in a directory. */
+std::vector<std::string>
+file_utility::get_file_names_in_directory(const char *dir_name) {
 	DIR *dir;
 	struct dirent *dir_entry;
-	std::vector<struct dirent> file_entries;
+	std::vector<std::string> file_entries;
 
 	/* Open directory stream */
 	dir = opendir(dir_name);
@@ -32,16 +40,29 @@ std::vector<dirent> get_files_in_directory(const char *dir_name) {
 		/* Add all files within the directory */
 		while ((dir_entry = readdir(dir)) != NULL) {
 			if (dir_entry->d_type == DT_REG) {
-				file_entries.push_back(*dir_entry);
+				file_entries.push_back(dir_entry->d_name);
 			}
 		}
 
 		closedir(dir);
-		return file_entries;
 	}
 	else {
-		/* Could not open directory */
-		printf("Cannot open directory %s\n", dir_name);
-		exit(EXIT_FAILURE);
+		std::string dir_path;
+		dir_path = dir_name;
+		logger::print_and_log("Cannot open directory " + dir_path + "\n");
+	}
+	return file_entries;
+}
+
+/*
+Fixes paths for directly concatenating with file names.
+Replaces forward slashes with backslashes and if missing 
+adds a backslash to the end.
+*/
+void
+file_utility::fix_path(std::string &path) {
+	string_utility::replace_all('/', '\\', path);
+	if (path[path.size() - 1] != '\\') {
+		path += "\\";
 	}
 }

@@ -20,23 +20,23 @@
 
 #include <iostream>
 
- /*
- * Prints the content right aligned in a horizontal slot of given size.
- */
-void print_right_aligned(
+ /* Prints the content right aligned in a horizontal slot with given size. */
+std::string
+console_gui::print_right_aligned(
 	const std::string &content, const size_t &slot_size)
 {
+	std::string slot = "";
 	size_t whitespace_count = slot_size - content.length();
 	for (size_t i = 0; i < whitespace_count; i++) {
-		std::cout << " ";
+		slot += " ";
 	}
-	std::cout << content;
+	slot += content;
+	return slot;
 }
 
-/*
-* Prints "-" the same size with given content to serve as underliner.
-*/
-std::string underline(const std::string &content) {
+/* Prints "-" the same size with given content to serve as underliner. */
+std::string
+console_gui::underline(const std::string &content) {
 	std::string underliner;
 	for (size_t i = 0; i < content.length(); i++) {
 		underliner.append("-");
@@ -44,10 +44,9 @@ std::string underline(const std::string &content) {
 	return underliner;
 }
 
-/*
-* Moves cursor back. Doesn't delete printed output.
-*/
-std::string move_cursor_back(const size_t &size) {
+/* Moves cursor back given size. Doesn't delete printed output. */
+std::string
+console_gui::move_cursor_back(const size_t &size) {
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
 		backspace.append("\b");
@@ -55,10 +54,9 @@ std::string move_cursor_back(const size_t &size) {
 	return backspace;
 }
 
-/*
-* Prints whitespace of given size.
-*/
-std::string whitespace(const size_t &size) {
+/* Prints whitespace of given size. */
+std::string
+console_gui::whitespace(const size_t &size) {
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
 		backspace.append(" ");
