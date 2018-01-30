@@ -56,7 +56,8 @@ file_utility::get_file_names_in_directory(const char *dir_name) {
 
 /*
 Fixes paths for directly concatenating with file names.
-Replaces forward slashes with backslashes and if missing adds a backslash to the end.
+Replaces forward slashes with backslashes and if missing 
+adds a backslash to the end.
 */
 void
 file_utility::fix_path(std::string &path) {

@@ -42,14 +42,16 @@ int main(int argc, char *argv[]) {
 	/* List current working directory if no arguments on command line */
 	if (argc == 1) {
 		dir_path = ".\\";
-		files_in_dirs[dir_path] = file_utility::get_file_names_in_directory(".\\");
+		files_in_dirs[dir_path] =
+			file_utility::get_file_names_in_directory(".\\");
 	}
 	else {
 		/* For each directory in command line */
 		for (int i = 1; i < argc; i++) {
 			dir_path = argv[i];
 			file_utility::fix_path(dir_path);
-			files_in_dirs[dir_path] = file_utility::get_file_names_in_directory(argv[i]);
+			files_in_dirs[dir_path] =
+				file_utility::get_file_names_in_directory(argv[i]);
 		}
 	}
 
@@ -58,13 +60,17 @@ int main(int argc, char *argv[]) {
 	for (auto &it_path : files_in_dirs) {
 		if (it_path.second.size() == 0) {
 			logger::print_and_log("\n");
-			logger::print_and_log("No mining logs found at " + it_path.first + "\n");
+			logger::print_and_log("No mining logs found at "
+				+ it_path.first + "\n");
 		}
 		for (size_t i = 0; i < it_path.second.size(); i++) {
 			if (it_path.second[i].find(".log") != std::string::npos
-				&& it_path.second[i].find(log_file_prefix.c_str()) == std::string::npos)
+				&& it_path.second[i].find(log_file_prefix.c_str()) ==
+					std::string::npos)
 			{
-				plot_files = analyze_plot_files_in_log(it_path.first + it_path.second[i]);
+				plot_files = analyze_plot_files_in_log(
+					it_path.first + it_path.second[i]
+				);
 				print_plot_file_stats(plot_files);
 			}
 		}
