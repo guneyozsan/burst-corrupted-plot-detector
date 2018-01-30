@@ -22,5 +22,5 @@
 
 #include "plot_file.h"
 
-std::vector<plot_file> analyze_plot_files_in_log(const char *file_name);
+std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name);
 void print_plot_file_stats(const std::vector<plot_file> &plot_file_result);
