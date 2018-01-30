@@ -33,7 +33,7 @@
 Analyzes the Burst log file and returns a plot_file object with analysis results.
 Looks for deadlines conflicting with server.
 */
-std::vector<plot_file> analyze_plot_files_in_log(const char *file_name) {
+std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name) {
 	// Plot information
 	std::string found_deadline;
 	std::string confirmed_deadline;

@@ -18,12 +18,10 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 
-#ifdef _MSC_VER
-#include "dirent.h"
-#else
-#include <dirent.h>
-#endif // _MSC_VER
-
-std::vector<dirent> get_files_in_directory(const char *dirname);
+namespace file_utility {
+	std::vector<std::string> get_file_names_in_directory(const char *dirname);
+	void fix_path(std::string &path);
+}
