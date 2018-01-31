@@ -27,13 +27,13 @@
 #include "console_gui.h"
 #include "cursor_animator.h"
 #include "logger.h"
-#include "plot_files.h"
 
 /*
 Analyzes the Burst log file and returns a plot_file object with analysis results.
 Looks for deadlines conflicting with server.
 */
-std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name) {
+plot_files
+analyze_plot_files_in_log(const std::string file_name) {
 	// Plot information
 	std::string found_deadline;
 	std::string confirmed_deadline;
@@ -62,6 +62,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name) {
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";
 	unsigned char confirmed_deadline_cursor = 219;
+	unsigned char corrupted_deadline_cursor = 177;
 	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
 
 	// Main loop
@@ -86,9 +87,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name) {
 				+ found_deadline_end_keyword.size()
 			) + file_name_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
-			if (!plot_files.contains(plot_file_name)) {
-				plot_files.add(plot_file_name);
-			}
+			plot_files.add(plot_file_name);
 			plot_files.add_found_deadline(plot_file_name, found_deadline);
 		}
 
@@ -110,7 +109,7 @@ std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name) {
 			std::string confirmed_plot_file_name =
 				plot_files.find_plot_file_with_deadline(confirmed_deadline);
 			if (confirmed_plot_file_name == "") {
-				cursor_animator::print("X");
+				cursor_animator::print(corrupted_deadline_cursor);
 			}
 			else {
 				plot_files.remove_deadline(
@@ -123,14 +122,15 @@ std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name) {
 	}
 	cursor_animator::finalize();
 	plot_files.calculate_corrupted_count();
-	return plot_files.get_vector();
+	return plot_files;
 }
 
 /*
 Displays the stats available in a plot_file object in a nicely formatted way.
 */
-void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
-	std::vector<plot_file> m_plot_files = plot_files;
+void
+print_plot_file_stats(const plot_files &plot_files) {
+	std::vector<plot_file> m_plot_files = plot_files.get_vector();
 
 	const std::string corrupted_title = "CONFLICTING";
 	const std::string healthy_title = "HEALTHY";
@@ -141,7 +141,6 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 		std::string corrupted_count;
 		std::string healthy_count;
 
-		std::cout << std::endl;
 		logger::print_and_log("\n");
 		logger::print_and_log(
 			title_gap + corrupted_title
@@ -193,5 +192,4 @@ void print_plot_file_stats(const std::vector<plot_file> &plot_files) {
 		logger::print_and_log("No deadlines detected.");
 		logger::print_and_log("\n");
 	}
-	logger::log("\n");
 }

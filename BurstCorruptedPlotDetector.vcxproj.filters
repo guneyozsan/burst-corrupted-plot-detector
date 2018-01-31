@@ -45,6 +45,9 @@
     <ClInclude Include="include\string_utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\mining_stats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\console_gui.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\string_utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mining_stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

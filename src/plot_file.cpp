@@ -6,30 +6,16 @@ plot_file::plot_file(const std::string &name) {
 	this->name = name;
 }
 
-void
-plot_file::mining_stats::increment_healthy_count() {
-	healthy_count++;
-}
-
-void
-plot_file::mining_stats::increment_corrupted_count() {
-	corrupted_count++;
-}
-
-void
-plot_file::mining_stats::add_to_corrupted_count(
-	const size_t& corrupted_count
-)
-{
-	this->corrupted_count += (int)corrupted_count;
-}
-
-int
-plot_file::mining_stats::get_healthy_count() {
-	return healthy_count;
-}
-
-int 
-plot_file::mining_stats::get_corrupted_count() {
-	return corrupted_count;
+/* Merges two plot_files and their stats. */
+plot_file
+plot_file::merge(const plot_file& lhs, const plot_file& rhs) {
+	if (lhs.name == rhs.name) {
+		plot_file merged(lhs.name);
+		lhs.found_deadlines;
+		rhs.found_deadlines;
+		merged.mining_stats = mining_stats::merge(
+			lhs.mining_stats, rhs.mining_stats
+		);
+		return merged;
+	}
 }

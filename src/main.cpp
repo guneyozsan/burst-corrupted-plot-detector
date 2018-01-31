@@ -23,6 +23,7 @@
 #include "file_utility.h"
 #include "logger.h"
 #include "mining_log_analyzer.h"
+#include "plot_files.h"
 #include "string_utility.h"
 #include "time_utility.h"
 
@@ -36,7 +37,9 @@ int main(int argc, char *argv[]) {
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 
 	// Get the list of files in directory or arguments.
-	std::map<std::string, std::vector<std::string>> files_in_dirs;
+	// map<dir_name, vector<log_file_name>>
+	std::map<std::string /* Dir path */,
+		std::vector<std::string /* File names */>> files_in_dirs;
 	std::string dir_path;
 
 	/* List current working directory if no arguments on command line */
@@ -56,14 +59,18 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Main loop
-	std::vector<plot_file> plot_files;
+	struct plot_files plot_files;
+	struct plot_files merged_plot_files;
+	// Iterate directories.
 	for (auto &it_path : files_in_dirs) {
 		if (it_path.second.size() == 0) {
 			logger::print_and_log("\n");
 			logger::print_and_log("No mining logs found at "
 				+ it_path.first + "\n");
 		}
+		// Iterate files in directories.
 		for (size_t i = 0; i < it_path.second.size(); i++) {
+			// Only consider .log extensions, and exclude own logs.
 			if (it_path.second[i].find(".log") != std::string::npos
 				&& it_path.second[i].find(log_file_prefix.c_str()) ==
 					std::string::npos)
@@ -72,15 +79,20 @@ int main(int argc, char *argv[]) {
 					it_path.first + it_path.second[i]
 				);
 				print_plot_file_stats(plot_files);
+				merged_plot_files = plot_files::merge(
+					merged_plot_files, plot_files
+				);
 			}
 		}
 	}
 
 	// Finalize logger
-	logger::log("\n");
-	logger::log("\n");
-	logger::log("-- END OF LOG --");
-	logger::log("\n");
+	logger::print_and_log("\n");
+	logger::print_and_log("-- SUMMARY --\n");
+	print_plot_file_stats(merged_plot_files);
+	logger::print_and_log("\n");
+	logger::print_and_log("\n");
+	logger::print_and_log("-- END OF LOG --\n");
 
 	return EXIT_SUCCESS;
 }
