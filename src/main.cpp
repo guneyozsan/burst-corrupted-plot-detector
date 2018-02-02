@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 
+#include "console_gui.h"
 #include "file_utility.h"
 #include "logger.h"
 #include "mining_log_analyzer.h"
@@ -66,8 +67,9 @@ int main(int argc, char *argv[]) {
 	// Iterate directories.
 	for (auto &it_path : files_in_dirs) {
 		logger::print_and_log("\n");
-		logger::print_and_log("------------------------------------\n");
-		logger::print_and_log("DIRECTORY: " + it_path.first + "\n");
+		logger::print_and_log("->\n");
+		logger::print_and_log("-> DIRECTORY: " + it_path.first + "\n");
+		logger::print_and_log("->\n");
 		if (it_path.second.size() == 0) {
 			logger::print_and_log("\n");
 			logger::print_and_log("No mining logs found at "
@@ -91,7 +93,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	logger::print_and_log_title("SUMMARY");
+	std::string title_separator = "------------------------------------------------------------";
+	logger::print_and_log("\n");
+	logger::print_and_log(title_separator + "\n");
+	logger::print_and_log("\n");
+	logger::print_and_log(console_gui::center("SUMMARY", title_separator.size()) + "\n");
+	logger::print_and_log("\n");
+	logger::print_and_log(title_separator + "\n");
 	print_plot_file_stats(merged_plot_files);
 	print_end_titles();
 
@@ -111,17 +119,22 @@ void print_opening_titles() {
 	logger::print_and_log("             _ \\ __|__ __|__|  __|__ __|_ \\ _ \\\n");
 	logger::print_and_log("             |  |_|    |  _|  (      | (   |  /\n");
 	logger::print_and_log("            ___/___|  _| ___|\\___|  _|\\___/_|_\\\n");
-	logger::print_and_log_title("ANALYSIS");
-
-	logger::print("\n");
-	logger::print("Summary stats are at the end of the log file.\n");
+	std::string title_separator = "------------------------------------------------------------";
+	logger::print_and_log(title_separator + "\n");
+	logger::print_and_log("\n");
+	logger::print_and_log(console_gui::center("ANALYSIS", title_separator.size()) + "\n");
+	logger::print_and_log(console_gui::center("(Summary stats are at the end of the log file.)\n", title_separator.size()) + "\n");
+	logger::print_and_log(title_separator + "\n");
 }
 
 void print_end_titles() {
 	logger::print("\n");
+	std::string title_separator = "------------------------------------------------------------";
+	logger::print_and_log(title_separator + "\n");
+	logger::print_and_log("\n");
 	logger::print(
-		"* This log is also saved to a file near the executable.\n"
+		console_gui::center("(This log is also saved to a file near the executable.)", title_separator.size()) + "\n"
 	);
 	logger::print_and_log("\n");
-	logger::print_and_log("-- END OF LOG --\n");
+	logger::print_and_log(console_gui::center("-- END OF LOG --\n", title_separator.size()) + "\n");
 }

@@ -39,13 +39,3 @@ logger::print_and_log(const std::string &content) {
 	std::cout << content;
 	log(content);
 }
-
-void
-logger::print_and_log_title(const std::string &content) {
-	std::string separator = "**********************************************";
-	std::string centered_text = console_gui::center(content, separator.size());
-	logger::print_and_log("\n");
-	logger::print_and_log(separator + "\n");
-	logger::print_and_log(centered_text + "\n");
-	logger::print_and_log(separator + "\n");
-}
