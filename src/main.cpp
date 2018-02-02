@@ -27,9 +27,7 @@
 #include "plot_files.h"
 #include "string_utility.h"
 #include "time_utility.h"
-
-void print_opening_titles();
-void print_end_titles();
+#include "titles.h"
 
 int main(int argc, char *argv[]) {
 	std::string formatted_time =
@@ -38,7 +36,7 @@ int main(int argc, char *argv[]) {
 	string_utility::replace_all(':', '_', formatted_time);
 	std::string log_file_prefix = "Burst-mining-log-analysis-";
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
-	print_opening_titles();
+	titles::print_opening_titles();
 
 	// Get the list of files in directory or arguments.
 	std::map<std::string /* Dir path */,
@@ -80,7 +78,7 @@ int main(int argc, char *argv[]) {
 			// Only consider .log extensions, and exclude own logs.
 			if (it_path.second[i].find(".log") != std::string::npos
 				&& it_path.second[i].find(log_file_prefix.c_str()) ==
-					std::string::npos)
+				std::string::npos)
 			{
 				plot_files = analyze_plot_files_in_log(
 					it_path.first + it_path.second[i]
@@ -93,48 +91,8 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	std::string title_separator = "------------------------------------------------------------";
-	logger::print_and_log("\n");
-	logger::print_and_log(title_separator + "\n");
-	logger::print_and_log("\n");
-	logger::print_and_log(console_gui::center("SUMMARY", title_separator.size()) + "\n");
-	logger::print_and_log("\n");
-	logger::print_and_log(title_separator + "\n");
+	titles::print_title({"SUMMARY"});
 	print_plot_file_stats(merged_plot_files);
-	print_end_titles();
-
+	titles::print_end_titles();
 	return EXIT_SUCCESS;
-}
-
-void print_opening_titles() {
-	logger::log("\n");
-	logger::print_and_log("    _ ) |  |_ \\  __|__ __|   \\  |_ _|  \\ |_ _|  \\ |  __|\n");
-	logger::print_and_log("    _ \\ |  |  /\\__ \\   |    |\\/ |  |  .  |  |  .  | (_ |\n");
-	logger::print_and_log("   ___/\\__/_|_\\____/  _|   _|  _|___|_|\\_|___|_|\\_|\\___|\n");
-	logger::print_and_log("\n");
-	logger::print_and_log("  __|  _ \\ _ \\ _ \\ |  |_ \\__ __|__| _ \\   _ \\|     _ \\__ __|\n");
-	logger::print_and_log(" (    (   |  /   / |  |__/   |  _|  |  |  __/|    (   |  |  \n");
-	logger::print_and_log("\\___|\\___/_|_\\_|_\\\\__/_|    _| ___|___/  _| ____|\\___/  _|  \n");
-	logger::print_and_log("\n");
-	logger::print_and_log("             _ \\ __|__ __|__|  __|__ __|_ \\ _ \\\n");
-	logger::print_and_log("             |  |_|    |  _|  (      | (   |  /\n");
-	logger::print_and_log("            ___/___|  _| ___|\\___|  _|\\___/_|_\\\n");
-	std::string title_separator = "------------------------------------------------------------";
-	logger::print_and_log(title_separator + "\n");
-	logger::print_and_log("\n");
-	logger::print_and_log(console_gui::center("ANALYSIS", title_separator.size()) + "\n");
-	logger::print_and_log(console_gui::center("(Summary stats are at the end of the log file.)\n", title_separator.size()) + "\n");
-	logger::print_and_log(title_separator + "\n");
-}
-
-void print_end_titles() {
-	logger::print("\n");
-	std::string title_separator = "------------------------------------------------------------";
-	logger::print_and_log(title_separator + "\n");
-	logger::print_and_log("\n");
-	logger::print(
-		console_gui::center("(This log is also saved to a file near the executable.)", title_separator.size()) + "\n"
-	);
-	logger::print_and_log("\n");
-	logger::print_and_log(console_gui::center("-- END OF LOG --\n", title_separator.size()) + "\n");
 }

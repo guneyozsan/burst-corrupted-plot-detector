@@ -48,6 +48,9 @@
     <ClInclude Include="include\mining_stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\titles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\console_gui.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\mining_stats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\titles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

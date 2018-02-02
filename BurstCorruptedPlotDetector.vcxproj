@@ -131,6 +131,7 @@
     <ClInclude Include="include\plot_files.h" />
     <ClInclude Include="include\string_utility.h" />
     <ClInclude Include="include\time_utility.h" />
+    <ClInclude Include="include\titles.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\animating_cursor.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="src\plot_files.cpp" />
     <ClCompile Include="src\string_utility.cpp" />
     <ClCompile Include="src\time_utility.cpp" />
+    <ClCompile Include="src\titles.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
