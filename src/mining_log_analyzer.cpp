@@ -55,9 +55,8 @@ analyze_plot_files_in_log(const std::string file_name) {
 	std::string line;
 
 	// User feedback
-	logger::log("ANALYSIS OF THE LOG FILE: ");
-	logger::log(file_name);
 	logger::log("\n");
+	logger::log("LOG FILE: " + file_name + "\n");
 	std::cout << std::endl;
 	std::cout << "CHECKING FILE -> " << file_name << std::endl;
 	std::cout << "DEADLINES -> ";

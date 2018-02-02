@@ -25,4 +25,5 @@ struct console_gui {
 	static std::string underline(const std::string &content);
 	static std::string move_cursor_back(const size_t &size);
 	static std::string whitespace(const size_t &size);
+	static std::string center(const std::string content, size_t width);
 };

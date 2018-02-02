@@ -27,17 +27,19 @@
 #include "string_utility.h"
 #include "time_utility.h"
 
+void print_opening_titles();
+void print_end_titles();
+
 int main(int argc, char *argv[]) {
-	// Initialize logging to file.
 	std::string formatted_time =
 		time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.
 	string_utility::replace_all(':', '_', formatted_time);
 	std::string log_file_prefix = "Burst-mining-log-analysis-";
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
+	print_opening_titles();
 
 	// Get the list of files in directory or arguments.
-	// map<dir_name, vector<log_file_name>>
 	std::map<std::string /* Dir path */,
 		std::vector<std::string /* File names */>> files_in_dirs;
 	std::string dir_path;
@@ -63,6 +65,9 @@ int main(int argc, char *argv[]) {
 	struct plot_files merged_plot_files;
 	// Iterate directories.
 	for (auto &it_path : files_in_dirs) {
+		logger::print_and_log("\n");
+		logger::print_and_log("------------------------------------\n");
+		logger::print_and_log("DIRECTORY: " + it_path.first + "\n");
 		if (it_path.second.size() == 0) {
 			logger::print_and_log("\n");
 			logger::print_and_log("No mining logs found at "
@@ -86,13 +91,37 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	// Finalize logger
-	logger::print_and_log("\n");
-	logger::print_and_log("-- SUMMARY --\n");
+	logger::print_and_log_title("SUMMARY");
 	print_plot_file_stats(merged_plot_files);
-	logger::print_and_log("\n");
-	logger::print_and_log("\n");
-	logger::print_and_log("-- END OF LOG --\n");
+	print_end_titles();
 
 	return EXIT_SUCCESS;
+}
+
+void print_opening_titles() {
+	logger::log("\n");
+	logger::print_and_log("    _ ) |  |_ \\  __|__ __|   \\  |_ _|  \\ |_ _|  \\ |  __|\n");
+	logger::print_and_log("    _ \\ |  |  /\\__ \\   |    |\\/ |  |  .  |  |  .  | (_ |\n");
+	logger::print_and_log("   ___/\\__/_|_\\____/  _|   _|  _|___|_|\\_|___|_|\\_|\\___|\n");
+	logger::print_and_log("\n");
+	logger::print_and_log("  __|  _ \\ _ \\ _ \\ |  |_ \\__ __|__| _ \\   _ \\|     _ \\__ __|\n");
+	logger::print_and_log(" (    (   |  /   / |  |__/   |  _|  |  |  __/|    (   |  |  \n");
+	logger::print_and_log("\\___|\\___/_|_\\_|_\\\\__/_|    _| ___|___/  _| ____|\\___/  _|  \n");
+	logger::print_and_log("\n");
+	logger::print_and_log("             _ \\ __|__ __|__|  __|__ __|_ \\ _ \\\n");
+	logger::print_and_log("             |  |_|    |  _|  (      | (   |  /\n");
+	logger::print_and_log("            ___/___|  _| ___|\\___|  _|\\___/_|_\\\n");
+	logger::print_and_log_title("ANALYSIS");
+
+	logger::print("\n");
+	logger::print("Summary stats are at the end of the log file.\n");
+}
+
+void print_end_titles() {
+	logger::print("\n");
+	logger::print(
+		"* This log is also saved to a file near the executable.\n"
+	);
+	logger::print_and_log("\n");
+	logger::print_and_log("-- END OF LOG --\n");
 }

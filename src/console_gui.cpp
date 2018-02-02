@@ -63,3 +63,15 @@ console_gui::whitespace(const size_t &size) {
 	}
 	return backspace;
 }
+
+std::string
+console_gui::center(const std::string text, size_t width)
+{
+	int text_position = (width - text.size()) / 2;
+	std::string whitespace = console_gui::whitespace(text_position);
+	std::string centered_text = whitespace + text + whitespace;
+	if (centered_text.size() < width) {
+		centered_text += " ";
+	}
+	return centered_text;
+}
