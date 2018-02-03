@@ -145,14 +145,14 @@ print_plot_file_stats(const plot_files &plot_files) {
 			title_gap + corrupted_title
 			+ title_gap + healthy_title
 			+ title_gap + plot_file_title
+			+ "\n"
 		);
-		logger::print_and_log("\n");
 		logger::print_and_log(
 			title_gap + console_gui::underline(corrupted_title)
 			+ title_gap + console_gui::underline(healthy_title)
 			+ title_gap + console_gui::underline(plot_file_title)
+			+ "\n"
 		);
-		logger::print_and_log("\n");
 
 		for (size_t i = 0; i < m_plot_files.size(); i++) {
 			if (m_plot_files[i].mining_stats.get_corrupted_count() == 0) {
@@ -180,15 +180,12 @@ print_plot_file_stats(const plot_files &plot_files) {
 
 			logger::print_and_log(title_gap
 				+ console_gui::print_right_aligned(
-					healthy_count, healthy_title.length()
-				)
-				+ title_gap + m_plot_files[i].name
+					healthy_count, healthy_title.length())
+				+ title_gap + m_plot_files[i].name + "\n"
 			);
-			logger::print_and_log("\n");
 		}
 	}
 	else {
-		logger::print_and_log("No deadlines detected.");
-		logger::print_and_log("\n");
+		logger::print_and_log("No deadlines detected.\n");
 	}
 }
