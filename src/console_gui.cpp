@@ -20,9 +20,9 @@
 
 #include <iostream>
 
- /* Prints the content right aligned in a horizontal slot with given size. */
+ /* Right aligns the text in a given horizontal slot. */
 std::string
-console_gui::print_right_aligned(
+console_gui::align_right(
 	const std::string &content, const size_t &slot_size)
 {
 	std::string slot = "";
@@ -64,6 +64,7 @@ console_gui::whitespace(const size_t &size) {
 	return backspace;
 }
 
+/* Centers the text in a given horizontal slot. */
 std::string
 console_gui::center(const std::string text, size_t width)
 {

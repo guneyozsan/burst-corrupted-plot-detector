@@ -27,6 +27,7 @@
 #include "console_gui.h"
 #include "cursor_animator.h"
 #include "logger.h"
+#include "string_utility.h"
 
 /*
 Analyzes the Burst log file and returns a plot_file object with analysis results.
@@ -130,6 +131,8 @@ Displays the stats available in a plot_file object in a nicely formatted way.
 void
 print_plot_file_stats(const plot_files &plot_files) {
 	std::vector<plot_file> m_plot_files = plot_files.get_vector();
+	int total_corrupted = 0;
+	int total_healthy = 0;
 
 	const std::string corrupted_title = "CONFLICTING";
 	const std::string healthy_title = "HEALTHY";
@@ -142,17 +145,12 @@ print_plot_file_stats(const plot_files &plot_files) {
 
 		logger::print_and_log("\n");
 		logger::print_and_log(
-			title_gap + corrupted_title
-			+ title_gap + healthy_title
-			+ title_gap + plot_file_title
-			+ "\n"
-		);
+			title_gap + corrupted_title + title_gap + healthy_title
+			+ title_gap + plot_file_title + "\n");
 		logger::print_and_log(
 			title_gap + console_gui::underline(corrupted_title)
 			+ title_gap + console_gui::underline(healthy_title)
-			+ title_gap + console_gui::underline(plot_file_title)
-			+ "\n"
-		);
+			+ title_gap + console_gui::underline(plot_file_title) + "\n");
 
 		for (size_t i = 0; i < m_plot_files.size(); i++) {
 			if (m_plot_files[i].mining_stats.get_corrupted_count() == 0) {
@@ -163,13 +161,6 @@ print_plot_file_stats(const plot_files &plot_files) {
 					m_plot_files[i].mining_stats.get_corrupted_count());
 			}
 
-			logger::print_and_log(
-				console_gui::print_right_aligned(
-					corrupted_count, corrupted_title.length()
-				)
-				+ title_gap
-			);
-
 			if (m_plot_files[i].mining_stats.get_healthy_count() == 0) {
 				healthy_count = "-";
 			}
@@ -178,12 +169,48 @@ print_plot_file_stats(const plot_files &plot_files) {
 					m_plot_files[i].mining_stats.get_healthy_count());
 			}
 
-			logger::print_and_log(title_gap
-				+ console_gui::print_right_aligned(
-					healthy_count, healthy_title.length())
-				+ title_gap + m_plot_files[i].name + "\n"
-			);
+			if (string_utility::is_numbers_only(corrupted_count)) {
+				total_corrupted += std::stoi(corrupted_count);
+			}
+
+			if (string_utility::is_numbers_only(healthy_count)) {
+				total_healthy += std::stoi(healthy_count);
+			}
+			
+			logger::print_and_log(
+				title_gap + console_gui::align_right(
+					corrupted_count, corrupted_title.length()
+				) + title_gap + console_gui::align_right(
+					healthy_count, healthy_title.length()
+				) + title_gap + m_plot_files[i].name + "\n");
 		}
+
+		std::string corrupted_percentage;
+		std::string healthy_percentage;
+		if (total_corrupted + total_healthy == 0) {
+			corrupted_percentage = "0";
+			healthy_percentage = "0";
+		}
+		else {
+			corrupted_percentage = std::to_string(100 * total_corrupted / (total_corrupted + total_healthy));
+			healthy_percentage = std::to_string(100 * total_healthy / (total_corrupted + total_healthy));
+		}
+
+		logger::print_and_log(
+			title_gap + console_gui::underline(corrupted_title)
+			+ title_gap + console_gui::underline(healthy_title) + "\n");
+		logger::print_and_log(
+			title_gap + console_gui::align_right(
+				std::to_string(total_corrupted), corrupted_title.length()
+			) + title_gap + console_gui::align_right(
+				std::to_string(total_healthy), healthy_title.length()
+			) + "\n");
+		logger::print_and_log(
+			" " + title_gap + console_gui::align_right(
+				corrupted_percentage + "%", corrupted_title.length()
+			) + title_gap + console_gui::align_right(
+				healthy_percentage + "%", healthy_title.length()
+			) + "\n");
 	}
 	else {
 		logger::print_and_log("No deadlines detected.\n");
