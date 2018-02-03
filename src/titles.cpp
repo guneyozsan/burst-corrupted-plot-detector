@@ -16,7 +16,9 @@ titles::print_title(std::vector<std::string> titles) {
 	logger::print_and_log("\n");
 
 	for (size_t i = 0; i < titles.size(); i++) {
-		logger::print_and_log(console_gui::center(titles[i], separator.size()) + "\n");
+		logger::print_and_log(
+			console_gui::center(titles[i], separator.size()) + "\n"
+		);
 	}
 
 	logger::print_and_log("\n");
@@ -27,6 +29,7 @@ titles::print_title(std::vector<std::string> titles) {
 void
 titles::print_opening_titles() {
 	logger::log("\n");
+	logger::print_and_log("\n");
 	logger::print_and_log("    _ ) |  |_ \\  __|__ __|   \\  |_ _|  \\ |_ _|  \\ |  __|\n");
 	logger::print_and_log("    _ \\ |  |  /\\__ \\   |    |\\/ |  |  .  |  |  .  | (_ |\n");
 	logger::print_and_log("   ___/\\__/_|_\\____/  _|   _|  _|___|_|\\_|___|_|\\_|\\___|\n");
@@ -38,7 +41,10 @@ titles::print_opening_titles() {
 	logger::print_and_log("             _ \\ __|__ __|__|  __|__ __|_ \\ _ \\\n");
 	logger::print_and_log("             |  |_|    |  _|  (      | (   |  /\n");
 	logger::print_and_log("            ___/___|  _| ___|\\___|  _|\\___/_|_\\\n");
-	print_title({ "ANALYSIS", "** Summary stats are at the end of the log file. **" });
+	print_title({
+			"ANALYSIS", 
+			"** Summary stats are at the end of the log file. **"
+		});
 }
 
 /* Prints end titles. */
@@ -48,8 +54,14 @@ titles::print_end_titles() {
 	logger::print_and_log(separator + "\n");
 	logger::print_and_log("\n");
 	logger::print(
-		console_gui::center("** This log is also saved to a file near the executable. **", separator.size()) + "\n"
+		console_gui::center(
+			"** This log is also saved to a file near the executable. **",
+			separator.size()
+		)
+		+ "\n"
 	);
 	logger::print_and_log("\n");
-	logger::print_and_log(console_gui::center("-- END OF LOG --\n", separator.size()) + "\n");
+	logger::print_and_log(
+		console_gui::center("-- END OF LOG --\n", separator.size()) + "\n"
+	);
 }
