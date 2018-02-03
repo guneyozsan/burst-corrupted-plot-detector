@@ -138,27 +138,34 @@ print_plot_file_stats(const plot_files &plot_files) {
 	const std::string healthy_title = "HEALTHY";
 	const std::string plot_file_title = "PLOT FILE";
 	const std::string title_gap = "   ";
+	const std::string conflict_marker = " X ";
+	const std::string no_conflict_marker = "   ";
 
 	if (m_plot_files.size() > 0) {
 		std::string corrupted_count;
 		std::string healthy_count;
+		std::string marker;
 
 		logger::print_and_log("\n");
 		logger::print_and_log(
-			title_gap + corrupted_title + title_gap + healthy_title
-			+ title_gap + plot_file_title + "\n");
+			title_gap + corrupted_title + title_gap
+			+ healthy_title + no_conflict_marker + plot_file_title + "\n");
 		logger::print_and_log(
-			title_gap + console_gui::underline(corrupted_title)
-			+ title_gap + console_gui::underline(healthy_title)
-			+ title_gap + console_gui::underline(plot_file_title) + "\n");
+			title_gap
+			+ console_gui::underline(corrupted_title) + title_gap
+			+ console_gui::underline(healthy_title) + no_conflict_marker
+			+ console_gui::underline(plot_file_title) + "\n");
 
 		for (size_t i = 0; i < m_plot_files.size(); i++) {
+			marker = no_conflict_marker;
+
 			if (m_plot_files[i].mining_stats.get_corrupted_count() == 0) {
 				corrupted_count = "-";
 			}
 			else {
 				corrupted_count = std::to_string(
 					m_plot_files[i].mining_stats.get_corrupted_count());
+				marker = conflict_marker;
 			}
 
 			if (m_plot_files[i].mining_stats.get_healthy_count() == 0) {
@@ -178,15 +185,18 @@ print_plot_file_stats(const plot_files &plot_files) {
 			}
 			
 			logger::print_and_log(
-				title_gap + console_gui::align_right(
+				title_gap
+				+ console_gui::align_right(
 					corrupted_count, corrupted_title.length()
-				) + title_gap + console_gui::align_right(
+				) + title_gap
+				+ console_gui::align_right(
 					healthy_count, healthy_title.length()
-				) + title_gap + m_plot_files[i].name + "\n");
+				) + marker + m_plot_files[i].name + "\n");
 		}
 
 		std::string corrupted_percentage;
 		std::string healthy_percentage;
+
 		if (total_corrupted + total_healthy == 0) {
 			corrupted_percentage = "0";
 			healthy_percentage = "0";
@@ -197,18 +207,23 @@ print_plot_file_stats(const plot_files &plot_files) {
 		}
 
 		logger::print_and_log(
-			title_gap + console_gui::underline(corrupted_title)
+			title_gap
+			+ console_gui::underline(corrupted_title)
 			+ title_gap + console_gui::underline(healthy_title) + "\n");
 		logger::print_and_log(
-			title_gap + console_gui::align_right(
+			title_gap
+			+ console_gui::align_right(
 				std::to_string(total_corrupted), corrupted_title.length()
-			) + title_gap + console_gui::align_right(
+			) + title_gap
+			+ console_gui::align_right(
 				std::to_string(total_healthy), healthy_title.length()
 			) + "\n");
 		logger::print_and_log(
-			" " + title_gap + console_gui::align_right(
+			" " + title_gap
+			+ console_gui::align_right(
 				corrupted_percentage + "%", corrupted_title.length()
-			) + title_gap + console_gui::align_right(
+			) + title_gap
+			+ console_gui::align_right(
 				healthy_percentage + "%", healthy_title.length()
 			) + "\n");
 	}
