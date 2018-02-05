@@ -140,7 +140,7 @@ print_plot_file_stats(const plot_files &plot_files) {
 	int total_healthy = 0;
 
 	const std::string corrupted_title = "CONFLICTING";
-	const std::string healthy_title = "HEALTHY";
+	const std::string healthy_title = "    HEALTHY";
 	const std::string plot_file_title = "PLOT FILE";
 	const std::string title_gap = "   ";
 	const std::string conflict_marker = "  X ->";
@@ -151,6 +151,7 @@ print_plot_file_stats(const plot_files &plot_files) {
 		std::string healthy_count;
 		std::string marker;
 
+		// Print titles for stats table
 		logger::print_and_log("\n");
 		logger::print_and_log(
 			title_gap + corrupted_title + title_gap
