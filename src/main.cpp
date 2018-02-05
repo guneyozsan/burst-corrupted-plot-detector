@@ -66,9 +66,7 @@ int main(int argc, char *argv[]) {
 	// Iterate directories.
 	for (auto &it_path : files_in_dirs) {
 		logger::print_and_log("\n");
-		logger::print_and_log("->\n");
 		logger::print_and_log("-> DIRECTORY: " + it_path.first + "\n");
-		logger::print_and_log("->\n");
 		if (it_path.second.size() == 0) {
 			logger::print_and_log("\n");
 			logger::print_and_log("No mining logs found at "

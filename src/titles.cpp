@@ -36,8 +36,7 @@ titles::print_title(std::vector<std::string> titles) {
 
 	for (size_t i = 0; i < titles.size(); i++) {
 		logger::print_and_log(
-			console_gui::center(titles[i], separator.size()) + "\n"
-		);
+			console_gui::center(titles[i], separator.size()) + "\n");
 	}
 
 	logger::print_and_log("\n");
@@ -64,8 +63,7 @@ titles::print_opening_titles() {
 	logger::print_and_log(console_gui::center("by Guney Ozsan", separator.size()) + "\n");
 	print_title({
 			"ANALYSIS", 
-			"** Summary stats are at the end of the log file. **"
-		});
+			"** Summary stats are at the end of the log file. **"});
 }
 
 /* Prints end titles. */
@@ -74,20 +72,11 @@ titles::print_end_titles() {
 	std::string version;
 	version = VERSION;
 	logger::print_and_log("\n");
+	std::cout << "This log is also saved near the executable." << std::endl;
 	logger::print_and_log(separator + "\n");
-	logger::print_and_log("\n");
-	logger::print_and_log("Burst Corrupted Plot Detector " + version + " by Guney Ozsan\n");
-	logger::print_and_log("Latest version: https://github.com/guneyozsan/burst-corrupted-plot-detector/releases\n");
-	logger::print_and_log("\n");
-	logger::print(
-		console_gui::center(
-			"** This log is also saved to a file near the executable. **",
-			separator.size()
-		)
-		+ "\n"
-	);
-	logger::print("\n");
-	logger::print_and_log(
-		console_gui::center("-- END OF LOG --\n", separator.size()) + "\n"
-	);
+	std::cout << "Burst Corrupted Plot Detector " << version << " by Guney Ozsan" << std::endl;
+	std::cout << "Latest version: https://github.com/guneyozsan/burst-corrupted-plot-detector/releases" << std::endl;
+	logger::log("\n");
+	logger::log(
+		console_gui::center("-- END OF LOG --\n", separator.size()) + "\n");
 }
