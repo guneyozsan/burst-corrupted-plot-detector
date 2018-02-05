@@ -73,6 +73,14 @@ console_gui::whitespace(const size_t &size) {
 std::string
 console_gui::center(const std::string text, size_t width)
 {
+	if (text.size() > INT_MAX) {
+		throw std::overflow_error("text size cannot be greater than INT_MAX.");
+	}
+
+	if (width > INT_MAX) {
+		throw std::overflow_error("with cannot be greater than INT_MAX.");
+	}
+
 	int text_position = (int)(width - text.size()) / 2;
 	std::string whitespace = console_gui::whitespace(text_position);
 	std::string centered_text = whitespace + text + whitespace;

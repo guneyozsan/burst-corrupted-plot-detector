@@ -89,7 +89,7 @@ string_utility::round_with_precision(
 
 		if (str_number.size() > INT_MAX) {
 			throw std::overflow_error(
-				"string size should be less than INT_MAX.");
+				"string size cannot be greater than INT_MAX.");
 		}
 
 		int deficit_digit_count =
