@@ -26,11 +26,16 @@ console_gui::align_right(
 	const std::string &content, const size_t &slot_size)
 {
 	std::string slot = "";
-	size_t whitespace_count = slot_size - content.length();
-	for (size_t i = 0; i < whitespace_count; i++) {
-		slot += " ";
+	if (slot_size >= content.length()) {
+		size_t whitespace_count = slot_size - content.length();
+		for (size_t i = 0; i < whitespace_count; i++) {
+			slot += " ";
+		}
+		slot += content;
 	}
-	slot += content;
+	else {
+		slot = content.substr(content.length() - slot_size);
+	}
 	return slot;
 }
 
