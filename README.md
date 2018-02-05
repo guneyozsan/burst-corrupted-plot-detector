@@ -5,6 +5,8 @@
 
 Scans Burst mining logs and helps detecting corrupted plot files so that problematic plot files can be re-plotted. It looks for deadlines conflicting with server and report related stats.
 
+Conflicts found does not necessarily mean that the plot file is corrupt. Consider re-plotting if a consistent pattern is noticeable and different from other plot files.
+
 Currently only Blago Miner logs are supported.
 
 Written in C++ to support PC, Mac and Linux. Tested only on Windows. Any testers are appreciated.
@@ -15,7 +17,7 @@ Either pass the path of the directory of your mining log files as arguments or c
 Example:
 D:\Qbundle_1.6\BlagoMiner\Logs>BurstCorruptedPlotDetector.exe
 or
-AnyPath>BurstCorruptedPlotDetector.exe D:\Qbundle_1.6\BlagoMiner\Logs E:\Qbundle_1.5\BlagoMiner\Logs
+AnyPath>BurstCorruptedPlotDetector.exe D:\MyBlagoMiner\Logs E:\MyOtherBlagoMiner\Logs
 
 Results are also saved to a file in the same directory with the executable.
 
