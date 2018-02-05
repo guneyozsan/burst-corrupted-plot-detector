@@ -6,7 +6,11 @@ plot_file::plot_file(const std::string &name) {
 	this->name = name;
 }
 
-/* Merges two plot_files and their stats. */
+/*
+Merges stats of two plot_file's with the same name
+and returns a new plot_file.
+If names don't match, returns an empty plot_file.
+*/
 plot_file
 plot_file::merge(const plot_file& lhs, const plot_file& rhs) {
 	if (lhs.name == rhs.name) {
@@ -17,5 +21,8 @@ plot_file::merge(const plot_file& lhs, const plot_file& rhs) {
 			lhs.mining_stats, rhs.mining_stats
 		);
 		return merged;
+	}
+	else {
+		return plot_file();
 	}
 }
