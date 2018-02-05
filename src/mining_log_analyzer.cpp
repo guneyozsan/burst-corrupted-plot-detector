@@ -207,8 +207,15 @@ print_plot_file_stats(const plot_files &plot_files) {
 			healthy_percentage = "0";
 		}
 		else {
-			corrupted_percentage = std::to_string(100 * total_corrupted / (total_corrupted + total_healthy));
-			healthy_percentage = std::to_string(100 * total_healthy / (total_corrupted + total_healthy));
+			corrupted_percentage
+				= std::to_string(
+					100.0f * (float)total_corrupted / ((float)total_corrupted + (float)total_healthy));
+			healthy_percentage
+				= std::to_string(
+					100.0f * (float)total_healthy / ((float)total_corrupted + (float)total_healthy));
+			int precision = 1;
+			string_utility::round_with_precision(corrupted_percentage, precision);
+			string_utility::round_with_precision(healthy_percentage, precision);
 		}
 
 		logger::print_and_log(

@@ -27,4 +27,5 @@ namespace string_utility {
 		std::string &string_body
 	);
 	bool is_numbers_only(const std::string& s);
+	void round_with_precision(std::string& str_number, const int& precision);
 }
