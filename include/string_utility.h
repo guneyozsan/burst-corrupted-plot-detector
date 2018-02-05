@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <cctype>
 #include <string>
 
 namespace string_utility {
@@ -25,4 +26,6 @@ namespace string_utility {
 		const char &original_char, const char &replacement,
 		std::string &string_body
 	);
+	bool is_numbers_only(const std::string& s);
+	void round_with_precision(std::string& str_number, const int& precision);
 }

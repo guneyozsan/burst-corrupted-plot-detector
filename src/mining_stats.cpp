@@ -16,44 +16,45 @@
 * along with this program.If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "logger.h"
-
-#include <fstream>
-#include <iostream>
-#include <string>
-
-#include "console_gui.h"
-
-extern std::ofstream log_file;
-
-std::string logger::log_file_name;
-std::ofstream log_file;
+#include "mining_stats.h"
 
 void
-logger::set_log_file_name(const std::string &file_name)
+mining_stats::increment_healthy_count() {
+	healthy_count++;
+}
+
+void
+mining_stats::increment_corrupted_count() {
+	corrupted_count++;
+}
+
+void
+mining_stats::add_to_corrupted_count(
+	const size_t& corrupted_count
+)
 {
-	logger::log_file_name = file_name;
+	this->corrupted_count += (int)corrupted_count;
 }
 
-std::string
-logger::get_log_file_name() {
-	return log_file_name;
+int
+mining_stats::get_healthy_count() const {
+	return healthy_count;
 }
 
-void
-logger::log(const std::string &content) {
-	log_file.open(log_file_name, std::ios::in | std::ios::app);
-	log_file << content;
-	log_file.close();
+int
+mining_stats::get_corrupted_count() const {
+	return corrupted_count;
 }
 
-void
-logger::print(const std::string &content) {
-	std::cout << content;
-}
-
-void
-logger::print_and_log(const std::string &content) {
-	std::cout << content;
-	log(content);
+/* Merges two stats objects by calculating total counts. */
+mining_stats
+mining_stats::merge(
+	const mining_stats& lhs, const mining_stats& rhs)
+{
+	mining_stats merged_stats;
+	merged_stats.healthy_count =
+		lhs.get_healthy_count() + rhs.get_healthy_count();
+	merged_stats.corrupted_count =
+		lhs.get_corrupted_count() + rhs.get_corrupted_count();
+	return merged_stats;
 }

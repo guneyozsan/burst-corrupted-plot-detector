@@ -27,10 +27,20 @@ plot_files::contains(const std::string &plot_file_name) {
 		return true;
 }
 
-/* Adds a plot file to collection. Allows duplicates. */
+/* Adds a plot file to the collection if it is not already added. */
 void
 plot_files::add(const std::string &plot_file_name) {
-	plot_file_collection[plot_file_name] = plot_file(plot_file_name);
+	if (!contains(plot_file_name)) {
+		plot_file_collection[plot_file_name] = plot_file(plot_file_name);
+	}
+}
+
+/* Adds a plot file to the collection if it is not already added. */
+void
+plot_files::add(const plot_file &plot_file) {
+	if (!contains(plot_file.name)) {
+		plot_file_collection[plot_file.name] = plot_file;
+	}
 }
 
 /* Returns the plot file object with given file name. */
@@ -41,13 +51,13 @@ plot_files::get(const std::string &plot_file_name) {
 
 /* Returns the complete plot file collection as map. */
 std::map<std::string, plot_file>
-plot_files::get_collection() {
+plot_files::get_collection() const {
 	return plot_file_collection;
 }
 
 /* Returns the complete plot file collection as vector. */
 std::vector<plot_file>
-plot_files::get_vector() {
+plot_files::get_vector() const {
 	std::vector<plot_file> plot_files_vector(plot_file_collection.size());
 	int i = 0;
 	for (auto &it_pf : plot_file_collection) {
@@ -63,7 +73,8 @@ plot_files::add_found_deadline(
 	const std::string &plot_file_name, const std::string &found_deadline
 )
 {
-	plot_file_collection[plot_file_name].found_deadlines.push_back(found_deadline);
+	plot_file_collection[plot_file_name]
+		.found_deadlines.push_back(found_deadline);
 }
 
 /* 
@@ -124,4 +135,43 @@ plot_files::calculate_corrupted_count() {
 			it_pf.second.found_deadlines.size()
 		);
 	}
+}
+
+/* Merges two plot_file collections and their stats. */
+plot_files
+plot_files::merge(const plot_files& lhs, const plot_files& rhs) {
+	plot_files merged_collection;
+	std::vector<bool> has_match_lhs(lhs.get_collection().size(), false);
+	std::vector<bool> has_match_rhs(rhs.get_collection().size(), false);
+	int i_lhs = 0;
+	for (auto &it_lhs : lhs.get_collection()) {
+		int i_rhs = 0;
+		for (auto &it_rhs : rhs.get_collection()) {
+			if (it_lhs.first == it_rhs.first) {
+				plot_file merged_plot_file;
+				merged_plot_file = 
+					plot_file::merge(it_lhs.second, it_rhs.second);
+				merged_plot_file.name;
+				merged_collection.add(merged_plot_file);
+				has_match_lhs[i_lhs] = true;
+				has_match_rhs[i_rhs] = true;
+			}
+			i_rhs++;
+		}
+
+		if (!has_match_lhs[i_lhs]) {
+			merged_collection.add(it_lhs.second);
+		}
+
+		i_lhs++;
+	}
+
+	int i_rhs = 0;
+	for (auto &it_rhs : rhs.get_collection()) {
+		if (!has_match_rhs[i_rhs]) {
+			merged_collection.add(it_rhs.second);
+		}
+		i_rhs++;
+	}
+	return merged_collection;
 }

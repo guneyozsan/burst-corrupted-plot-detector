@@ -21,23 +21,16 @@
 #include <list>
 #include <string>
 
+#include "mining_stats.h"
+
 struct plot_file {
-	struct mining_stats {
-	private:
-		int healthy_count = 0;
-		int corrupted_count = 0;
-	public:
-		void increment_healthy_count();
-		void increment_corrupted_count();
-		void add_to_corrupted_count(const size_t& corrupted_count);
-		int get_healthy_count();
-		int get_corrupted_count();
-	};
-	
 	std::string name;
 	std::list<std::string> found_deadlines;
 	mining_stats mining_stats;
 
 	plot_file();
 	plot_file(const std::string &name);
+	static plot_file merge(
+		const plot_file& lhs, const plot_file& rhs
+	);
 };

@@ -20,17 +20,22 @@
 
 #include <iostream>
 
- /* Prints the content right aligned in a horizontal slot with given size. */
+ /* Right aligns the text in a given horizontal slot. */
 std::string
-console_gui::print_right_aligned(
+console_gui::align_right(
 	const std::string &content, const size_t &slot_size)
 {
 	std::string slot = "";
-	size_t whitespace_count = slot_size - content.length();
-	for (size_t i = 0; i < whitespace_count; i++) {
-		slot += " ";
+	if (slot_size >= content.length()) {
+		size_t whitespace_count = slot_size - content.length();
+		for (size_t i = 0; i < whitespace_count; i++) {
+			slot += " ";
+		}
+		slot += content;
 	}
-	slot += content;
+	else {
+		slot = content.substr(content.length() - slot_size);
+	}
 	return slot;
 }
 
@@ -62,4 +67,17 @@ console_gui::whitespace(const size_t &size) {
 		backspace.append(" ");
 	}
 	return backspace;
+}
+
+/* Centers the text in a given horizontal slot. */
+std::string
+console_gui::center(const std::string text, size_t width)
+{
+	int text_position = (int)(width - text.size()) / 2;
+	std::string whitespace = console_gui::whitespace(text_position);
+	std::string centered_text = whitespace + text + whitespace;
+	if (centered_text.size() < width) {
+		centered_text += " ";
+	}
+	return centered_text;
 }
