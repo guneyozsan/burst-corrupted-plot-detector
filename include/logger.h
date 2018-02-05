@@ -29,5 +29,4 @@ public:
 	static void log(const std::string &content);
 	static void print(const std::string &content);
 	static void print_and_log(const std::string &content);
-	static void print_and_log_title(const std::string &content);
 };
