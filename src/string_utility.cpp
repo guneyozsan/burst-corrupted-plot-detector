@@ -37,7 +37,7 @@ string_utility::replace_all(
 
 // Checks if the string contains only numeric characters.
 bool
-string_utility::is_numbers_only(const std::string& s)
+string_utility::is_numbers_only(const std::string &s)
 {
 	if (s.size() == 0) {
 		return false;

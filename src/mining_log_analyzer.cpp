@@ -161,6 +161,7 @@ print_plot_file_stats(const plot_files &plot_files) {
 			+ console_gui::underline(healthy_title) + no_conflict_marker
 			+ console_gui::underline(plot_file_title) + "\n");
 
+		// Print stats for each plot file.
 		for (size_t i = 0; i < m_plot_files.size(); i++) {
 			marker = no_conflict_marker;
 
@@ -199,6 +200,7 @@ print_plot_file_stats(const plot_files &plot_files) {
 				) + marker + m_plot_files[i].name + "\n");
 		}
 
+		// Calculate percentages of total corrupted and healthy deadlines in a log file.
 		std::string corrupted_percentage;
 		std::string healthy_percentage;
 
