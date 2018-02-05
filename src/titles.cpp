@@ -59,8 +59,10 @@ titles::print_opening_titles() {
 	logger::print_and_log("             |  |_|    |  _|  (      | (   |  /\n");
 	logger::print_and_log("            ___/___|  _| ___|\\___|  _|\\___/_|_\\\n");
 	logger::print_and_log("\n");
-	logger::print_and_log(console_gui::center(version, separator.size()) + "\n");
-	logger::print_and_log(console_gui::center("by Guney Ozsan", separator.size()) + "\n");
+	logger::print_and_log(
+		console_gui::center(version, separator.size()) + "\n");
+	logger::print_and_log(
+		console_gui::center("by Guney Ozsan", separator.size()) + "\n");
 	print_title({
 			"ANALYSIS", 
 			"** Summary stats are at the end of the log file. **"});
@@ -72,8 +74,12 @@ titles::print_end_titles() {
 	logger::print_and_log("\n");
 	std::cout << "This log is also saved near the executable." << std::endl;
 	logger::print_and_log(separator + "\n");
-	std::cout << "Burst Corrupted Plot Detector " << version << " by Guney Ozsan" << std::endl;
-	std::cout << "Latest version: https://github.com/guneyozsan/burst-corrupted-plot-detector/releases" << std::endl;
+	std::cout << "Burst Corrupted Plot Detector " << version
+		<< " by Guney Ozsan" << std::endl;
+	std::cout
+		<< "Latest version: "
+		<< "https://github.com/guneyozsan/burst-corrupted-plot-detector/releases"
+		<< std::endl;
 	logger::log("\n");
 	logger::log(
 		console_gui::center("-- END OF LOG --\n", separator.size()) + "\n");
