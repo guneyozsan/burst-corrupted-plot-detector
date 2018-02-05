@@ -56,13 +56,19 @@ analyze_plot_files_in_log(const std::string file_name) {
 	std::string line;
 
 	// User feedback
-	logger::log("\n");
-	logger::log("LOG FILE: " + file_name + "\n");
-	std::cout << std::endl;
-	std::cout << "CHECKING FILE -> " << file_name << std::endl;
-	std::cout << "DEADLINES -> ";
 	unsigned char confirmed_deadline_cursor = 219;
 	unsigned char corrupted_deadline_cursor = 177;
+	logger::log("\n");
+	logger::log("MINING LOG: " + file_name + "\n");
+	logger::print("\n");
+	logger::print("SCANNING MINING LOG -> " + file_name + "\n");
+	logger::print("DEADLINES ->\n");
+	std::string healthy_cursor;
+	healthy_cursor = confirmed_deadline_cursor;
+	std::string corrupted_cursor;
+	corrupted_cursor = corrupted_deadline_cursor;
+	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor + " = conflicting\n");
+	logger::print("\n");
 	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
 
 	// Main loop
@@ -138,8 +144,8 @@ print_plot_file_stats(const plot_files &plot_files) {
 	const std::string healthy_title = "HEALTHY";
 	const std::string plot_file_title = "PLOT FILE";
 	const std::string title_gap = "   ";
-	const std::string conflict_marker = " X ";
-	const std::string no_conflict_marker = "   ";
+	const std::string conflict_marker = "  X ->";
+	const std::string no_conflict_marker = "      ";
 
 	if (m_plot_files.size() > 0) {
 		std::string corrupted_count;
