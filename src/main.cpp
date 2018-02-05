@@ -16,6 +16,7 @@
  * along with this program.If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
@@ -94,5 +95,8 @@ int main(int argc, char *argv[]) {
 	titles::print_title({"SUMMARY"});
 	print_plot_file_stats(merged_plot_files);
 	titles::print_end_titles();
+	std::cout << std::endl;
+	std::cout << "Press a key to exit...";
+	std::cin.get();
 	return EXIT_SUCCESS;
 }
