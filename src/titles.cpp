@@ -59,7 +59,7 @@ titles::print_opening_titles() {
 	logger::print_and_log("             |  |_|    |  _|  (      | (   |  /\n");
 	logger::print_and_log("            ___/___|  _| ___|\\___|  _|\\___/_|_\\\n");
 	logger::print_and_log("\n");
-	logger::print_and_log(console_gui::center(VERSION, separator.size()) + "\n");
+	logger::print_and_log(console_gui::center(version, separator.size()) + "\n");
 	logger::print_and_log(console_gui::center("by Guney Ozsan", separator.size()) + "\n");
 	print_title({
 			"ANALYSIS", 
@@ -69,8 +69,6 @@ titles::print_opening_titles() {
 /* Prints end titles. */
 void
 titles::print_end_titles() {
-	std::string version;
-	version = VERSION;
 	logger::print_and_log("\n");
 	std::cout << "This log is also saved near the executable." << std::endl;
 	logger::print_and_log(separator + "\n");
