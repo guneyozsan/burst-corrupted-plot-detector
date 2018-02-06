@@ -66,7 +66,8 @@ mining_log_analyzer::analyze_plot_files_in_log(const std::string file_name) {
 	healthy_cursor = confirmed_deadline_cursor;
 	std::string corrupted_cursor;
 	corrupted_cursor = corrupted_deadline_cursor;
-	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor + " = conflicting\n");
+	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor
+		+ " = conflicting\n");
 	logger::print("DEADLINES ->  ");
 	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
 
