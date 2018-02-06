@@ -57,18 +57,20 @@ mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 	std::string line;
 
 	// User feedback
-	unsigned char confirmed_deadline_cursor = 219;
-	unsigned char corrupted_deadline_cursor = 177;
 	logger::log("\n");
 	logger::log("MINING LOG: " + file_name + "\n");
 	logger::print("\n");
 	logger::print("SCANNING LOG -> " + file_name + "\n");
+
+	const unsigned char confirmed_deadline_cursor = 219;
+	const unsigned char corrupted_deadline_cursor = 177;
 	std::string healthy_cursor;
 	healthy_cursor = confirmed_deadline_cursor;
 	std::string corrupted_cursor;
 	corrupted_cursor = corrupted_deadline_cursor;
 	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor
 		+ " = conflicting\n");
+
 	logger::print("DEADLINES ->  ");
 	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
 
@@ -135,9 +137,7 @@ Displays the stats available in a plot_file object in a nicely formatted way.
 void
 mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 {
-	std::vector<plot_file> m_plot_files = plot_files.get_vector();
-	int total_corrupted = 0;
-	int total_healthy = 0;
+	std::vector<plot_file> plot_files_list = plot_files.get_vector();
 
 	const std::string corrupted_title = "CONFLICTING";
 	const std::string healthy_title = "    HEALTHY";
@@ -145,8 +145,8 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 	const std::string title_gap = "   ";
 	const std::string conflict_marker = "  X ->";
 	const std::string no_conflict_marker = "      ";
-
-	if (m_plot_files.size() > 0) {
+	
+	if (plot_files_list.size() > 0) {
 		// Print titles for stats table
 		logger::print_and_log("\n");
 		logger::print_and_log(
@@ -162,25 +162,27 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 		std::string corrupted_count;
 		std::string healthy_count;
 		std::string marker;
+		int total_corrupted = 0;
+		int total_healthy = 0;
 
-		for (size_t i = 0; i < m_plot_files.size(); i++) {
+		for (size_t i = 0; i < plot_files_list.size(); i++) {
 			marker = no_conflict_marker;
 
-			if (m_plot_files[i].mining_stats.get_corrupted_count() == 0) {
+			if (plot_files_list[i].mining_stats.get_corrupted_count() == 0) {
 				corrupted_count = "-";
 			}
 			else {
 				corrupted_count = std::to_string(
-					m_plot_files[i].mining_stats.get_corrupted_count());
+					plot_files_list[i].mining_stats.get_corrupted_count());
 				marker = conflict_marker;
 			}
 
-			if (m_plot_files[i].mining_stats.get_healthy_count() == 0) {
+			if (plot_files_list[i].mining_stats.get_healthy_count() == 0) {
 				healthy_count = "-";
 			}
 			else {
 				healthy_count = std::to_string(
-					m_plot_files[i].mining_stats.get_healthy_count());
+					plot_files_list[i].mining_stats.get_healthy_count());
 			}
 
 			if (string_utility::is_numbers_only(corrupted_count))
@@ -196,7 +198,7 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 				+ title_gap
 				+ console_gui::align_right(
 					healthy_count, healthy_title.length())
-				+ marker + m_plot_files[i].name + "\n");
+				+ marker + plot_files_list[i].name + "\n");
 		}
 
 		// Calculate percentages of total corrupted and healthy deadlines
@@ -215,11 +217,12 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 			healthy_percentage
 				= std::to_string(
 					100.0f * (float)total_healthy / ((float)total_corrupted + (float)total_healthy));
-			int precision = 1;
+			const int precision = 1;
 			string_utility::round_with_precision(corrupted_percentage, precision);
 			string_utility::round_with_precision(healthy_percentage, precision);
 		}
 
+		// Print total stats.
 		logger::print_and_log(
 			title_gap
 			+ console_gui::underline(corrupted_title)
