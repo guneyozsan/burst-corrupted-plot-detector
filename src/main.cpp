@@ -76,16 +76,14 @@ int main(int argc, char *argv[]) {
 		for (size_t i = 0; i < it_path.second.size(); i++) {
 			// Only consider .log extensions, and exclude own logs.
 			if (it_path.second[i].find(".log") != std::string::npos
-				&& it_path.second[i].find(log_file_prefix.c_str()) ==
-				std::string::npos)
+				&& it_path.second[i].find(log_file_prefix.c_str())
+				== std::string::npos)
 			{
 				plot_files = analyze_plot_files_in_log(
-					it_path.first + it_path.second[i]
-				);
+					it_path.first + it_path.second[i]);
 				print_plot_file_stats(plot_files);
 				merged_plot_files = plot_files::merge(
-					merged_plot_files, plot_files
-				);
+					merged_plot_files, plot_files);
 			}
 		}
 	}

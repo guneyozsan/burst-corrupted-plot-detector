@@ -30,6 +30,5 @@ public:
 	int get_corrupted_count() const;
 
 	static mining_stats merge(
-		const mining_stats& lhs_stats, const mining_stats& rhs_stats
-	);
+		const mining_stats& lhs_stats, const mining_stats& rhs_stats);
 };
