@@ -16,11 +16,11 @@ Either pass the path of the directory of your mining log files as arguments or c
 
 **Example:**
 
-D:\Qbundle_1.6\BlagoMiner\Logs>BurstCorruptedPlotDetector.exe
+`D:\Qbundle_1.6\BlagoMiner\Logs>BurstCorruptedPlotDetector.exe`
 
 or
 
-AnyPath>BurstCorruptedPlotDetector.exe D:\MyBlagoMiner\Logs E:\MyOtherBlagoMiner\Logs
+`AnyPath>BurstCorruptedPlotDetector.exe D:\MyBlagoMiner\Logs E:\MyOtherBlagoMiner\Logs`
 
 Results are also saved to a file in the same directory with the executable.
 
