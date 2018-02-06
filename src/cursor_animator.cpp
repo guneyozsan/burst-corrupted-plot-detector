@@ -33,9 +33,9 @@ cursor_animator::update_animation() {
 		animating_cursor::progress_to_next_frame();
 		std::cout 
 			<< console_gui::move_cursor_back(
-				animating_cursor::current_frame().length()
+				animating_cursor::get_current_frame().length()
 			)
-			<< animating_cursor::current_frame();
+			<< animating_cursor::get_current_frame();
 		last_update_time = clock();
 	}
 }
@@ -45,10 +45,10 @@ void
 cursor_animator::finalize() {
 	std::cout 
 		<< console_gui::move_cursor_back(
-			animating_cursor::current_frame().length()
+			animating_cursor::get_current_frame().length()
 		)
 		<< console_gui::whitespace(
-			animating_cursor::current_frame().length()
+			animating_cursor::get_current_frame().length()
 		);
 }
 
