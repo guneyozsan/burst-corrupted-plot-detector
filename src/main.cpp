@@ -30,12 +30,13 @@
 #include "time_utility.h"
 #include "titles.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	std::string formatted_time =
 		time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.
 	string_utility::replace_all(':', '_', formatted_time);
-	std::string log_file_prefix = "Burst-mining-log-analysis-";
+	const std::string log_file_prefix = "Burst-mining-log-analysis-";
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 	titles::print_opening_titles();
 
@@ -61,8 +62,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Main loop
-	struct plot_files plot_files;
-	struct plot_files merged_plot_files;
+	class plot_files plot_files;
+	class plot_files merged_plot_files;
 	// Iterate directories.
 	for (auto &it_path : files_in_dirs) {
 		logger::print_and_log("\n");
@@ -76,22 +77,20 @@ int main(int argc, char *argv[]) {
 		for (size_t i = 0; i < it_path.second.size(); i++) {
 			// Only consider .log extensions, and exclude own logs.
 			if (it_path.second[i].find(".log") != std::string::npos
-				&& it_path.second[i].find(log_file_prefix.c_str()) ==
-				std::string::npos)
+				&& it_path.second[i].find(log_file_prefix.c_str())
+				== std::string::npos)
 			{
-				plot_files = analyze_plot_files_in_log(
-					it_path.first + it_path.second[i]
-				);
-				print_plot_file_stats(plot_files);
+				plot_files = mining_log_analyzer::analyze_plot_files_in_log(
+					it_path.first + it_path.second[i]);
+				mining_log_analyzer::print_plot_file_stats(plot_files);
 				merged_plot_files = plot_files::merge(
-					merged_plot_files, plot_files
-				);
+					merged_plot_files, plot_files);
 			}
 		}
 	}
 
 	titles::print_title({"SUMMARY"});
-	print_plot_file_stats(merged_plot_files);
+	mining_log_analyzer::print_plot_file_stats(merged_plot_files);
 	titles::print_end_titles();
 	std::cout << std::endl;
 	std::cout << "Press a key to exit...";

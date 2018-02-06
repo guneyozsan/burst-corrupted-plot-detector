@@ -29,7 +29,8 @@ titles::separator = "-----------------------------------------------------------
 Prints a pre-formatted section title.
 Prints each string in vector to a new line. */
 void
-titles::print_title(std::vector<std::string> titles) {
+titles::print_title(const std::vector<std::string> &titles)
+{
 	logger::print_and_log("\n");
 	logger::print_and_log(separator + "\n");
 	logger::print_and_log("\n");
@@ -45,7 +46,8 @@ titles::print_title(std::vector<std::string> titles) {
 
 /* Prints opening titles. */
 void
-titles::print_opening_titles() {
+titles::print_opening_titles()
+{
 	logger::print_and_log("\n");
 	logger::print_and_log("    _ ) |  |_ \\  __|__ __|   \\  |_ _|  \\ |_ _|  \\ |  __|\n");
 	logger::print_and_log("    _ \\ |  |  /\\__ \\   |    |\\/ |  |  .  |  |  .  | (_ |\n");
@@ -70,7 +72,8 @@ titles::print_opening_titles() {
 
 /* Prints end titles. */
 void
-titles::print_end_titles() {
+titles::print_end_titles()
+{
 	logger::print_and_log("\n");
 	std::cout << "This log is also saved near the executable." << std::endl;
 	logger::print_and_log(separator + "\n");

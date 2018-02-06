@@ -24,9 +24,9 @@
 class animating_cursor {
 private:
 	static std::vector<std::string> frames;
-	static int currentFrame;
+	static int current_frame;
 public:
 	static void set_animation(const std::vector<std::string> &frame_sequence);
-	static std::string current_frame();
+	static std::string get_current_frame();
 	static void progress_to_next_frame();
 };

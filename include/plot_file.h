@@ -31,6 +31,5 @@ struct plot_file {
 	plot_file();
 	plot_file(const std::string &name);
 	static plot_file merge(
-		const plot_file& lhs, const plot_file& rhs
-	);
+		const plot_file &lhs, const plot_file &rhs);
 };

@@ -29,9 +29,8 @@ string_utility::replace_all(
 	std::string replacement_str;
 	replacement_str = replacement;
 	for (size_t i = 0; i < string_body.size(); ++i) {
-		if (string_body[i] == original_char) {
+		if (string_body[i] == original_char)
 			string_body.replace(i, 1, replacement_str);
-		}
 	}
 }
 
@@ -44,9 +43,8 @@ string_utility::is_numbers_only(const std::string &s)
 	}
 
 	for (size_t i = 0; i < s.size(); i++) {
-		if (!std::isdigit(s[i])) {
+		if (!std::isdigit(s[i]))
 			return false;
-		}
 	}
 
 	return true;
@@ -58,16 +56,14 @@ void
 string_utility::round_with_precision(
 	std::string &str_number, const int &precision)
 {
-	if (precision < 0) {
+	if (precision < 0)
 		throw std::invalid_argument("precision cannot be negative");
-	}
 
 	// Check if number has decimals.
 	size_t dot_index = str_number.find(".");
 	if (dot_index == std::string::npos) {
-		if (!string_utility::is_numbers_only(str_number)) {
+		if (!string_utility::is_numbers_only(str_number))
 			throw std::invalid_argument("string is not a valid number.");
-		}
 
 		// Add decimal separator and zeros if number precision is less than
 		// given precision.
@@ -83,14 +79,11 @@ string_utility::round_with_precision(
 		if (!string_utility::is_numbers_only(str_number.substr(0, dot_index))
 			|| !string_utility::is_numbers_only(
 				str_number.substr(dot_index + 1)))
-		{
 			throw std::invalid_argument("string is not a valid number.");
-		}
 
-		if (str_number.size() > INT_MAX) {
+		if (str_number.size() > INT_MAX)
 			throw std::overflow_error(
 				"string size cannot be greater than INT_MAX.");
-		}
 
 		int deficit_digit_count =
 			(int)dot_index + precision - ((int)str_number.size() - 1);
@@ -108,12 +101,10 @@ string_utility::round_with_precision(
 				i > dot_index + precision; i--)
 			{
 				if (str_number[i] - '0' >= 5) {
-					if (i == dot_index + 1) {
+					if (i == dot_index + 1)
 						str_number[i - 2] += 1;
-					}
-					else {
+					else
 						str_number[i - 1] += 1;
-					}
 				}
 				str_number[i] = '0';
 			}
@@ -121,9 +112,8 @@ string_utility::round_with_precision(
 			str_number = str_number.substr(0, dot_index + precision + 1);
 				
 			// Truncate dot if precision is 0.
-			if (precision == 0) {
+			if (precision == 0)
 				str_number = str_number.substr(0, str_number.size() - 1);
-			}
 		}
 	}
 }

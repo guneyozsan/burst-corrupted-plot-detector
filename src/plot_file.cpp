@@ -20,7 +20,8 @@
 
 plot_file::plot_file() {}
 
-plot_file::plot_file(const std::string &name) {
+plot_file::plot_file(const std::string &name)
+{
 	this->name = name;
 }
 
@@ -30,7 +31,8 @@ and returns a new plot_file.
 If names don't match, returns an empty plot_file.
 */
 plot_file
-plot_file::merge(const plot_file& lhs, const plot_file& rhs) {
+plot_file::merge(const plot_file &lhs, const plot_file &rhs)
+{
 	if (lhs.name == rhs.name) {
 		plot_file merged(lhs.name);
 		lhs.found_deadlines;

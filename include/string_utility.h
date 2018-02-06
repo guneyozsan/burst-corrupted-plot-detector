@@ -24,8 +24,7 @@
 namespace string_utility {
 	void replace_all(
 		const char &original_char, const char &replacement,
-		std::string &string_body
-	);
-	bool is_numbers_only(const std::string& s);
-	void round_with_precision(std::string& str_number, const int& precision);
+		std::string &string_body);
+	bool is_numbers_only(const std::string &s);
+	void round_with_precision(std::string &str_number, const int &precision);
 }

@@ -24,7 +24,7 @@
 
 #include "plot_file.h"
 
-struct plot_files {
+class plot_files {
 private:
 	std::map<std::string /* File name */, plot_file> plot_file_collection;
 public:
@@ -35,15 +35,11 @@ public:
 	std::map<std::string, plot_file> get_collection() const;
 	std::vector<plot_file> get_vector() const;
 	void add_found_deadline(
-		const std::string &plot_file_name, const std::string &found_deadline
-	);
+		const std::string &plot_file_name, const std::string &found_deadline);
 	std::string find_plot_file_with_deadline(
-		const std::string &confirmed_deadline
-	);
+		const std::string &confirmed_deadline);
 	void remove_deadline(
-		const std::string &plot_file_name, const std::string &deadline
-	);
+		const std::string &plot_file_name, const std::string &deadline);
 	void calculate_corrupted_count();
-
 	static plot_files merge(const plot_files& lhs, const plot_files& rhs);
 };
