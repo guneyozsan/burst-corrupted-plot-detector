@@ -24,6 +24,6 @@
 #include "plot_files.h"
 
 namespace mining_log_analyzer {
-	plot_files analyze_plot_files_in_log(const std::string file_name);
+	plot_files analyze_plot_files_in_log(const std::string &file_name);
 	void print_plot_file_stats(const plot_files &plot_file_result);
 }
