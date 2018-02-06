@@ -43,8 +43,7 @@ time_utility::format_time(const std::tm &time, const std::string &format) {
 	struct tm date_time = time;
 	char buffer[64];
 	return { buffer,
-		std::strftime(buffer, sizeof(buffer), format.c_str(), &date_time)
-	};
+		std::strftime(buffer, sizeof(buffer), format.c_str(), &date_time)};
 }
 
 /* Returns current time in tm. */

@@ -70,8 +70,7 @@ plot_files::get_vector() const {
 /* Adds found deadline to the confirmation queue. */
 void
 plot_files::add_found_deadline(
-	const std::string &plot_file_name, const std::string &found_deadline
-)
+	const std::string &plot_file_name, const std::string &found_deadline)
 {
 	plot_file_collection[plot_file_name]
 		.found_deadlines.push_back(found_deadline);
@@ -83,8 +82,7 @@ removes the match from confirmation queue, and return the result.
 */
 std::string
 plot_files::find_plot_file_with_deadline(
-	const std::string &confirmed_deadline
-)
+	const std::string &confirmed_deadline)
 {
 	for (auto &it_pf : plot_file_collection) {
 		auto it_fd = it_pf.second.found_deadlines.begin();
@@ -105,8 +103,7 @@ plot_files::find_plot_file_with_deadline(
 /* Removes the deadline from the confirmation queue. */
 void
 plot_files::remove_deadline(
-	const std::string &plot_file_name, const std::string &deadline
-) 
+	const std::string &plot_file_name, const std::string &deadline)
 {
 	auto it_fd = plot_file_collection[plot_file_name].found_deadlines.begin();
 	size_t j = 0;

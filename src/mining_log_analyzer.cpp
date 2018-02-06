@@ -89,8 +89,8 @@ analyze_plot_files_in_log(const std::string file_name) {
 			// Extract file name.
 			plot_file_position = line.find(
 				file_name_keyword, end_position
-				+ found_deadline_end_keyword.size()
-			) + file_name_keyword.size();
+				+ found_deadline_end_keyword.size())
+				+ file_name_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
 			plot_files.add(plot_file_name);
 			plot_files.add_found_deadline(plot_file_name, found_deadline);
@@ -98,15 +98,13 @@ analyze_plot_files_in_log(const std::string file_name) {
 
 		// Extract confirmed deadline.
 		current_position = line.find(
-			confirmed_deadline_keyword, current_position + 1
-		);
+			confirmed_deadline_keyword, current_position + 1);
 		if (current_position != std::string::npos) {
 			end_position = line.size();
 			start_position = current_position
 				+ confirmed_deadline_keyword.size();
 			confirmed_deadline = line.substr(
-				start_position, end_position - start_position
-			);
+				start_position, end_position - start_position);
 		}
 
 		// Check if found deadline and confirmed deadline conflict.
@@ -118,8 +116,7 @@ analyze_plot_files_in_log(const std::string file_name) {
 			}
 			else {
 				plot_files.remove_deadline(
-					confirmed_plot_file_name, confirmed_deadline
-				);
+					confirmed_plot_file_name, confirmed_deadline);
 				cursor_animator::print(confirmed_deadline_cursor);
 			}
 			confirmed_deadline = "";
@@ -147,10 +144,6 @@ print_plot_file_stats(const plot_files &plot_files) {
 	const std::string no_conflict_marker = "      ";
 
 	if (m_plot_files.size() > 0) {
-		std::string corrupted_count;
-		std::string healthy_count;
-		std::string marker;
-
 		// Print titles for stats table
 		logger::print_and_log("\n");
 		logger::print_and_log(
@@ -163,6 +156,10 @@ print_plot_file_stats(const plot_files &plot_files) {
 			+ console_gui::underline(plot_file_title) + "\n");
 
 		// Print stats for each plot file.
+		std::string corrupted_count;
+		std::string healthy_count;
+		std::string marker;
+
 		for (size_t i = 0; i < m_plot_files.size(); i++) {
 			marker = no_conflict_marker;
 
@@ -194,14 +191,15 @@ print_plot_file_stats(const plot_files &plot_files) {
 			logger::print_and_log(
 				title_gap
 				+ console_gui::align_right(
-					corrupted_count, corrupted_title.length()
-				) + title_gap
+					corrupted_count, corrupted_title.length())
+				+ title_gap
 				+ console_gui::align_right(
-					healthy_count, healthy_title.length()
-				) + marker + m_plot_files[i].name + "\n");
+					healthy_count, healthy_title.length())
+				+ marker + m_plot_files[i].name + "\n");
 		}
 
-		// Calculate percentages of total corrupted and healthy deadlines in a log file.
+		// Calculate percentages of total corrupted and healthy deadlines
+		// in a log file.
 		std::string corrupted_percentage;
 		std::string healthy_percentage;
 
@@ -228,19 +226,19 @@ print_plot_file_stats(const plot_files &plot_files) {
 		logger::print_and_log(
 			title_gap
 			+ console_gui::align_right(
-				std::to_string(total_corrupted), corrupted_title.length()
-			) + title_gap
+				std::to_string(total_corrupted), corrupted_title.length())
+			+ title_gap
 			+ console_gui::align_right(
-				std::to_string(total_healthy), healthy_title.length()
-			) + "\n");
+				std::to_string(total_healthy), healthy_title.length())
+			+ "\n");
 		logger::print_and_log(
 			" " + title_gap
 			+ console_gui::align_right(
-				corrupted_percentage + "%", corrupted_title.length()
-			) + title_gap
+				corrupted_percentage + "%", corrupted_title.length())
+			+ title_gap
 			+ console_gui::align_right(
-				healthy_percentage + "%", healthy_title.length()
-			) + "\n");
+				healthy_percentage + "%", healthy_title.length())
+			+ "\n");
 	}
 	else {
 		logger::print_and_log("No deadlines detected.\n");

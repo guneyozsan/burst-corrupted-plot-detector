@@ -24,7 +24,6 @@
 namespace time_utility {
 	std::tm localtime_cross_platform(const std::time_t &calendar_time);
 	std::string format_time(
-		const std::tm &time, const std::string &format = "%F %T"
-	);
+		const std::tm &time, const std::string &format = "%F %T");
 	std::tm now();
 };

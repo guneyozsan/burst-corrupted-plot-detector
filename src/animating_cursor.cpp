@@ -39,8 +39,7 @@ animating_cursor::progress_to_next_frame() {
 /* Sets cursor animation to given frame sequence. */
 void
 animating_cursor::set_animation(
-	const std::vector<std::string> &frame_sequence
-)
+	const std::vector<std::string> &frame_sequence)
 {
 	frames.clear();
 	for (size_t i = 0; i < frame_sequence.size(); i++) {
