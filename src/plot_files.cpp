@@ -20,7 +20,8 @@
 
 /* Checks if the plot file is already in collection. */
 bool
-plot_files::contains(const std::string &plot_file_name) {
+plot_files::contains(const std::string &plot_file_name)
+{
 	if (plot_file_collection.count(plot_file_name) == 0)
 		return false;
 	else
@@ -29,7 +30,8 @@ plot_files::contains(const std::string &plot_file_name) {
 
 /* Adds a plot file to the collection if it is not already added. */
 void
-plot_files::add(const std::string &plot_file_name) {
+plot_files::add(const std::string &plot_file_name)
+{
 	if (!contains(plot_file_name)) {
 		plot_file_collection[plot_file_name] = plot_file(plot_file_name);
 	}
@@ -37,7 +39,8 @@ plot_files::add(const std::string &plot_file_name) {
 
 /* Adds a plot file to the collection if it is not already added. */
 void
-plot_files::add(const plot_file &plot_file) {
+plot_files::add(const plot_file &plot_file)
+{
 	if (!contains(plot_file.name)) {
 		plot_file_collection[plot_file.name] = plot_file;
 	}
@@ -45,19 +48,22 @@ plot_files::add(const plot_file &plot_file) {
 
 /* Returns the plot file object with given file name. */
 plot_file
-plot_files::get(const std::string &plot_file_name) {
+plot_files::get(const std::string &plot_file_name)
+{
 	return plot_file_collection[plot_file_name];
 }
 
 /* Returns the complete plot file collection as map. */
 std::map<std::string, plot_file>
-plot_files::get_collection() const {
+plot_files::get_collection() const
+{
 	return plot_file_collection;
 }
 
 /* Returns the complete plot file collection as vector. */
 std::vector<plot_file>
-plot_files::get_vector() const {
+plot_files::get_vector() const
+{
 	std::vector<plot_file> plot_files_vector(plot_file_collection.size());
 	int i = 0;
 	for (auto &it_pf : plot_file_collection) {
@@ -126,7 +132,8 @@ Counts the deadlines left in confirmation queue
 and add them to corrupted plot count.
 */
 void
-plot_files::calculate_corrupted_count() {
+plot_files::calculate_corrupted_count()
+{
 	for (auto &it_pf : plot_file_collection) {
 		it_pf.second.mining_stats.add_to_corrupted_count(
 			it_pf.second.found_deadlines.size()
@@ -136,7 +143,8 @@ plot_files::calculate_corrupted_count() {
 
 /* Merges two plot_file collections and their stats. */
 plot_files
-plot_files::merge(const plot_files& lhs, const plot_files& rhs) {
+plot_files::merge(const plot_files& lhs, const plot_files& rhs)
+{
 	plot_files merged_collection;
 	std::vector<bool> has_match_lhs(lhs.get_collection().size(), false);
 	std::vector<bool> has_match_rhs(rhs.get_collection().size(), false);

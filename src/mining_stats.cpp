@@ -22,12 +22,14 @@
 #include <stdexcept>
 
 void
-mining_stats::increment_healthy_count() {
+mining_stats::increment_healthy_count()
+{
 	healthy_count++;
 }
 
 void
-mining_stats::increment_corrupted_count() {
+mining_stats::increment_corrupted_count()
+{
 	corrupted_count++;
 }
 
@@ -44,12 +46,14 @@ mining_stats::add_to_corrupted_count(
 }
 
 int
-mining_stats::get_healthy_count() const {
+mining_stats::get_healthy_count() const
+{
 	return healthy_count;
 }
 
 int
-mining_stats::get_corrupted_count() const {
+mining_stats::get_corrupted_count() const
+{
 	return corrupted_count;
 }
 

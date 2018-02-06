@@ -39,7 +39,8 @@ Returns formatted version of the given calendar time.
 default = "YYYY-MM-DD HH:MM:SS"
 */
 std::string
-time_utility::format_time(const std::tm &time, const std::string &format) {
+time_utility::format_time(const std::tm &time, const std::string &format)
+{
 	struct tm date_time = time;
 	char buffer[64];
 	return { buffer,
@@ -48,6 +49,7 @@ time_utility::format_time(const std::tm &time, const std::string &format) {
 
 /* Returns current time in tm. */
 std::tm
-time_utility::now() {
+time_utility::now()
+{
 	return localtime_cross_platform(std::time(nullptr));
 }

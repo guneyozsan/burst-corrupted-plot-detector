@@ -30,7 +30,8 @@
 #include "time_utility.h"
 #include "titles.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	std::string formatted_time =
 		time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.

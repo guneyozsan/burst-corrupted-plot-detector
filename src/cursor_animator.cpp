@@ -28,7 +28,8 @@ clock_t cursor_animator::last_update_time;
 
 /* Updates cursor frame according to the frames per second set. */
 void
-cursor_animator::update_animation() {
+cursor_animator::update_animation()
+{
 	if ((clock() - last_update_time) > animation_period) {
 		animating_cursor::progress_to_next_frame();
 		std::cout 
@@ -42,7 +43,8 @@ cursor_animator::update_animation() {
 
 /* Clears last frame. Use this when you are done with the animation. */
 void
-cursor_animator::finalize() {
+cursor_animator::finalize()
+{
 	std::cout 
 		<< console_gui::move_cursor_back(
 			animating_cursor::get_current_frame().length()

@@ -29,7 +29,8 @@
 
 /* Returns the list of files in a directory. */
 std::vector<std::string>
-file_utility::get_file_names_in_directory(const char *dir_name) {
+file_utility::get_file_names_in_directory(const char *dir_name)
+{
 	DIR *dir;
 	struct dirent *dir_entry;
 	std::vector<std::string> file_entries;
@@ -60,7 +61,8 @@ Replaces forward slashes with backslashes and if missing
 adds a backslash to the end.
 */
 void
-file_utility::fix_path(std::string &path) {
+file_utility::fix_path(std::string &path)
+{
 	string_utility::replace_all('/', '\\', path);
 	if (path[path.size() - 1] != '\\') {
 		path += "\\";

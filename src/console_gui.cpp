@@ -41,7 +41,8 @@ console_gui::align_right(
 
 /* Prints "-" the same size with given content to serve as underliner. */
 std::string
-console_gui::underline(const std::string &content) {
+console_gui::underline(const std::string &content)
+{
 	std::string underliner;
 	for (size_t i = 0; i < content.length(); i++) {
 		underliner.append("-");
@@ -51,7 +52,8 @@ console_gui::underline(const std::string &content) {
 
 /* Moves cursor back given size. Doesn't delete printed output. */
 std::string
-console_gui::move_cursor_back(const size_t &size) {
+console_gui::move_cursor_back(const size_t &size)
+{
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
 		backspace.append("\b");
@@ -61,7 +63,8 @@ console_gui::move_cursor_back(const size_t &size) {
 
 /* Prints whitespace of given size. */
 std::string
-console_gui::whitespace(const size_t &size) {
+console_gui::whitespace(const size_t &size)
+{
 	std::string backspace;
 	for (size_t i = 0; i < size; i++) {
 		backspace.append(" ");

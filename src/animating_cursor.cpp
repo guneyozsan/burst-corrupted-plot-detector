@@ -26,13 +26,15 @@ int animating_cursor::current_frame;
 
 /* Returns the current frame. */
 std::string
-animating_cursor::get_current_frame() {
+animating_cursor::get_current_frame()
+{
 	return frames[current_frame];
 }
 
 /* Advances the cursor animation to the next frame. */
 void
-animating_cursor::progress_to_next_frame() {
+animating_cursor::progress_to_next_frame()
+{
 	current_frame = (current_frame + 1) % frames.size();
 }
 
