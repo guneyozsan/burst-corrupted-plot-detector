@@ -34,7 +34,7 @@ Analyzes the Burst log file and returns a plot_file object with analysis results
 Looks for deadlines conflicting with server.
 */
 plot_files
-analyze_plot_files_in_log(const std::string file_name) {
+mining_log_analyzer::analyze_plot_files_in_log(const std::string file_name) {
 	// Plot information
 	std::string found_deadline;
 	std::string confirmed_deadline;
@@ -131,7 +131,7 @@ analyze_plot_files_in_log(const std::string file_name) {
 Displays the stats available in a plot_file object in a nicely formatted way.
 */
 void
-print_plot_file_stats(const plot_files &plot_files) {
+mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files) {
 	std::vector<plot_file> m_plot_files = plot_files.get_vector();
 	int total_corrupted = 0;
 	int total_healthy = 0;

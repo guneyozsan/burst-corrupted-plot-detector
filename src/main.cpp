@@ -79,9 +79,9 @@ int main(int argc, char *argv[]) {
 				&& it_path.second[i].find(log_file_prefix.c_str())
 				== std::string::npos)
 			{
-				plot_files = analyze_plot_files_in_log(
+				plot_files = mining_log_analyzer::analyze_plot_files_in_log(
 					it_path.first + it_path.second[i]);
-				print_plot_file_stats(plot_files);
+				mining_log_analyzer::print_plot_file_stats(plot_files);
 				merged_plot_files = plot_files::merge(
 					merged_plot_files, plot_files);
 			}
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	titles::print_title({"SUMMARY"});
-	print_plot_file_stats(merged_plot_files);
+	mining_log_analyzer::print_plot_file_stats(merged_plot_files);
 	titles::print_end_titles();
 	std::cout << std::endl;
 	std::cout << "Press a key to exit...";
