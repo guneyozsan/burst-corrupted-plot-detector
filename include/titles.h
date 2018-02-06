@@ -18,12 +18,13 @@
 
 #pragma once
 
-#include<ctime>
-#include<string>
+#include <string>
+#include <vector>
 
-namespace time_utility {
-	std::tm localtime_cross_platform(const std::time_t &calendar_time);
-	std::string format_time(
-		const std::tm &time, const std::string &format = "%F %T");
-	std::tm now();
+class titles {
+	static std::string separator;
+public:
+	static void print_title(const std::vector<std::string> &titles);
+	static void print_opening_titles();
+	static void print_end_titles();
 };

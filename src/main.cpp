@@ -16,27 +16,33 @@
  * along with this program.If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
+#include "console_gui.h"
 #include "file_utility.h"
 #include "logger.h"
 #include "mining_log_analyzer.h"
+#include "plot_files.h"
 #include "string_utility.h"
 #include "time_utility.h"
+#include "titles.h"
 
-int main(int argc, char *argv[]) {
-	// Initialize logging to file.
+int main(int argc, char *argv[])
+{
 	std::string formatted_time =
 		time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.
 	string_utility::replace_all(':', '_', formatted_time);
-	std::string log_file_prefix = "Burst-mining-log-analysis-";
+	const std::string log_file_prefix = "Burst-mining-log-analysis-";
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
+	titles::print_opening_titles();
 
 	// Get the list of files in directory or arguments.
-	std::map<std::string, std::vector<std::string>> files_in_dirs;
+	std::map<std::string /* Dir path */,
+		std::vector<std::string /* File names */>> files_in_dirs;
 	std::string dir_path;
 
 	/* List current working directory if no arguments on command line */
@@ -56,31 +62,38 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Main loop
-	std::vector<plot_file> plot_files;
+	class plot_files plot_files;
+	class plot_files merged_plot_files;
+	// Iterate directories.
 	for (auto &it_path : files_in_dirs) {
+		logger::print_and_log("\n");
+		logger::print_and_log("-> DIRECTORY: " + it_path.first + "\n");
 		if (it_path.second.size() == 0) {
 			logger::print_and_log("\n");
 			logger::print_and_log("No mining logs found at "
 				+ it_path.first + "\n");
 		}
+		// Iterate files in directories.
 		for (size_t i = 0; i < it_path.second.size(); i++) {
+			// Only consider .log extensions, and exclude own logs.
 			if (it_path.second[i].find(".log") != std::string::npos
-				&& it_path.second[i].find(log_file_prefix.c_str()) ==
-					std::string::npos)
+				&& it_path.second[i].find(log_file_prefix.c_str())
+				== std::string::npos)
 			{
-				plot_files = analyze_plot_files_in_log(
-					it_path.first + it_path.second[i]
-				);
-				print_plot_file_stats(plot_files);
+				plot_files = mining_log_analyzer::analyze_plot_files_in_log(
+					it_path.first + it_path.second[i]);
+				mining_log_analyzer::print_plot_file_stats(plot_files);
+				merged_plot_files = plot_files::merge(
+					merged_plot_files, plot_files);
 			}
 		}
 	}
 
-	// Finalize logger
-	logger::log("\n");
-	logger::log("\n");
-	logger::log("-- END OF LOG --");
-	logger::log("\n");
-
+	titles::print_title({"SUMMARY"});
+	mining_log_analyzer::print_plot_file_stats(merged_plot_files);
+	titles::print_end_titles();
+	std::cout << std::endl;
+	std::cout << "Press a key to exit...";
+	std::cin.get();
 	return EXIT_SUCCESS;
 }

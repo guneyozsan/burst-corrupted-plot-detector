@@ -22,25 +22,26 @@
 #include <iostream>
 
 std::vector<std::string> animating_cursor::frames;
-int animating_cursor::currentFrame;
+int animating_cursor::current_frame;
 
 /* Returns the current frame. */
 std::string
-animating_cursor::current_frame() {
-	return frames[currentFrame];
+animating_cursor::get_current_frame()
+{
+	return frames[current_frame];
 }
 
 /* Advances the cursor animation to the next frame. */
 void
-animating_cursor::progress_to_next_frame() {
-	currentFrame = (currentFrame + 1) % frames.size();
+animating_cursor::progress_to_next_frame()
+{
+	current_frame = (current_frame + 1) % frames.size();
 }
 
 /* Sets cursor animation to given frame sequence. */
 void
 animating_cursor::set_animation(
-	const std::vector<std::string> &frame_sequence
-)
+	const std::vector<std::string> &frame_sequence)
 {
 	frames.clear();
 	for (size_t i = 0; i < frame_sequence.size(); i++) {

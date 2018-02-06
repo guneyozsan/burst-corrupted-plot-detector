@@ -30,11 +30,9 @@ private:
 public:
 	static void set_animation(
 		const std::vector<std::string> &frame_sequence,
-		const float &anim_speed
-	);
+		const float &anim_speed);
 	static void set_animation_sequence(
-		const std::vector<std::string> &frame_sequence
-	);
+		const std::vector<std::string> &frame_sequence);
 	static void set_speed(const float &anim_speed);
 	static void update_animation();
 	template<typename T> static void print(T const &content);
@@ -46,8 +44,7 @@ template<typename T> static void
 cursor_animator::print(T const &content) {
 	std::cout 
 		<< console_gui::move_cursor_back(
-			animating_cursor::current_frame().length()
-		)
+			animating_cursor::get_current_frame().length())
 		<< content 
-		<< animating_cursor::current_frame();
+		<< animating_cursor::get_current_frame();
 }

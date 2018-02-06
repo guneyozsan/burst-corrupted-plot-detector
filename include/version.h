@@ -18,12 +18,4 @@
 
 #pragma once
 
-#include<ctime>
-#include<string>
-
-namespace time_utility {
-	std::tm localtime_cross_platform(const std::time_t &calendar_time);
-	std::string format_time(
-		const std::tm &time, const std::string &format = "%F %T");
-	std::tm now();
-};
+extern const char* version = "v1.0.0";

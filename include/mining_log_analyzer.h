@@ -21,6 +21,9 @@
 #include <vector>
 
 #include "plot_file.h"
+#include "plot_files.h"
 
-std::vector<plot_file> analyze_plot_files_in_log(const std::string file_name);
-void print_plot_file_stats(const std::vector<plot_file> &plot_file_result);
+namespace mining_log_analyzer {
+	plot_files analyze_plot_files_in_log(const std::string &file_name);
+	void print_plot_file_stats(const plot_files &plot_file_result);
+}

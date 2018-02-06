@@ -70,7 +70,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Projeler\BurstCorruptedPlotDetector\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -123,10 +126,13 @@
     <ClInclude Include="include\file_utility.h" />
     <ClInclude Include="include\logger.h" />
     <ClInclude Include="include\mining_log_analyzer.h" />
+    <ClInclude Include="include\mining_stats.h" />
     <ClInclude Include="include\plot_file.h" />
     <ClInclude Include="include\plot_files.h" />
     <ClInclude Include="include\string_utility.h" />
     <ClInclude Include="include\time_utility.h" />
+    <ClInclude Include="include\titles.h" />
+    <ClInclude Include="include\version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\animating_cursor.cpp" />
@@ -136,10 +142,12 @@
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mining_log_analyzer.cpp" />
+    <ClCompile Include="src\mining_stats.cpp" />
     <ClCompile Include="src\plot_file.cpp" />
     <ClCompile Include="src\plot_files.cpp" />
     <ClCompile Include="src\string_utility.cpp" />
     <ClCompile Include="src\time_utility.cpp" />
+    <ClCompile Include="src\titles.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

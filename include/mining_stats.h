@@ -18,12 +18,17 @@
 
 #pragma once
 
-#include<ctime>
-#include<string>
+struct mining_stats {
+private:
+	int healthy_count = 0;
+	int corrupted_count = 0;
+public:
+	void increment_healthy_count();
+	void increment_corrupted_count();
+	void add_to_corrupted_count(const size_t &corrupted_count);
+	int get_healthy_count() const;
+	int get_corrupted_count() const;
 
-namespace time_utility {
-	std::tm localtime_cross_platform(const std::time_t &calendar_time);
-	std::string format_time(
-		const std::tm &time, const std::string &format = "%F %T");
-	std::tm now();
+	static mining_stats merge(
+		const mining_stats &lhs_stats, const mining_stats &rhs_stats);
 };
