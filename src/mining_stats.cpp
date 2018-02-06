@@ -33,7 +33,7 @@ mining_stats::increment_corrupted_count() {
 
 void
 mining_stats::add_to_corrupted_count(
-	const size_t& corrupted_count)
+	const size_t &corrupted_count)
 {
 	if (corrupted_count > INT_MAX) {
 		throw std::overflow_error(
@@ -56,7 +56,7 @@ mining_stats::get_corrupted_count() const {
 /* Merges two stats objects by calculating total counts. */
 mining_stats
 mining_stats::merge(
-	const mining_stats& lhs, const mining_stats& rhs)
+	const mining_stats &lhs, const mining_stats &rhs)
 {
 	mining_stats merged_stats;
 	merged_stats.healthy_count =

@@ -29,7 +29,7 @@ titles::separator = "-----------------------------------------------------------
 Prints a pre-formatted section title.
 Prints each string in vector to a new line. */
 void
-titles::print_title(std::vector<std::string> titles) {
+titles::print_title(const std::vector<std::string> &titles) {
 	logger::print_and_log("\n");
 	logger::print_and_log(separator + "\n");
 	logger::print_and_log("\n");
