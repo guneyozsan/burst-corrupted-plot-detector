@@ -183,13 +183,11 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 					m_plot_files[i].mining_stats.get_healthy_count());
 			}
 
-			if (string_utility::is_numbers_only(corrupted_count)) {
+			if (string_utility::is_numbers_only(corrupted_count))
 				total_corrupted += std::stoi(corrupted_count);
-			}
 
-			if (string_utility::is_numbers_only(healthy_count)) {
+			if (string_utility::is_numbers_only(healthy_count))
 				total_healthy += std::stoi(healthy_count);
-			}
 			
 			logger::print_and_log(
 				title_gap

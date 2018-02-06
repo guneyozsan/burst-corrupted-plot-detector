@@ -32,18 +32,16 @@ plot_files::contains(const std::string &plot_file_name)
 void
 plot_files::add(const std::string &plot_file_name)
 {
-	if (!contains(plot_file_name)) {
+	if (!contains(plot_file_name))
 		plot_file_collection[plot_file_name] = plot_file(plot_file_name);
-	}
 }
 
 /* Adds a plot file to the collection if it is not already added. */
 void
 plot_files::add(const plot_file &plot_file)
 {
-	if (!contains(plot_file.name)) {
+	if (!contains(plot_file.name))
 		plot_file_collection[plot_file.name] = plot_file;
-	}
 }
 
 /* Returns the plot file object with given file name. */
@@ -164,18 +162,16 @@ plot_files::merge(const plot_files& lhs, const plot_files& rhs)
 			i_rhs++;
 		}
 
-		if (!has_match_lhs[i_lhs]) {
+		if (!has_match_lhs[i_lhs])
 			merged_collection.add(it_lhs.second);
-		}
 
 		i_lhs++;
 	}
 
 	int i_rhs = 0;
 	for (auto &it_rhs : rhs.get_collection()) {
-		if (!has_match_rhs[i_rhs]) {
+		if (!has_match_rhs[i_rhs])
 			merged_collection.add(it_rhs.second);
-		}
 		i_rhs++;
 	}
 	return merged_collection;

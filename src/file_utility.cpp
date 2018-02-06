@@ -40,9 +40,8 @@ file_utility::get_file_names_in_directory(const char *dir_name)
 	if (dir != NULL) {
 		/* Add all files within the directory */
 		while ((dir_entry = readdir(dir)) != NULL) {
-			if (dir_entry->d_type == DT_REG) {
+			if (dir_entry->d_type == DT_REG)
 				file_entries.push_back(dir_entry->d_name);
-			}
 		}
 
 		closedir(dir);
@@ -64,7 +63,6 @@ void
 file_utility::fix_path(std::string &path)
 {
 	string_utility::replace_all('/', '\\', path);
-	if (path[path.size() - 1] != '\\') {
+	if (path[path.size() - 1] != '\\')
 		path += "\\";
-	}
 }

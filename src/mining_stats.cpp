@@ -37,10 +37,9 @@ void
 mining_stats::add_to_corrupted_count(
 	const size_t &corrupted_count)
 {
-	if (corrupted_count > INT_MAX) {
+	if (corrupted_count > INT_MAX)
 		throw std::overflow_error(
 			"corrupted_count cannot be greater than INT_MAX.");
-	}
 	
 	this->corrupted_count += (int)corrupted_count;
 }
