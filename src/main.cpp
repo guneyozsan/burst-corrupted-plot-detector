@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 		time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.
 	string_utility::replace_all(':', '_', formatted_time);
-	std::string log_file_prefix = "Burst-mining-log-analysis-";
+	const std::string log_file_prefix = "Burst-mining-log-analysis-";
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 	titles::print_opening_titles();
 
@@ -61,8 +61,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Main loop
-	struct plot_files plot_files;
-	struct plot_files merged_plot_files;
+	class plot_files plot_files;
+	class plot_files merged_plot_files;
 	// Iterate directories.
 	for (auto &it_path : files_in_dirs) {
 		logger::print_and_log("\n");

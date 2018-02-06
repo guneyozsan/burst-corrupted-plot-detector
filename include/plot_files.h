@@ -24,7 +24,7 @@
 
 #include "plot_file.h"
 
-struct plot_files {
+class plot_files {
 private:
 	std::map<std::string /* File name */, plot_file> plot_file_collection;
 public:
