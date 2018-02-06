@@ -71,19 +71,19 @@ console_gui::whitespace(const size_t &size) {
 
 /* Centers the text in a given horizontal slot. */
 std::string
-console_gui::center(const std::string text, size_t width)
+console_gui::center(const std::string &content, const size_t &width)
 {
-	if (text.size() > INT_MAX) {
-		throw std::overflow_error("text size cannot be greater than INT_MAX.");
+	if (content.size() > INT_MAX) {
+		throw std::overflow_error("content size cannot be greater than INT_MAX.");
 	}
 
 	if (width > INT_MAX) {
 		throw std::overflow_error("with cannot be greater than INT_MAX.");
 	}
 
-	int text_position = (int)(width - text.size()) / 2;
+	int text_position = (int)(width - content.size()) / 2;
 	std::string whitespace = console_gui::whitespace(text_position);
-	std::string centered_text = whitespace + text + whitespace;
+	std::string centered_text = whitespace + content + whitespace;
 	if (centered_text.size() < width) {
 		centered_text += " ";
 	}

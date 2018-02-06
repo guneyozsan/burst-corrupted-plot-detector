@@ -25,5 +25,5 @@ namespace console_gui {
 	std::string underline(const std::string &content);
 	std::string move_cursor_back(const size_t &size);
 	std::string whitespace(const size_t &size);
-	std::string center(const std::string content, size_t width);
+	std::string center(const std::string &content, const size_t &width);
 };
