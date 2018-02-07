@@ -1,7 +1,7 @@
-# burst-corrupted-plot-detector
+# Burst Corrupted Plot Detector (Burst CPD)
 **Scans Burst mining logs and helps detecting corrupted plot files.**
 
-![Burst corrupted plot detector screenshot](https://github.com/guneyozsan/burst-corrupted-plot-detector/blob/develop/Screenshots/burst-corrupted-plot-detector-v1.0.0-x64.gif)
+![Burst corrupted plot detector screenshot](https://github.com/guneyozsan/burst-corrupted-plot-detector/blob/master/Screenshots/burst-corrupted-plot-detector-v1.0.0-x64.gif)
 
 Scans Burst mining logs and helps detecting corrupted plot files so that problematic plot files can be re-plotted. It looks for deadlines conflicting with server and report related stats.
 
@@ -12,15 +12,20 @@ Currently only Blago Miner logs are supported.
 Written in C++ to support PC, Mac and Linux. Tested only on Windows. Any testers are appreciated.
 
 ## Usage
-Either pass the path of the directory of your mining log files as arguments or copy the executable into the directory that contain your mining logs and run it there (probably "Qbundle_1.6\BlagoMiner\Logs").
+
+`BurstCPD [<log_path>...]`
 
 **Example:**
 
-`D:\Qbundle_1.6\BlagoMiner\Logs>BurstCorruptedPlotDetector.exe`
+Copy to miner logs directory and run it:
+
+`C:\MyBlagoMiner\Logs>BurstCPD`
 
 or
 
-`AnyPath>BurstCorruptedPlotDetector.exe D:\MyBlagoMiner\Logs E:\MyOtherBlagoMiner\Logs`
+Pass paths to miner logs as arguments and run from anywhere:
+
+`...AnyPath>BurstCPD.exe D:\MyBlagoMiner\Logs E:\MyOtherBlagoMiner\Logs`
 
 Results are also saved to a file in the same directory with the executable.
 
