@@ -27,7 +27,7 @@ or
 
 Pass paths to miner logs as arguments and run from anywhere:
 
-`...AnyPath>BurstCPD.exe D:\MyBlagoMiner\Logs E:\MyOtherBlagoMiner\Logs`
+`...AnyPath>BurstCPD D:\MyBlagoMiner\Logs E:\MyOtherBlagoMiner\Logs`
 
 Results are also saved to a file in the same directory with the executable.
 
