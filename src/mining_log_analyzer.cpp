@@ -289,6 +289,19 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 			+ no_conflict_marker
 			+ total_title
 			+ "\n");
+
+		// Print errors
+		int mining_log_error_count = plot_files.get_mining_log_error_count();
+		if (mining_log_error_count > 0) {
+			std::string multiple_suffix
+				= (mining_log_error_count == 1) ? ". It is" : "s. They are";
+			logger::print_and_log(
+				"\n" + title_gap
+				+ "* Could not read mining logs of "
+				+ std::to_string(plot_files.get_mining_log_error_count())
+				+ " deadline" + multiple_suffix
+				+ " not included in the stats.\n");
+		}
 	}
 	else {
 		logger::print_and_log("No deadlines detected.\n");

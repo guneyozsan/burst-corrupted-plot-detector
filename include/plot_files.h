@@ -43,6 +43,8 @@ public:
 		const std::string &plot_file_name, const std::string &deadline);
 	void calculate_corrupted_count();
 	void increment_mining_log_error_count();
+	void set_mining_log_error_count(const int &error_count);
+	int get_mining_log_error_count() const;
 
-	static plot_files merge(const plot_files& lhs, const plot_files& rhs);
+	static plot_files merge(const plot_files &lhs, const plot_files &rhs);
 };
