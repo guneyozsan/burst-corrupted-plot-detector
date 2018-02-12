@@ -27,6 +27,7 @@
 #include "console_gui.h"
 #include "cursor_animator.h"
 #include "logger.h"
+#include "math_utility.h"
 #include "string_utility.h"
 
 /*
@@ -211,11 +212,11 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 			
 			deadline_count = corrupted_count + healthy_count;
 			corrupted_percentage_of_plot
-				= std::to_string(
-					100.0f * (float)corrupted_count / (float)deadline_count);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)corrupted_count, (float)deadline_count));
 			healthy_percentage_of_plot
-				= std::to_string(
-					100.0f * (float)healthy_count / (float)deadline_count);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)healthy_count, (float)deadline_count));
 			const int precision = 1;
 			string_utility::round_with_precision(
 				corrupted_percentage_of_plot, precision);
@@ -252,11 +253,11 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 		else {
 			int total_deadlines = total_corrupted + total_healthy;
 			total_corrupted_percentage
-				= std::to_string(
-					100.0f * (float)total_corrupted / (float)total_deadlines);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)total_corrupted, (float)total_deadlines));
 			total_healthy_percentage
-				= std::to_string(
-					100.0f * (float)total_healthy / (float)total_deadlines);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)total_healthy, (float)total_deadlines));
 			const int precision = 1;
 			string_utility::round_with_precision(
 				total_corrupted_percentage, precision);
