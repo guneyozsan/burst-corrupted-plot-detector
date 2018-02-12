@@ -139,8 +139,10 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 {
 	std::vector<plot_file> plot_files_list = plot_files.get_vector();
 
+	const std::string total_title = "OVERALL";
 	const std::string corrupted_title = "CONFLICTING";
-	const std::string healthy_title = "    HEALTHY";
+	const std::string healthy_title = "HEALTHY    ";
+	const std::string percentage_title = "    %";
 	const std::string plot_file_title = "PLOT FILE";
 	const std::string title_gap = "   ";
 	const std::string conflict_marker = "  X ->";
@@ -150,17 +152,28 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 		// Print titles for stats table
 		logger::print_and_log("\n");
 		logger::print_and_log(
-			title_gap + corrupted_title + title_gap
-			+ healthy_title + no_conflict_marker + plot_file_title + "\n");
+			title_gap + corrupted_title
+			+ title_gap + percentage_title + " "
+			+ title_gap + healthy_title
+			+ title_gap+ percentage_title + " "
+			+ no_conflict_marker + plot_file_title
+			+ "\n");
 		logger::print_and_log(
-			title_gap
-			+ console_gui::underline(corrupted_title) + title_gap
-			+ console_gui::underline(healthy_title) + no_conflict_marker
-			+ console_gui::underline(plot_file_title) + "\n");
+			title_gap + console_gui::underline(corrupted_title)
+			+ console_gui::underline(title_gap) + console_gui::underline(percentage_title) + " "
+			+ title_gap + console_gui::underline(healthy_title)
+			+ console_gui::underline(title_gap) + console_gui::underline(percentage_title) + " "
+			+ no_conflict_marker + console_gui::underline(plot_file_title)
+			+ "\n");
 
 		// Print stats for each plot file.
-		std::string corrupted_count;
-		std::string healthy_count;
+		int corrupted_count;
+		int healthy_count;
+		int deadline_count;
+		std::string corrupted_count_string;
+		std::string healthy_count_string;
+		std::string corrupted_percentage_of_plot;
+		std::string healthy_percentage_of_plot;
 		std::string marker;
 		int total_corrupted = 0;
 		int total_healthy = 0;
@@ -168,80 +181,105 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 		for (size_t i = 0; i < plot_files_list.size(); i++) {
 			marker = no_conflict_marker;
 
+			corrupted_count =
+				plot_files_list[i].mining_stats.get_corrupted_count();
+			healthy_count =
+				plot_files_list[i].mining_stats.get_healthy_count();
+
 			if (plot_files_list[i].mining_stats.get_corrupted_count() == 0) {
-				corrupted_count = "-";
+				corrupted_count_string = "-";
 			}
 			else {
-				corrupted_count = std::to_string(
-					plot_files_list[i].mining_stats.get_corrupted_count());
+				corrupted_count_string = std::to_string(corrupted_count);
 				marker = conflict_marker;
 			}
 
-			if (plot_files_list[i].mining_stats.get_healthy_count() == 0) {
-				healthy_count = "-";
-			}
-			else {
-				healthy_count = std::to_string(
-					plot_files_list[i].mining_stats.get_healthy_count());
-			}
+			if (plot_files_list[i].mining_stats.get_healthy_count() == 0)
+				healthy_count_string = "-";
+			else
+				healthy_count_string = std::to_string(healthy_count);
 
-			if (string_utility::is_numbers_only(corrupted_count))
-				total_corrupted += std::stoi(corrupted_count);
+			if (string_utility::is_numbers_only(corrupted_count_string))
+				total_corrupted += std::stoi(corrupted_count_string);
 
-			if (string_utility::is_numbers_only(healthy_count))
-				total_healthy += std::stoi(healthy_count);
+			if (string_utility::is_numbers_only(healthy_count_string))
+				total_healthy += std::stoi(healthy_count_string);
 			
+			deadline_count = corrupted_count + healthy_count;
+			corrupted_percentage_of_plot
+				= std::to_string(
+					100.0f * (float)corrupted_count / (float)deadline_count);
+			healthy_percentage_of_plot
+				= std::to_string(
+					100.0f * (float)healthy_count / (float)deadline_count);
+			const int precision = 1;
+			string_utility::round_with_precision(
+				corrupted_percentage_of_plot, precision);
+			string_utility::round_with_precision(
+				healthy_percentage_of_plot, precision);
+
 			logger::print_and_log(
 				title_gap
 				+ console_gui::align_right(
-					corrupted_count, corrupted_title.length())
+					corrupted_count_string, corrupted_title.length())
+				+ title_gap 
+				+ console_gui::align_right(
+					corrupted_percentage_of_plot, percentage_title.length()) + " "
 				+ title_gap
 				+ console_gui::align_right(
-					healthy_count, healthy_title.length())
+					healthy_count_string, healthy_title.length())
+				+ title_gap
+				+ console_gui::align_right(
+					healthy_percentage_of_plot, percentage_title.length()) + " "
 				+ marker + plot_files_list[i].name + "\n");
 		}
 
 		// Calculate percentages of total corrupted and healthy deadlines
 		// in a log file.
-		std::string corrupted_percentage;
-		std::string healthy_percentage;
+		std::string total_corrupted_percentage;
+		std::string total_healthy_percentage;
 
 		if (total_corrupted + total_healthy == 0) {
-			corrupted_percentage = "0";
-			healthy_percentage = "0";
+			total_corrupted_percentage = "0";
+			total_healthy_percentage = "0";
 		}
 		else {
-			corrupted_percentage
+			int total_deadlines = total_corrupted + total_healthy;
+			total_corrupted_percentage
 				= std::to_string(
-					100.0f * (float)total_corrupted / ((float)total_corrupted + (float)total_healthy));
-			healthy_percentage
+					100.0f * (float)total_corrupted / (float)total_deadlines);
+			total_healthy_percentage
 				= std::to_string(
-					100.0f * (float)total_healthy / ((float)total_corrupted + (float)total_healthy));
+					100.0f * (float)total_healthy / (float)total_deadlines);
 			const int precision = 1;
-			string_utility::round_with_precision(corrupted_percentage, precision);
-			string_utility::round_with_precision(healthy_percentage, precision);
+			string_utility::round_with_precision(
+				total_corrupted_percentage, precision);
+			string_utility::round_with_precision(
+				total_healthy_percentage, precision);
 		}
 
 		// Print total stats.
 		logger::print_and_log(
 			title_gap
-			+ console_gui::underline(corrupted_title)
-			+ title_gap + console_gui::underline(healthy_title) + "\n");
+			+ console_gui::underline(corrupted_title + title_gap + percentage_title) + " "
+			+ title_gap + console_gui::underline(healthy_title + title_gap + percentage_title) + " "
+			+ no_conflict_marker + console_gui::underline(plot_file_title)
+			+ "\n");
 		logger::print_and_log(
 			title_gap
 			+ console_gui::align_right(
 				std::to_string(total_corrupted), corrupted_title.length())
 			+ title_gap
 			+ console_gui::align_right(
-				std::to_string(total_healthy), healthy_title.length())
-			+ "\n");
-		logger::print_and_log(
-			" " + title_gap
-			+ console_gui::align_right(
-				corrupted_percentage + "%", corrupted_title.length())
+				total_corrupted_percentage, percentage_title.length()) + "%"
 			+ title_gap
 			+ console_gui::align_right(
-				healthy_percentage + "%", healthy_title.length())
+				std::to_string(total_healthy), healthy_title.length())
+			+ title_gap
+			+ console_gui::align_right(
+				total_healthy_percentage, percentage_title.length()) + "%"
+			+ no_conflict_marker
+			+ total_title
 			+ "\n");
 	}
 	else {
