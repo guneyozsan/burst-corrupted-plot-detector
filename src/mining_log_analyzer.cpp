@@ -36,6 +36,23 @@ Looks for deadlines conflicting with server.
 plot_files
 mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 {
+	// User feedback
+	logger::log("\n");
+	logger::log("MINING LOG: " + file_name + "\n");
+	logger::print("\n");
+	logger::print("SCANNING LOG -> " + file_name + "\n");
+
+	const unsigned char confirmed_deadline_cursor = 219;
+	const unsigned char corrupted_deadline_cursor = 177;
+	std::string healthy_cursor;
+	healthy_cursor = confirmed_deadline_cursor;
+	std::string corrupted_cursor;
+	corrupted_cursor = corrupted_deadline_cursor;
+	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor
+		+ " = conflicting\n");
+	logger::print("DEADLINES ->  ");
+	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
+
 	// Plot information
 	std::string found_deadline;
 	std::string confirmed_deadline;
@@ -55,24 +72,6 @@ mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 	// File utility
 	std::ifstream file(file_name);
 	std::string line;
-
-	// User feedback
-	logger::log("\n");
-	logger::log("MINING LOG: " + file_name + "\n");
-	logger::print("\n");
-	logger::print("SCANNING LOG -> " + file_name + "\n");
-
-	const unsigned char confirmed_deadline_cursor = 219;
-	const unsigned char corrupted_deadline_cursor = 177;
-	std::string healthy_cursor;
-	healthy_cursor = confirmed_deadline_cursor;
-	std::string corrupted_cursor;
-	corrupted_cursor = corrupted_deadline_cursor;
-	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor
-		+ " = conflicting\n");
-
-	logger::print("DEADLINES ->  ");
-	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
 
 	// Main loop
 	while (std::getline(file, line)) {
