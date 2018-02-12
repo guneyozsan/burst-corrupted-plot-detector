@@ -79,22 +79,22 @@ mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 
 		// Extract found deadline.
 		current_position = line.find(
-			found_deadline_keyword, current_position + 1
-		);
+			found_deadline_keyword, current_position + 1);
 		if (current_position != std::string::npos) {
 			end_position = line.find(
-				found_deadline_end_keyword, current_position + 1
-			);
+				found_deadline_end_keyword, current_position + 1);
 			start_position = current_position + found_deadline_keyword.size();
 			found_deadline = line.substr(
-				start_position, end_position - start_position
-			);
+				start_position, end_position - start_position);
+
 			// Extract file name.
 			plot_file_position = line.find(
 				file_name_keyword, end_position
 				+ found_deadline_end_keyword.size())
 				+ file_name_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
+			if (!plot_file::suits_file_name_format(plot_file_name))
+				plot_file_name = "Error in mining log";
 			plot_files.add(plot_file_name);
 			plot_files.add_found_deadline(plot_file_name, found_deadline);
 		}

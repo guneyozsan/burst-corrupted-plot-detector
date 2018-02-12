@@ -18,11 +18,50 @@
 
 #include "plot_file.h"
 
+#include <cctype>
+
 plot_file::plot_file() {}
 
 plot_file::plot_file(const std::string &name)
 {
 	this->name = name;
+}
+
+bool
+plot_file::suits_file_name_format(const std::string plot_file_name)
+{
+	if (plot_file_name.size() == 0)
+		return false;
+
+	const char separator = '_';
+	const int number_of_separators = 3;
+	int separator_count = 0;
+	int previous_separator_index = 0;
+
+	for (size_t i = 0; i < plot_file_name.size(); i++) {
+		if (plot_file_name[i] == separator) {
+			if (i == 0 || i == plot_file_name.size() - 1)
+				return false;
+
+			if (i == previous_separator_index + 1)
+				return false;
+			else
+				previous_separator_index = i;
+			
+			separator_count++;
+			
+			if (separator_count > number_of_separators)
+				return false;
+		}
+		else if (!std::isdigit(plot_file_name[i])) {
+			return false;
+		}
+	}
+
+	if (separator_count != number_of_separators)
+		return false;
+
+	return true;
 }
 
 /*

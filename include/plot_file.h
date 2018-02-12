@@ -30,6 +30,7 @@ struct plot_file {
 
 	plot_file();
 	plot_file(const std::string &name);
+	static bool suits_file_name_format(const std::string plot_file_name);
 	static plot_file merge(
 		const plot_file &lhs, const plot_file &rhs);
 };
