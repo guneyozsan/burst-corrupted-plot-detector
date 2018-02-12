@@ -36,7 +36,7 @@ plot_file::suits_file_name_format(const std::string plot_file_name)
 	const char separator = '_';
 	const int number_of_separators = 3;
 	int separator_count = 0;
-	int previous_separator_index = 0;
+	size_t previous_separator_index = 0;
 
 	for (size_t i = 0; i < plot_file_name.size(); i++) {
 		if (plot_file_name[i] == separator) {
