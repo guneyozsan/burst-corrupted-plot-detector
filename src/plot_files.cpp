@@ -139,6 +139,13 @@ plot_files::calculate_corrupted_count()
 	}
 }
 
+// Add 1 to the count of mining log errors.
+void
+plot_files::increment_mining_log_error_count()
+{
+	mining_log_error_count++;
+}
+
 /* Merges two plot_file collections and their stats. */
 plot_files
 plot_files::merge(const plot_files& lhs, const plot_files& rhs)

@@ -88,15 +88,16 @@ mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 				start_position, end_position - start_position);
 
 			// Extract file name.
-			plot_file_position = line.find(
-				file_name_keyword, end_position
-				+ found_deadline_end_keyword.size())
+			plot_file_position = line.find(file_name_keyword)
 				+ file_name_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
-			if (!plot_file::suits_file_name_format(plot_file_name))
-				plot_file_name = "Error in mining log";
-			plot_files.add(plot_file_name);
-			plot_files.add_found_deadline(plot_file_name, found_deadline);
+			if (plot_file::suits_file_name_format(plot_file_name)) {
+				plot_files.add(plot_file_name);
+				plot_files.add_found_deadline(plot_file_name, found_deadline);
+			}
+			else {
+				plot_files.increment_mining_log_error_count();
+			}
 		}
 
 		// Extract confirmed deadline.
@@ -159,9 +160,13 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 			+ "\n");
 		logger::print_and_log(
 			title_gap + console_gui::underline(corrupted_title)
-			+ console_gui::underline(title_gap) + console_gui::underline(percentage_title) + " "
+			+ console_gui::underline(title_gap)
+			+ console_gui::underline(percentage_title)
+			+ " "
 			+ title_gap + console_gui::underline(healthy_title)
-			+ console_gui::underline(title_gap) + console_gui::underline(percentage_title) + " "
+			+ console_gui::underline(title_gap)
+			+ console_gui::underline(percentage_title)
+			+ " "
 			+ no_conflict_marker + console_gui::underline(plot_file_title)
 			+ "\n");
 
@@ -223,13 +228,15 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 					corrupted_count_string, corrupted_title.length())
 				+ title_gap 
 				+ console_gui::align_right(
-					corrupted_percentage_of_plot, percentage_title.length()) + " "
+					corrupted_percentage_of_plot, percentage_title.length())
+				+ " "
 				+ title_gap
 				+ console_gui::align_right(
 					healthy_count_string, healthy_title.length())
 				+ title_gap
 				+ console_gui::align_right(
-					healthy_percentage_of_plot, percentage_title.length()) + " "
+					healthy_percentage_of_plot, percentage_title.length())
+				+ " "
 				+ marker + plot_files_list[i].name + "\n");
 		}
 
@@ -259,9 +266,10 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 
 		// Print total stats.
 		logger::print_and_log(
-			title_gap
-			+ console_gui::underline(corrupted_title + title_gap + percentage_title) + " "
-			+ title_gap + console_gui::underline(healthy_title + title_gap + percentage_title) + " "
+			title_gap + console_gui::underline(
+				corrupted_title + title_gap + percentage_title) + " "
+			+ title_gap + console_gui::underline(
+				healthy_title + title_gap + percentage_title) + " "
 			+ no_conflict_marker + console_gui::underline(plot_file_title)
 			+ "\n");
 		logger::print_and_log(

@@ -27,6 +27,7 @@
 class plot_files {
 private:
 	std::map<std::string /* File name */, plot_file> plot_file_collection;
+	int mining_log_error_count = 0;
 public:
 	bool contains(const std::string &plot_file_name);
 	void add(const std::string &plot_file_name);
@@ -41,5 +42,7 @@ public:
 	void remove_deadline(
 		const std::string &plot_file_name, const std::string &deadline);
 	void calculate_corrupted_count();
+	void increment_mining_log_error_count();
+
 	static plot_files merge(const plot_files& lhs, const plot_files& rhs);
 };
