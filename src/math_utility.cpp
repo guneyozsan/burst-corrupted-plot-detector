@@ -16,21 +16,15 @@
 * along with this program.If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "math_utility.h"
 
-#include <list>
-#include <string>
+// Calculates percentage of subject in total.
+// Returns 0 if total is 0.
+float
+math_utility::division_safe_percentage(const float &subject, const float &total) {
+	if (total == 0)
+		return 0;
 
-#include "mining_stats.h"
-
-struct plot_file {
-	std::string name;
-	std::list<std::string> found_deadlines;
-	mining_stats mining_stats;
-
-	plot_file();
-	plot_file(const std::string &name);
-	static bool suits_file_name_format(const std::string plot_file_name);
-	static plot_file merge(
-		const plot_file &lhs, const plot_file &rhs);
-};
+	float percentage = 100.0f * subject / total;
+	return percentage;
+}

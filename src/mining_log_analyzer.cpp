@@ -27,6 +27,7 @@
 #include "console_gui.h"
 #include "cursor_animator.h"
 #include "logger.h"
+#include "math_utility.h"
 #include "string_utility.h"
 
 /*
@@ -36,6 +37,23 @@ Looks for deadlines conflicting with server.
 plot_files
 mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 {
+	// User feedback
+	logger::log("\n");
+	logger::log("MINING LOG: " + file_name + "\n");
+	logger::print("\n");
+	logger::print("SCANNING LOG -> " + file_name + "\n");
+
+	const unsigned char confirmed_deadline_cursor = 219;
+	const unsigned char corrupted_deadline_cursor = 177;
+	std::string healthy_cursor;
+	healthy_cursor = confirmed_deadline_cursor;
+	std::string corrupted_cursor;
+	corrupted_cursor = corrupted_deadline_cursor;
+	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor
+		+ " = conflicting\n");
+	logger::print("DEADLINES ->  ");
+	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
+
 	// Plot information
 	std::string found_deadline;
 	std::string confirmed_deadline;
@@ -56,48 +74,31 @@ mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 	std::ifstream file(file_name);
 	std::string line;
 
-	// User feedback
-	logger::log("\n");
-	logger::log("MINING LOG: " + file_name + "\n");
-	logger::print("\n");
-	logger::print("SCANNING LOG -> " + file_name + "\n");
-
-	const unsigned char confirmed_deadline_cursor = 219;
-	const unsigned char corrupted_deadline_cursor = 177;
-	std::string healthy_cursor;
-	healthy_cursor = confirmed_deadline_cursor;
-	std::string corrupted_cursor;
-	corrupted_cursor = corrupted_deadline_cursor;
-	logger::print(healthy_cursor + " = healthy, " + corrupted_cursor
-		+ " = conflicting\n");
-
-	logger::print("DEADLINES ->  ");
-	cursor_animator::set_animation({ "-", "\\", "|", "/" }, 15.0f);
-
 	// Main loop
 	while (std::getline(file, line)) {
 		cursor_animator::update_animation();
 
 		// Extract found deadline.
 		current_position = line.find(
-			found_deadline_keyword, current_position + 1
-		);
+			found_deadline_keyword, current_position + 1);
 		if (current_position != std::string::npos) {
 			end_position = line.find(
-				found_deadline_end_keyword, current_position + 1
-			);
+				found_deadline_end_keyword, current_position + 1);
 			start_position = current_position + found_deadline_keyword.size();
 			found_deadline = line.substr(
-				start_position, end_position - start_position
-			);
+				start_position, end_position - start_position);
+
 			// Extract file name.
-			plot_file_position = line.find(
-				file_name_keyword, end_position
-				+ found_deadline_end_keyword.size())
+			plot_file_position = line.find(file_name_keyword)
 				+ file_name_keyword.size();
 			plot_file_name = line.substr(plot_file_position, line.size());
-			plot_files.add(plot_file_name);
-			plot_files.add_found_deadline(plot_file_name, found_deadline);
+			if (plot_file::suits_file_name_format(plot_file_name)) {
+				plot_files.add(plot_file_name);
+				plot_files.add_found_deadline(plot_file_name, found_deadline);
+			}
+			else {
+				plot_files.increment_mining_log_error_count();
+			}
 		}
 
 		// Extract confirmed deadline.
@@ -160,9 +161,13 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 			+ "\n");
 		logger::print_and_log(
 			title_gap + console_gui::underline(corrupted_title)
-			+ console_gui::underline(title_gap) + console_gui::underline(percentage_title) + " "
+			+ console_gui::underline(title_gap)
+			+ console_gui::underline(percentage_title)
+			+ " "
 			+ title_gap + console_gui::underline(healthy_title)
-			+ console_gui::underline(title_gap) + console_gui::underline(percentage_title) + " "
+			+ console_gui::underline(title_gap)
+			+ console_gui::underline(percentage_title)
+			+ " "
 			+ no_conflict_marker + console_gui::underline(plot_file_title)
 			+ "\n");
 
@@ -207,11 +212,11 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 			
 			deadline_count = corrupted_count + healthy_count;
 			corrupted_percentage_of_plot
-				= std::to_string(
-					100.0f * (float)corrupted_count / (float)deadline_count);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)corrupted_count, (float)deadline_count));
 			healthy_percentage_of_plot
-				= std::to_string(
-					100.0f * (float)healthy_count / (float)deadline_count);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)healthy_count, (float)deadline_count));
 			const int precision = 1;
 			string_utility::round_with_precision(
 				corrupted_percentage_of_plot, precision);
@@ -224,13 +229,15 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 					corrupted_count_string, corrupted_title.length())
 				+ title_gap 
 				+ console_gui::align_right(
-					corrupted_percentage_of_plot, percentage_title.length()) + " "
+					corrupted_percentage_of_plot, percentage_title.length())
+				+ " "
 				+ title_gap
 				+ console_gui::align_right(
 					healthy_count_string, healthy_title.length())
 				+ title_gap
 				+ console_gui::align_right(
-					healthy_percentage_of_plot, percentage_title.length()) + " "
+					healthy_percentage_of_plot, percentage_title.length())
+				+ " "
 				+ marker + plot_files_list[i].name + "\n");
 		}
 
@@ -246,11 +253,11 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 		else {
 			int total_deadlines = total_corrupted + total_healthy;
 			total_corrupted_percentage
-				= std::to_string(
-					100.0f * (float)total_corrupted / (float)total_deadlines);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)total_corrupted, (float)total_deadlines));
 			total_healthy_percentage
-				= std::to_string(
-					100.0f * (float)total_healthy / (float)total_deadlines);
+				= std::to_string(math_utility::division_safe_percentage(
+					(float)total_healthy, (float)total_deadlines));
 			const int precision = 1;
 			string_utility::round_with_precision(
 				total_corrupted_percentage, precision);
@@ -260,9 +267,10 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 
 		// Print total stats.
 		logger::print_and_log(
-			title_gap
-			+ console_gui::underline(corrupted_title + title_gap + percentage_title) + " "
-			+ title_gap + console_gui::underline(healthy_title + title_gap + percentage_title) + " "
+			title_gap + console_gui::underline(
+				corrupted_title + title_gap + percentage_title) + " "
+			+ title_gap + console_gui::underline(
+				healthy_title + title_gap + percentage_title) + " "
 			+ no_conflict_marker + console_gui::underline(plot_file_title)
 			+ "\n");
 		logger::print_and_log(
@@ -281,6 +289,19 @@ mining_log_analyzer::print_plot_file_stats(const plot_files &plot_files)
 			+ no_conflict_marker
 			+ total_title
 			+ "\n");
+
+		// Print errors
+		int mining_log_error_count = plot_files.get_mining_log_error_count();
+		if (mining_log_error_count > 0) {
+			std::string multiple_suffix
+				= (mining_log_error_count == 1) ? ". It is" : "s. They are";
+			logger::print_and_log(
+				"\n" + title_gap
+				+ "* Could not read mining logs of "
+				+ std::to_string(plot_files.get_mining_log_error_count())
+				+ " deadline" + multiple_suffix
+				+ " not included in the stats.\n");
+		}
 	}
 	else {
 		logger::print_and_log("No deadlines detected.\n");

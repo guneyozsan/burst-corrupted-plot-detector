@@ -18,19 +18,6 @@
 
 #pragma once
 
-#include <list>
-#include <string>
-
-#include "mining_stats.h"
-
-struct plot_file {
-	std::string name;
-	std::list<std::string> found_deadlines;
-	mining_stats mining_stats;
-
-	plot_file();
-	plot_file(const std::string &name);
-	static bool suits_file_name_format(const std::string plot_file_name);
-	static plot_file merge(
-		const plot_file &lhs, const plot_file &rhs);
-};
+namespace math_utility {
+	float division_safe_percentage(const float &subject, const float &total);
+}
