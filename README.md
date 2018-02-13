@@ -3,7 +3,7 @@
 
 ![Burst corrupted plot detector screenshot](https://github.com/guneyozsan/burst-corrupted-plot-detector/blob/master/Screenshots/burst-corrupted-plot-detector-v1.0.0-x64.gif)
 
-![Burst corrupted plot detector screenshot](https://github.com/guneyozsan/burst-corrupted-plot-detector/blob/master/Screenshots/burst-corrupted-plot-detector-v1.0.0-x64.png)
+![Burst corrupted plot detector screenshot](https://github.com/guneyozsan/burst-corrupted-plot-detector/blob/master/Screenshots/burst-corrupted-plot-detector-v1.1.0-x64.png)
 
 Scans Burst mining logs and helps detecting corrupted plot files so that problematic plot files can be re-plotted. It looks for deadlines conflicting with server and report related stats.
 
