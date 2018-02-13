@@ -23,6 +23,7 @@
     <ProjectGuid>{48831A6A-145A-460F-95ED-982CAD065064}</ProjectGuid>
     <RootNamespace>BurstCorruptedPlotDetector</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>BurstCPD</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -125,6 +126,7 @@
     <ClInclude Include="include\cursor_animator.h" />
     <ClInclude Include="include\file_utility.h" />
     <ClInclude Include="include\logger.h" />
+    <ClInclude Include="include\math_utility.h" />
     <ClInclude Include="include\mining_log_analyzer.h" />
     <ClInclude Include="include\mining_stats.h" />
     <ClInclude Include="include\plot_file.h" />
@@ -141,6 +143,7 @@
     <ClCompile Include="src\file_utility.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math_utility.cpp" />
     <ClCompile Include="src\mining_log_analyzer.cpp" />
     <ClCompile Include="src\mining_stats.cpp" />
     <ClCompile Include="src\plot_file.cpp" />

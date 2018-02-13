@@ -18,4 +18,6 @@
 
 #pragma once
 
-extern const char* version = "v1.1.0";
+namespace math_utility {
+	float division_safe_percentage(const float &subject, const float &total);
+}

@@ -38,9 +38,8 @@ string_utility::replace_all(
 bool
 string_utility::is_numbers_only(const std::string &s)
 {
-	if (s.size() == 0) {
+	if (s.size() == 0)
 		return false;
-	}
 
 	for (size_t i = 0; i < s.size(); i++) {
 		if (!std::isdigit(s[i]))

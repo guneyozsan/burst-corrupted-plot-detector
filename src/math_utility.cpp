@@ -16,6 +16,15 @@
 * along with this program.If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "math_utility.h"
 
-extern const char* version = "v1.1.0";
+// Calculates percentage of subject in total.
+// Returns 0 if total is 0.
+float
+math_utility::division_safe_percentage(const float &subject, const float &total) {
+	if (total == 0)
+		return 0;
+
+	float percentage = 100.0f * subject / total;
+	return percentage;
+}

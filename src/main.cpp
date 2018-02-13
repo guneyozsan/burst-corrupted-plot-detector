@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 		time_utility::format_time(time_utility::now(), "%F-%T");
 	// Replace characters not suitable for a file name.
 	string_utility::replace_all(':', '_', formatted_time);
-	const std::string log_file_prefix = "Burst-mining-log-analysis-";
+	const std::string log_file_prefix = "BurstCPD-analysis-log-";
 	logger::set_log_file_name(log_file_prefix + formatted_time + ".log");
 	titles::print_opening_titles();
 
