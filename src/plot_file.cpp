@@ -18,7 +18,6 @@
 
 #include "plot_file.h"
 
-#include <algorithm>
 #include <cctype>
 
 plot_file::plot_file() {}
