@@ -18,4 +18,4 @@
 
 #pragma once
 
-extern const char* version = "v1.1.0";
+extern const char* version = "v1.2.0";
