@@ -43,6 +43,7 @@ mining_log_analyzer::analyze_plot_files_in_log(const std::string &file_name)
 	logger::print("\n");
 	logger::print("SCANNING LOG -> " + file_name + "\n");
 
+	// Progress bar
 	const unsigned char confirmed_deadline_cursor = 219;
 	const unsigned char corrupted_deadline_cursor = 177;
 	std::string healthy_cursor;

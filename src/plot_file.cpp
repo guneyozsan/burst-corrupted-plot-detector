@@ -27,38 +27,45 @@ plot_file::plot_file(const std::string &name)
 	this->name = name;
 }
 
+/* Checks if the file name parsed suits the plot file name format to help ignoring false positives. */
 bool
 plot_file::suits_file_name_format(const std::string plot_file_name)
 {
 	if (plot_file_name.size() == 0)
 		return false;
 
+	// Plot file name standards.
 	const char separator = '_';
-	const int number_of_separators = 3;
+	const int number_of_separators_poc1 = 3;
+	const int number_of_separators_poc2 = 2;
+	
+	// Loop variables.
 	int separator_count = 0;
 	size_t previous_separator_index = 0;
 
 	for (size_t i = 0; i < plot_file_name.size(); i++) {
 		if (plot_file_name[i] == separator) {
+			// Separator is at the beginning or end.
 			if (i == 0 || i == plot_file_name.size() - 1)
 				return false;
 
+			// No chars between separators.
 			if (i == previous_separator_index + 1)
 				return false;
 			else
 				previous_separator_index = i;
 			
 			separator_count++;
-			
-			if (separator_count > number_of_separators)
-				return false;
 		}
 		else if (!std::isdigit(plot_file_name[i])) {
+			// File name has non digit chars.
 			return false;
 		}
 	}
 
-	if (separator_count != number_of_separators)
+	// Non standard separator count.
+	if (separator_count != number_of_separators_poc1
+		&& separator_count != number_of_separators_poc2)
 		return false;
 
 	return true;
